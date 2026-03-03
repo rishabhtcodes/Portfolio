@@ -1,111 +1,90 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 export default function CustomCursor() {
-    const [pos, setPos] = useState({ x: 0, y: 0 });
-    const [dotPos, setDotPos] = useState({ x: 0, y: 0 });
-    const [hovering, setHovering] = useState(false);
-    const [visible, setVisible] = useState(false);
-    const [isTouchDevice, setIsTouchDevice] = useState(false);
+    const cursorRef = useRef(null);
 
     useEffect(() => {
-        const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-        setIsTouchDevice(isTouch);
-        if (isTouch) return;
+        const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+        if (isTouchDevice) return;
 
-        const move = (e) => {
-            setPos({ x: e.clientX, y: e.clientY });
-            setDotPos({ x: e.clientX, y: e.clientY });
-            if (!visible) setVisible(true);
+        const cursor = cursorRef.current;
+        if (!cursor) return;
+
+        let mouseX = -50;
+        let mouseY = -50;
+        let curX = -50;
+        let curY = -50;
+
+        const handleMouseMove = (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
         };
 
-        const addHover = () => setHovering(true);
-        const removeHover = () => setHovering(false);
-
-        window.addEventListener('mousemove', move);
-        document.addEventListener('mouseleave', () => setVisible(false));
-        document.addEventListener('mouseenter', () => setVisible(true));
-
-        const observeHoverables = () => {
-            const els = document.querySelectorAll('a, button, .btn, input, textarea, [role="button"]');
-            els.forEach(el => {
-                el.addEventListener('mouseenter', addHover);
-                el.addEventListener('mouseleave', removeHover);
-            });
+        const animate = () => {
+            curX += (mouseX - curX) * 0.15;
+            curY += (mouseY - curY) * 0.15;
+            cursor.style.transform = `translate(${curX - 10}px, ${curY - 10}px)`;
+            requestAnimationFrame(animate);
         };
 
-        observeHoverables();
-        const observer = new MutationObserver(observeHoverables);
-        observer.observe(document.body, { childList: true, subtree: true });
+        const handleLinkEnter = () => cursor.classList.add('cursor--hover');
+        const handleLinkLeave = () => cursor.classList.remove('cursor--hover');
+
+        document.addEventListener('mousemove', handleMouseMove);
+
+        const interactiveEls = document.querySelectorAll('a, button, input, textarea, [role="button"]');
+        interactiveEls.forEach(el => {
+            el.addEventListener('mouseenter', handleLinkEnter);
+            el.addEventListener('mouseleave', handleLinkLeave);
+        });
+
+        const raf = requestAnimationFrame(animate);
 
         return () => {
-            window.removeEventListener('mousemove', move);
-            observer.disconnect();
+            document.removeEventListener('mousemove', handleMouseMove);
+            cancelAnimationFrame(raf);
+            interactiveEls.forEach(el => {
+                el.removeEventListener('mouseenter', handleLinkEnter);
+                el.removeEventListener('mouseleave', handleLinkLeave);
+            });
         };
-    }, [visible]);
-
-    if (isTouchDevice) return null;
+    }, []);
 
     return (
         <>
-            <div
-                className={`custom-cursor ${hovering ? 'custom-cursor--hover' : ''}`}
-                style={{
-                    left: pos.x,
-                    top: pos.y,
-                    opacity: visible ? 1 : 0,
-                }}
-            />
-            <div
-                className="custom-cursor-dot"
-                style={{
-                    left: dotPos.x,
-                    top: dotPos.y,
-                    opacity: visible ? 1 : 0,
-                }}
-            />
-
+            <div ref={cursorRef} className="custom-cursor" />
             <style>{`
-                * { cursor: none !important; }
-
                 .custom-cursor {
-                    position: fixed;
-                    width: 36px;
-                    height: 36px;
-                    border: 2px solid rgba(139, 92, 246, 0.5);
+                    width: 32px;
+                    height: 32px;
                     border-radius: 50%;
-                    pointer-events: none;
-                    z-index: 99999;
-                    transform: translate(-50%, -50%);
-                    transition: width 0.25s ease, height 0.25s ease,
-                                border-color 0.25s ease, opacity 0.15s ease,
-                                background 0.25s ease;
-                }
-
-                .custom-cursor--hover {
-                    width: 52px;
-                    height: 52px;
-                    border-color: var(--accent-cyan);
-                    background: rgba(6, 182, 212, 0.08);
-                }
-
-                .custom-cursor-dot {
+                    background: var(--accent);
                     position: fixed;
-                    width: 6px;
-                    height: 6px;
-                    background: var(--accent-purple);
-                    border-radius: 50%;
+                    top: 0;
+                    left: 0;
                     pointer-events: none;
-                    z-index: 99999;
-                    transform: translate(-50%, -50%);
-                    transition: opacity 0.15s ease;
+                    z-index: 9999;
+                    transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+                    mix-blend-mode: difference;
+                    opacity: 0.8;
                 }
 
-                @media (max-width: 768px), (pointer: coarse) {
+                .custom-cursor.cursor--hover {
+                    width: 60px;
+                    height: 60px;
+                    opacity: 0.4;
+                }
+
+                @media (hover: none) and (pointer: coarse) {
+                    .custom-cursor { display: none; }
+                }
+
+                * {
+                    cursor: none !important;
+                }
+
+                @media (hover: none) and (pointer: coarse) {
                     * { cursor: auto !important; }
-                    .custom-cursor,
-                    .custom-cursor-dot {
-                        display: none !important;
-                    }
                 }
             `}</style>
         </>
