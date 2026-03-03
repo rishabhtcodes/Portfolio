@@ -1,98 +1,46 @@
-import { Github, Linkedin, Mail, Heart } from 'lucide-react';
+import { Github, Linkedin, Mail, Twitter, Heart } from 'lucide-react';
 
 export default function Footer() {
-    return (
-        <footer className="footer">
-            <div className="container">
-                <div className="footer__inner">
-                    <div className="footer__brand">
-                        <span className="footer__logo">
-                            <span className="gradient-text">RKT</span>
-                            <span style={{ color: 'var(--accent-cyan)' }}>.</span>
-                        </span>
-                        <p className="footer__tagline">
-                            Building the web, one line at a time.
-                        </p>
-                    </div>
+  const socials = [
+    { icon: <Mail size={16} />, href: 'mailto:rishabhtiwari3538@gmail.com' },
+    { icon: <Linkedin size={16} />, href: 'https://linkedin.com/in/rishabhtcodes' },
+    { icon: <Twitter size={16} />, href: 'https://twitter.com/rishabhtcodes' },
+    { icon: <Github size={16} />, href: 'https://github.com/rishabhtcodes' },
+  ];
 
-                    <div className="footer__socials">
-                        <a href="https://github.com/rishabhtcodes" target="_blank" rel="noopener noreferrer" className="footer__social" aria-label="GitHub">
-                            <Github size={18} />
-                        </a>
-                        <a href="https://linkedin.com/in/rishabhtcodes" target="_blank" rel="noopener noreferrer" className="footer__social" aria-label="LinkedIn">
-                            <Linkedin size={18} />
-                        </a>
-                        <a href="mailto:rishabhtiwari3538@gmail.com" className="footer__social" aria-label="Email">
-                            <Mail size={18} />
-                        </a>
-                    </div>
-
-                    <div className="footer__bottom">
-                        <p>
-                            © {new Date().getFullYear()} Rishabh Kumar Tiwari. Made with{' '}
-                            <Heart size={14} style={{ display: 'inline', verticalAlign: 'middle', color: 'var(--accent-pink)', fill: 'var(--accent-pink)' }} />{' '}
-                            using React + Vite
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <style>{`
-        .footer {
-          padding: 48px 0 32px;
-          border-top: 1px solid var(--bg-glass-border);
-          background: var(--bg-secondary);
-        }
-
-        .footer__inner {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 24px;
-          text-align: center;
-        }
-
-        .footer__logo {
-          font-size: 1.4rem;
-          font-weight: 900;
-          letter-spacing: -0.04em;
-        }
-
-        .footer__tagline {
-          font-size: 0.88rem;
-          color: var(--text-muted);
-          margin-top: 4px;
-        }
-
-        .footer__socials {
-          display: flex;
-          gap: 12px;
-        }
-
+  return (
+    <footer className="footer">
+      <div className="footer__inner container">
+        <div className="footer__left">
+          <span className="footer__name"><strong>Rishabh</strong> Tiwari</span>
+          <span className="footer__role">Full Stack Developer</span>
+        </div>
+        <p className="footer__copy">
+          Made with <Heart size={12} style={{ display: 'inline', verticalAlign: 'middle' }} /> © 2026
+        </p>
+        <div className="footer__socials">
+          {socials.map((s, i) => (
+            <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className="footer__social">{s.icon}</a>
+          ))}
+        </div>
+      </div>
+      <style>{`
+        .footer { padding: 32px 0; border-top: 1px solid var(--border-color); }
+        .footer__inner { display: flex; align-items: center; justify-content: space-between; }
+        .footer__left { display: flex; flex-direction: column; }
+        .footer__name { font-size: 1.1rem; }
+        .footer__role { font-size: 0.75rem; color: var(--text-muted); }
+        .footer__copy { font-size: 0.8rem; color: var(--text-muted); }
+        .footer__socials { display: flex; gap: 8px; }
         .footer__social {
-          width: 38px;
-          height: 38px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          border-radius: 50%;
-          border: 1px solid var(--bg-glass-border);
-          color: var(--text-muted);
-          transition: all 0.3s ease;
+          width: 34px; height: 34px; border-radius: var(--radius-xs);
+          display: flex; align-items: center; justify-content: center;
+          background: var(--bg-card); border: 1px solid var(--border-color);
+          color: var(--text-secondary); transition: all 0.2s;
         }
-
-        .footer__social:hover {
-          color: var(--accent-purple);
-          border-color: var(--accent-purple);
-          background: rgba(139, 92, 246, 0.1);
-          transform: translateY(-2px);
-        }
-
-        .footer__bottom p {
-          font-size: 0.82rem;
-          color: var(--text-muted);
-        }
+        .footer__social:hover { color: var(--text-primary); border-color: var(--border-hover); }
+        @media (max-width: 600px) { .footer__inner { flex-direction: column; gap: 16px; text-align: center; } }
       `}</style>
-        </footer>
-    );
+    </footer>
+  );
 }
