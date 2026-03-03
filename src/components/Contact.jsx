@@ -1,182 +1,123 @@
+import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Mail, Github, Linkedin, ArrowUpRight } from 'lucide-react';
-
-const links = [
-    {
-        icon: <Mail size={24} />,
-        label: 'Email',
-        value: 'rishabhtiwari3538@gmail.com',
-        href: 'mailto:rishabhtiwari3538@gmail.com',
-        color: '#ec4899',
-    },
-    {
-        icon: <Github size={24} />,
-        label: 'GitHub',
-        value: 'rishabhtcodes',
-        href: 'https://github.com/rishabhtcodes',
-        color: '#8b5cf6',
-    },
-    {
-        icon: <Linkedin size={24} />,
-        label: 'LinkedIn',
-        value: 'in/rishabhtcodes',
-        href: 'https://linkedin.com/in/rishabhtcodes',
-        color: '#06b6d4',
-    },
-];
+import { Mail, Phone, Github, Linkedin, Twitter, Send } from 'lucide-react';
 
 export default function Contact() {
-    const { ref, inView } = useInView({ threshold: 0.15, triggerOnce: true });
+  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle');
+  const [errors, setErrors] = useState({});
 
-    return (
-        <section className="section" id="contact" ref={ref}>
-            <div className="container">
-                <div className="contact__wrapper">
-                    {/* Decorative gradient */}
-                    <div className="contact__bg-gradient" />
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim()) e.name = true;
+    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = true;
+    if (!form.message.trim()) e.message = true;
+    return e;
+  };
 
-                    <div className={`contact__content fade-in ${inView ? 'visible' : ''}`}>
-                        <span className="section-label" style={{ justifyContent: 'center' }}>Contact</span>
-                        <h2 className="section-title" style={{ textAlign: 'center' }}>
-                            Let's build something{' '}
-                            <span className="gradient-text">awesome together</span>
-                        </h2>
-                        <p className="section-subtitle" style={{ margin: '0 auto 48px', textAlign: 'center' }}>
-                            I'm open to freelance opportunities, collaborations, and interesting conversations. Drop me a line!
-                        </p>
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    const e = validate();
+    setErrors(e);
+    if (Object.keys(e).length) return;
+    setStatus('sending');
+    try {
+      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          service_id: 'YOUR_SERVICE_ID', template_id: 'YOUR_TEMPLATE_ID', user_id: 'YOUR_PUBLIC_KEY',
+          template_params: { from_name: form.name, from_email: form.email, message: form.message, to_name: 'Rishabh' },
+        }),
+      });
+      if (res.ok || res.status === 200) { setStatus('success'); setForm({ name: '', email: '', message: '' }); setTimeout(() => setStatus('idle'), 4000); }
+      else throw new Error();
+    } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 4000); }
+  };
 
-                        <div className="contact__links">
-                            {links.map((link, idx) => (
-                                <a
-                                    key={link.label}
-                                    href={link.href}
-                                    target={link.href.startsWith('mailto') ? undefined : '_blank'}
-                                    rel="noopener noreferrer"
-                                    className={`contact__link glass-card fade-in stagger-${idx + 1} ${inView ? 'visible' : ''}`}
-                                >
-                                    <div
-                                        className="contact__link-icon"
-                                        style={{
-                                            background: `${link.color}15`,
-                                            color: link.color,
-                                            border: `1px solid ${link.color}25`,
-                                        }}
-                                    >
-                                        {link.icon}
-                                    </div>
-                                    <div className="contact__link-info">
-                                        <span className="contact__link-label">{link.label}</span>
-                                        <span className="contact__link-value">{link.value}</span>
-                                    </div>
-                                    <ArrowUpRight size={18} className="contact__link-arrow" />
-                                </a>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+  const change = (f) => (e) => { setForm(p => ({ ...p, [f]: e.target.value })); if (errors[f]) setErrors(p => ({ ...p, [f]: undefined })); };
+
+  const socials = [
+    { icon: <Mail size={18} />, href: 'mailto:rishabhtiwari3538@gmail.com', label: 'Email' },
+    { icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/rishabhtcodes', label: 'LinkedIn' },
+    { icon: <Twitter size={18} />, href: 'https://twitter.com/rishabhtcodes', label: 'Twitter' },
+    { icon: <Github size={18} />, href: 'https://github.com/rishabhtcodes', label: 'GitHub' },
+  ];
+
+  return (
+    <section className="section" id="contact" ref={ref}>
+      <div className="container">
+        <span className="section-label">GET IN TOUCH</span>
+        <h2 className={`section-title fade-in ${inView ? 'visible' : ''}`}>
+          Contact <span className="gradient-text">Me</span>
+        </h2>
+
+        <div className="contact__grid">
+          <form className={`contact__form glass-card fade-in stagger-1 ${inView ? 'visible' : ''}`} onSubmit={handleSubmit}>
+            <div className="contact__field">
+              <label>Name</label>
+              <input className={errors.name ? 'error' : ''} value={form.name} onChange={change('name')} placeholder="Your name" />
             </div>
+            <div className="contact__field">
+              <label>Email</label>
+              <input className={errors.email ? 'error' : ''} value={form.email} onChange={change('email')} type="email" placeholder="your@email.com" />
+            </div>
+            <div className="contact__field">
+              <label>Message</label>
+              <textarea className={errors.message ? 'error' : ''} value={form.message} onChange={change('message')} rows={4} placeholder="How can I help?" />
+            </div>
+            <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
+              {status === 'sending' ? 'Sending...' : status === 'success' ? '✓ Sent!' : status === 'error' ? 'Failed — Retry' : <><Send size={16} /> Send Message</>}
+            </button>
+          </form>
 
-            <style>{`
-        .contact__wrapper {
-          position: relative;
-          padding: 80px 0;
+          <div className={`contact__info fade-in stagger-2 ${inView ? 'visible' : ''}`}>
+            <div className="contact__detail glass-card">
+              <Mail size={20} />
+              <div>
+                <strong>Email</strong>
+                <a href="mailto:rishabhtiwari3538@gmail.com">rishabhtiwari3538@gmail.com</a>
+              </div>
+            </div>
+            <div className="contact__detail glass-card">
+              <Phone size={20} />
+              <div>
+                <strong>Phone</strong>
+                <span>+91 XXXXXXXXXX</span>
+              </div>
+            </div>
+            <div className="contact__socials">
+              {socials.map((s) => (
+                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="contact__social glass-card" aria-label={s.label}>
+                  {s.icon}
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <style>{`
+        .contact__grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; margin-top: 40px; align-items: start; }
+        .contact__form { padding: 28px; }
+        .contact__field { margin-bottom: 16px; }
+        .contact__field label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
+        .contact__field input, .contact__field textarea {
+          width: 100%; padding: 12px 16px; border: 1px solid var(--border-color);
+          border-radius: var(--radius-xs); background: var(--bg-primary);
+          color: var(--text-primary); font-family: var(--font-sans); font-size: 0.88rem;
+          transition: border-color 0.2s; outline: none;
         }
-
-        .contact__bg-gradient {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 600px;
-          height: 400px;
-          background: radial-gradient(ellipse, rgba(139, 92, 246, 0.08), transparent 70%);
-          pointer-events: none;
-        }
-
-        .contact__content {
-          position: relative;
-          z-index: 2;
-        }
-
-        .contact__links {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 20px;
-          max-width: 800px;
-          margin: 0 auto;
-        }
-
-        .contact__link {
-          padding: 28px 24px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          text-align: center;
-          gap: 16px;
-          position: relative;
-          cursor: pointer;
-        }
-
-        .contact__link-icon {
-          width: 56px;
-          height: 56px;
-          border-radius: 14px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .contact__link-info {
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .contact__link-label {
-          font-size: 0.82rem;
-          color: var(--text-muted);
-          font-weight: 500;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        .contact__link-value {
-          font-size: 0.92rem;
-          font-weight: 600;
-          color: var(--text-primary);
-        }
-
-        .contact__link-arrow {
-          position: absolute;
-          top: 16px;
-          right: 16px;
-          color: var(--text-muted);
-          opacity: 0;
-          transition: all 0.3s ease;
-          transform: translate(-4px, 4px);
-        }
-
-        .contact__link:hover .contact__link-arrow {
-          opacity: 1;
-          transform: translate(0, 0);
-        }
-
-        @media (max-width: 768px) {
-          .contact__links {
-            grid-template-columns: 1fr;
-            max-width: 400px;
-          }
-
-          .contact__link {
-            flex-direction: row;
-            text-align: left;
-          }
-
-          .contact__link-info {
-            flex: 1;
-          }
-        }
+        .contact__field input:focus, .contact__field textarea:focus { border-color: var(--border-hover); }
+        .contact__field input.error, .contact__field textarea.error { border-color: #e74c3c; }
+        .contact__field textarea { resize: vertical; min-height: 100px; }
+        .contact__detail { padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+        .contact__detail strong { display: block; font-size: 0.82rem; }
+        .contact__detail a, .contact__detail span { font-size: 0.85rem; color: var(--text-secondary); }
+        .contact__socials { display: flex; gap: 10px; margin-top: 8px; }
+        .contact__social { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
+        .contact__social:hover { color: var(--text-primary); }
+        @media (max-width: 768px) { .contact__grid { grid-template-columns: 1fr; } }
       `}</style>
-        </section>
-    );
+    </section>
+  );
 }
