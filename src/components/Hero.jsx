@@ -56,18 +56,16 @@ export default function Hero() {
         <div className="hero__visual">
           <div className="hero__code-window glass-card">
             <div className="hero__code-dots">
-              <span style={{ background: '#999' }} /><span style={{ background: '#bbb' }} /><span style={{ background: '#ddd' }} />
+              <span /><span /><span />
             </div>
-            <pre className="hero__code"><code>
-              {`const rishabh = {
-  role: "Full Stack Developer",
-  university: "LPU",
-  skills: ["Django", "React",
-    "REST APIs", "Node.js"],
-  passion: "Building products",
-  coffee: true ☕
-};`}
-            </code></pre>
+            <pre className="hero__code"><code><span className="hc-keyword">const</span> <span className="hc-variable">rishabh</span> <span className="hc-bracket">= {'{'}</span>{'\n'}
+{'  '}<span className="hc-property">role</span>: <span className="hc-string">"Full Stack Developer"</span>,{'\n'}
+{'  '}<span className="hc-property">university</span>: <span className="hc-string">"LPU"</span>,{'\n'}
+{'  '}<span className="hc-property">skills</span>: <span className="hc-bracket">[</span><span className="hc-string">"Django"</span>, <span className="hc-string">"React"</span>,{'\n'}
+{'    '}<span className="hc-string">"REST APIs"</span>, <span className="hc-string">"Node.js"</span><span className="hc-bracket">]</span>,{'\n'}
+{'  '}<span className="hc-property">passion</span>: <span className="hc-string">"Building products"</span>,{'\n'}
+{'  '}<span className="hc-property">coffee</span>: <span className="hc-keyword">true</span> ☕{'\n'}
+<span className="hc-bracket">{'}'}</span>;</code></pre>
           </div>
         </div>
       </div>
@@ -104,8 +102,17 @@ export default function Hero() {
         .hero__visual { display: flex; justify-content: center; }
         .hero__code-window { padding: 24px; max-width: 400px; width: 100%; animation: float 6s ease infinite; }
         .hero__code-dots { display: flex; gap: 6px; margin-bottom: 16px; }
-        .hero__code-dots span { width: 10px; height: 10px; border-radius: 50%; }
-        .hero__code { font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.8; color: var(--text-secondary); white-space: pre; overflow-x: auto; }
+        .hero__code-dots span { width: 12px; height: 12px; border-radius: 50%; }
+        .hero__code-dots span:nth-child(1) { background: #ff5f57; }
+        .hero__code-dots span:nth-child(2) { background: #febc2e; }
+        .hero__code-dots span:nth-child(3) { background: #28c840; }
+        .hero__code-window { background: #1e1e2e !important; border: 1px solid #313244 !important; }
+        .hero__code { font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.9; color: #cdd6f4; white-space: pre; overflow-x: auto; background: #1e1e2e; }
+        .hc-keyword  { color: #cba6f7; font-style: italic; }
+        .hc-variable { color: #89dceb; }
+        .hc-property { color: #89b4fa; }
+        .hc-string   { color: #a6e3a1; }
+        .hc-bracket  { color: #cdd6f4; }
         .hero__scroll {
           position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
           width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-color);
