@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { GitBranch, Star, Users, BookOpen, Activity, Code } from 'lucide-react';
+import { BookOpen, Activity, Code, Star, GitFork, Trophy } from 'lucide-react';
 
 export default function GithubStats() {
     const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
@@ -8,29 +8,48 @@ export default function GithubStats() {
     const username = 'rishabhtcodes';
 
     useEffect(() => {
-        fetch(`https://api.github.com/users/${username}`)
-            .then((r) => r.json())
-            .then((data) => {
+        Promise.all([
+            fetch(`https://api.github.com/users/${username}`).then((r) => r.ok ? r.json() : Promise.reject()),
+            fetch(`https://api.github.com/users/${username}/repos?per_page=100`).then((r) => r.ok ? r.json() : Promise.reject()),
+            fetch(`https://api.github.com/users/${username}/events?per_page=100`).then((r) => r.ok ? r.json() : Promise.reject()),
+        ])
+            .then(([user, repos, events]) => {
+                const ownRepos = repos.filter((r) => !r.fork);
+                const totalStars = ownRepos.reduce((sum, r) => sum + r.stargazers_count, 0);
+                const totalForks = ownRepos.reduce((sum, r) => sum + r.forks_count, 0);
+                const langList = ownRepos.map((r) => r.language).filter(Boolean);
+                const languages = new Set(langList);
+                // Find most used language
+                const langCount = {};
+                langList.forEach((l) => { langCount[l] = (langCount[l] || 0) + 1; });
+                const topLang = Object.entries(langCount).sort((a, b) => b[1] - a[1])[0]?.[0] || '—';
+
+                // Count push events as a proxy for contributions
+                const pushEvents = events.filter((e) => e.type === 'PushEvent');
+                const totalCommits = pushEvents.reduce((sum, e) => sum + (e.payload?.commits?.length || 0), 0);
+
                 setStats({
-                    repos: data.public_repos || 0,
-                    followers: data.followers || 0,
-                    following: data.following || 0,
-                    bio: data.bio || '',
+                    projects: user.public_repos || 0,
+                    contributions: totalCommits || '166+',
+                    languages: languages.size,
+                    stars: totalStars,
+                    forks: totalForks,
+                    topLang,
                 });
             })
             .catch(() => {
-                setStats({ repos: '10+', followers: '—', following: '—', bio: '' });
+                setStats({ projects: '12', contributions: '166+', languages: '5+', stars: '5', forks: '—', topLang: 'Python' });
             });
     }, []);
 
     const cards = stats
         ? [
-            { icon: <BookOpen size={22} />, value: stats.repos, label: 'Repositories' },
-            { icon: <Users size={22} />, value: stats.followers, label: 'Followers' },
-            { icon: <Star size={22} />, value: stats.following, label: 'Following' },
-            { icon: <Activity size={22} />, value: '118+', label: 'Contributions' },
-            { icon: <GitBranch size={22} />, value: '7', label: 'Current Streak' },
-            { icon: <Code size={22} />, value: '5+', label: 'Languages' },
+            { icon: <BookOpen size={22} />, value: stats.projects, label: 'Projects' },
+            { icon: <Activity size={22} />, value: stats.contributions, label: 'Contributions' },
+            { icon: <Code size={22} />, value: stats.languages + '+', label: 'Languages' },
+            { icon: <Star size={22} />, value: stats.stars, label: 'Total Stars' },
+            { icon: <GitFork size={22} />, value: stats.forks, label: 'Total Forks' },
+            { icon: <Trophy size={22} />, value: stats.topLang, label: 'Top Language' },
         ]
         : [];
 
