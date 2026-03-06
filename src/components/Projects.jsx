@@ -1,53 +1,106 @@
+import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { Github, ExternalLink } from 'lucide-react';
 
-const projects = [
-  {
-    title: 'R.onny Store', category: 'E-COMMERCE', number: '01',
+/* ── Custom overrides for specific repos ──
+   Any repo whose name matches a key here will use these values
+   instead of the auto-generated ones from the GitHub API.
+   Add a 'live' key if the project has a live deployment.       */
+const overrides = {
+  'E-Commerce': {
+    title: 'R.onny Store',
+    category: 'E-COMMERCE',
     description: 'A full-featured e-commerce platform built with Django, PostgreSQL, and a modern minimal UI. Includes user auth, cart, orders, REST API with JWT, and email notifications.',
     tech: ['Django', 'PostgreSQL', 'DRF', 'Tailwind CSS'],
-    github: 'https://github.com/rishabhtcodes/E-Commerce',
     live: 'https://e-commerce-ebon-eta-82.vercel.app/',
   },
-  {
-    title: 'Mailing Web App', category: 'WEB APPLICATION', number: '02',
+  'Mailing-Web-App': {
+    title: 'Mailing Web App',
+    category: 'WEB APPLICATION',
     description: 'A web app for composing and sending emails via SMTP with user authentication, email history tracking, and a responsive Tailwind CSS UI. Uses MongoDB via djongo.',
     tech: ['Django', 'MongoDB', 'Tailwind CSS', 'SMTP'],
-    github: 'https://github.com/rishabhtcodes/Mailing-Web-App',
-    live: null,
   },
-  {
-    title: 'Portfolio', category: 'FRONTEND', number: '03',
+  'Portfolio': {
+    title: 'Portfolio',
+    category: 'FRONTEND',
     description: 'Personal portfolio website built with React and Vite featuring a clean monochrome design, theme toggle, custom cursor, and responsive layout.',
     tech: ['React', 'Vite', 'JavaScript', 'CSS'],
-    github: 'https://github.com/rishabhtcodes/Portfolio',
-    live: null,
   },
-  {
-    title: 'Udyog Saarthi', category: 'WEB APPLICATION', number: '04',
+  'Udyog_Saarthi': {
+    title: 'Udyog Saarthi',
+    category: 'WEB APPLICATION',
     description: 'A job portal platform connecting job seekers with employers, built primarily with JavaScript and CSS for a smooth user experience.',
     tech: ['JavaScript', 'CSS', 'HTML'],
-    github: 'https://github.com/rishabhtcodes/Udyog_Saarthi',
-    live: null,
   },
-  {
-    title: 'Django REST APIs', category: 'BACKEND', number: '05',
+  'Django_Rest_Api-s': {
+    title: 'Django REST APIs',
+    category: 'BACKEND',
     description: 'Assignments exploring different ways of sending data with Django REST Framework — covering serialization patterns, viewsets, and API design.',
     tech: ['Django', 'DRF', 'Python'],
-    github: 'https://github.com/rishabhtcodes/Django_Rest_Api-s',
-    live: null,
   },
-  {
-    title: 'Todo List App', category: 'WEB APPLICATION', number: '06',
+  'Todo_list': {
+    title: 'Todo List App',
+    category: 'WEB APPLICATION',
     description: 'A clean Todo List app built with Django for adding, updating, and deleting tasks. Demonstrates Django templates, backend logic, and responsive UI.',
     tech: ['Django', 'JavaScript', 'Tailwind CSS'],
-    github: 'https://github.com/rishabhtcodes/Todo_list',
-    live: null,
   },
+};
+
+/* ── Fallback data (used if API call fails) ── */
+const fallbackProjects = [
+  { title: 'R.onny Store', category: 'E-COMMERCE', number: '01', description: overrides['E-Commerce'].description, tech: overrides['E-Commerce'].tech, github: 'https://github.com/rishabhtcodes/E-Commerce', live: 'https://e-commerce-ebon-eta-82.vercel.app/' },
+  { title: 'Mailing Web App', category: 'WEB APPLICATION', number: '02', description: overrides['Mailing-Web-App'].description, tech: overrides['Mailing-Web-App'].tech, github: 'https://github.com/rishabhtcodes/Mailing-Web-App', live: null },
+  { title: 'Portfolio', category: 'FRONTEND', number: '03', description: overrides['Portfolio'].description, tech: overrides['Portfolio'].tech, github: 'https://github.com/rishabhtcodes/Portfolio', live: null },
+  { title: 'Udyog Saarthi', category: 'WEB APPLICATION', number: '04', description: overrides['Udyog_Saarthi'].description, tech: overrides['Udyog_Saarthi'].tech, github: 'https://github.com/rishabhtcodes/Udyog_Saarthi', live: null },
+  { title: 'Django REST APIs', category: 'BACKEND', number: '05', description: overrides['Django_Rest_Api-s'].description, tech: overrides['Django_Rest_Api-s'].tech, github: 'https://github.com/rishabhtcodes/Django_Rest_Api-s', live: null },
+  { title: 'Todo List App', category: 'WEB APPLICATION', number: '06', description: overrides['Todo_list'].description, tech: overrides['Todo_list'].tech, github: 'https://github.com/rishabhtcodes/Todo_list', live: null },
 ];
+
+/* ── Helper: guess a category from the repo language ── */
+function guessCategory(lang) {
+  if (!lang) return 'PROJECT';
+  const l = lang.toLowerCase();
+  if (['python', 'java', 'go', 'ruby'].includes(l)) return 'BACKEND';
+  if (['javascript', 'typescript', 'html', 'css', 'vue'].includes(l)) return 'FRONTEND';
+  return 'PROJECT';
+}
 
 export default function Projects() {
   const { ref, inView } = useInView({ threshold: 0.05, triggerOnce: true });
+  const [projects, setProjects] = useState(fallbackProjects);
+  const username = 'rishabhtcodes';
+
+  useEffect(() => {
+    fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`)
+      .then((r) => {
+        if (!r.ok) throw new Error('API error');
+        return r.json();
+      })
+      .then((repos) => {
+        // Filter out forks, sort by stars then updated
+        const own = repos
+          .filter((r) => !r.fork)
+          .sort((a, b) => b.stargazers_count - a.stargazers_count || new Date(b.updated_at) - new Date(a.updated_at))
+          .slice(0, 6);
+
+        const mapped = own.map((repo, idx) => {
+          const ov = overrides[repo.name] || {};
+          return {
+            title: ov.title || repo.name.replace(/[-_]/g, ' '),
+            category: ov.category || guessCategory(repo.language),
+            number: String(idx + 1).padStart(2, '0'),
+            description: ov.description || repo.description || 'A project by ' + username,
+            tech: ov.tech || [repo.language].filter(Boolean),
+            github: repo.html_url,
+            live: ov.live || (repo.homepage || null),
+          };
+        });
+        setProjects(mapped);
+      })
+      .catch(() => {
+        /* keep fallback data */
+      });
+  }, []);
 
   return (
     <section className="section" id="projects" ref={ref}>
