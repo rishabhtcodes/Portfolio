@@ -1,105 +1,101 @@
-import { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { useEffect, useState } from 'react';
+import { Github, Menu, X } from 'lucide-react';
+import { motion } from 'framer-motion';
+import PhotoModal from './PhotoModal';
 
-const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'Blog', href: '#blog' },
-  { label: 'Contact', href: '#contact' },
-];
-
-export default function Navbar() {
+export default function Navbar({ links, githubUrl, profilePhoto, name }) {
+  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
+  const [photoModalOpen, setPhotoModalOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
-    window.addEventListener('scroll', onScroll);
-    return () => window.removeEventListener('scroll', onScroll);
+    const handleScroll = () => setScrolled(window.scrollY > 12);
+    handleScroll();
+    window.addEventListener('scroll', handleScroll);
+
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const nav = (e, href) => {
-    e.preventDefault();
-    setMobileOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
+  const handleClick = (event, href) => {
+    event.preventDefault();
+    setOpen(false);
+    document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
   return (
-    <nav className={`navbar ${scrolled ? 'navbar--scrolled' : ''}`}>
-      <div className="navbar__inner container">
-        <a href="#" className="navbar__logo">
-          <span className="navbar__logo-bold">Rishabh</span>
-          <span className="navbar__logo-light">Tiwari</span>
-        </a>
-
-        <ul className={`navbar__links ${mobileOpen ? 'navbar__links--open' : ''}`}>
-          {navLinks.map((l) => (
-            <li key={l.href}>
-              <a href={l.href} className="navbar__link" onClick={(e) => nav(e, l.href)}>{l.label}</a>
-            </li>
-          ))}
-        </ul>
-
-        <div className="navbar__actions">
-          <button className="navbar__btn" onClick={toggleTheme} aria-label="Toggle theme">
-            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
+    <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
+      <PhotoModal isOpen={photoModalOpen} onClose={() => setPhotoModalOpen(false)} photoUrl={profilePhoto} name={name} />
+      <motion.nav
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className={[
+          'mx-auto flex max-w-7xl items-center justify-between rounded-full border px-4 py-3 transition duration-300 sm:px-6',
+          scrolled ? 'border-white/15 bg-slate-950/80 shadow-glass backdrop-blur-xl' : 'border-white/10 bg-white/5 backdrop-blur-md',
+        ].join(' ')}
+      >
+        <div className="flex items-center gap-3">
+          {/* Photo Logo - Clickable */}
+          <button
+            type="button"
+            onClick={() => setPhotoModalOpen(true)}
+            className="group relative h-10 w-10 overflow-hidden rounded-full border border-white/20 transition hover:border-sky-400/50"
+            aria-label="View profile photo"
+          >
+            <img
+              src={profilePhoto}
+              alt={name}
+              className="h-full w-full object-cover transition group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-br from-sky-400/0 to-indigo-500/0 transition group-hover:from-sky-400/20 group-hover:to-indigo-500/20" />
           </button>
-          <button className="navbar__toggle" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Menu">
-            {mobileOpen ? <X size={22} /> : <Menu size={22} />}
-          </button>
+
+          {/* Name - Links to Home */}
+          <a href="#home" onClick={(event) => handleClick(event, '#home')} className="text-sm font-semibold tracking-[0.24em] text-slate-100 transition hover:text-sky-300 sm:text-base">
+            {name}
+          </a>
         </div>
-      </div>
 
-      <style>{`
-        .navbar {
-          position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-          padding: 16px 0;
-          background: transparent;
-          transition: all 0.3s ease;
-        }
-        .navbar--scrolled {
-          padding: 10px 0;
-          background: var(--bg-card);
-          backdrop-filter: var(--glass-blur);
-          -webkit-backdrop-filter: var(--glass-blur);
-          border-bottom: 1px solid var(--border-color);
-        }
-        .navbar__inner { display: flex; align-items: center; justify-content: space-between; }
-        .navbar__logo { font-size: 1.3rem; }
-        .navbar__logo-bold { font-weight: 800; }
-        .navbar__logo-light { font-weight: 300; }
-        .navbar__links { display: flex; gap: 4px; }
-        .navbar__link {
-          padding: 8px 14px; font-size: 0.85rem; font-weight: 500;
-          color: var(--text-secondary); border-radius: var(--radius-xs);
-          transition: all 0.2s ease;
-        }
-        .navbar__link:hover { color: var(--text-primary); background: var(--accent-soft); }
-        .navbar__actions { display: flex; gap: 8px; align-items: center; }
-        .navbar__btn {
-          width: 38px; height: 38px; border-radius: var(--radius-xs);
-          border: 1px solid var(--border-color); background: var(--bg-card);
-          color: var(--text-primary); display: flex; align-items: center;
-          justify-content: center; cursor: pointer; transition: all 0.2s;
-        }
-        .navbar__btn:hover { border-color: var(--border-hover); }
-        .navbar__toggle { display: none; background: none; border: none; color: var(--text-primary); cursor: pointer; }
-        @media (max-width: 768px) {
-          .navbar__links {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: var(--bg-primary); flex-direction: column;
-            align-items: center; justify-content: center; gap: 8px;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s; z-index: 999;
-          }
-          .navbar__links--open { opacity: 1; pointer-events: all; }
-          .navbar__link { font-size: 1.3rem; padding: 14px 28px; }
-          .navbar__toggle { display: block; z-index: 1001; }
-        }
-      `}</style>
-    </nav>
+        <div className="hidden items-center gap-6 md:flex">
+          {links.map((link) => (
+            <a key={link.href} href={link.href} onClick={(event) => handleClick(event, link.href)} className="nav-link">
+              {link.label}
+            </a>
+          ))}
+          <a href={githubUrl} target="_blank" rel="noreferrer" className="secondary-button px-4 py-2 text-xs">
+            <Github className="mr-2 h-4 w-4" />
+            GitHub
+          </a>
+        </div>
+
+        <button
+          type="button"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white md:hidden"
+          onClick={() => setOpen((value) => !value)}
+          aria-label="Toggle navigation"
+        >
+          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+      </motion.nav>
+
+      {open ? (
+        <div className="mx-auto mt-3 max-w-7xl rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-glass backdrop-blur-xl md:hidden">
+          <div className="flex flex-col gap-2">
+            {links.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                onClick={(event) => handleClick(event, link.href)}
+                className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/5 hover:text-white"
+              >
+                {link.label}
+              </a>
+            ))}
+            <a href={githubUrl} target="_blank" rel="noreferrer" className="secondary-button mt-2 w-full text-center text-sm">
+              View GitHub
+            </a>
+          </div>
+        </div>
+      ) : null}
+    </header>
   );
 }
