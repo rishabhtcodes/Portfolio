@@ -1,4 +1,4 @@
-# 🚀 Modern Developer Portfolio
+# 🚀 Portfolio - rishabhtcodes
 
 A premium, fully-responsive developer portfolio built with cutting-edge technologies. Showcase your skills, projects, and achievements with smooth animations and a sleek glassmorphism design.
 
@@ -319,4 +319,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-**Built with ❤️ by your name • [Powered by React + Vite](https://vitejs.dev)**
+**Built by rishabhtcodes • [Powered by React + Vite](https://vitejs.dev)**
