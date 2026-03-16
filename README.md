@@ -32,6 +32,10 @@ A premium, fully-responsive developer portfolio built with cutting-edge technolo
 | **Lucide React** | 0.468.0 | Icon library |
 | **PostCSS** | 8.4.49 | CSS transformation |
 | **Autoprefixer** | 10.4.20 | CSS vendor prefixes |
+| **Node.js + Express** | Latest | Backend API server |
+| **MongoDB / Local JSON fallback** | Latest | Dynamic portfolio content storage |
+| **JWT** | Latest | Admin authentication |
+| **Nodemailer** | Latest | Contact form email delivery |
 
 ---
 
@@ -56,11 +60,14 @@ npm install
 ### Development Server
 
 ```bash
-# Start local development server with hot reload
+# Start frontend + backend together from root
 npm run dev
 ```
 
-The application will be available at `http://localhost:5173`
+This starts:
+
+- Frontend: `http://localhost:5173`
+- Backend API: `http://localhost:5000`
 
 ### Production Build
 
@@ -77,6 +84,17 @@ npm run preview
 ## 📂 Project Structure
 
 ```
+backend/
+├── src/
+│   ├── config/            # DB connection and storage mode
+│   ├── middleware/        # Auth middleware (JWT)
+│   ├── models/            # MongoDB schemas
+│   ├── routes/            # REST API routes
+│   ├── store/             # Mongo/JSON storage abstraction
+│   └── utils/             # bootstrap + mailer + seed data
+├── .env.example           # Backend env template
+└── package.json
+
 src/
 ├── components/              # Reusable UI components
 │   ├── Navbar.jsx          # Fixed sticky navigation with mobile menu
@@ -110,6 +128,40 @@ tailwind.config.js          # Tailwind customization
 postcss.config.js           # PostCSS configuration
 vite.config.js              # Vite configuration
 ```
+
+---
+
+## 🔐 Environment Setup
+
+### Root `.env`
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+### Backend `backend/.env`
+
+```env
+PORT=5000
+MONGODB_URI=mongodb://127.0.0.1:27017/portfolio
+JWT_SECRET=your-jwt-secret
+ADMIN_EMAIL=your-admin-email
+ADMIN_PASSWORD=your-admin-password
+CLIENT_URL=http://localhost:5173
+
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-gmail-app-password
+MAIL_FROM=your-email@gmail.com
+CONTACT_RECEIVER_EMAIL=your-email@gmail.com
+```
+
+The contact form sends:
+
+- One email to portfolio owner
+- One automatic thank-you email to sender
 
 ---
 
@@ -217,7 +269,9 @@ Current build metrics:
 
 | Command | Purpose |
 |---------|---------|
-| `npm run dev` | Start development server |
+| `npm run dev` | Start frontend + backend (single command) |
+| `npm run dev:frontend` | Start Vite frontend only |
+| `npm run dev:backend` | Start backend only |
 | `npm run build` | Build for production |
 | `npm run preview` | Preview production build |
 | `npm run lint` | Run ESLint |
