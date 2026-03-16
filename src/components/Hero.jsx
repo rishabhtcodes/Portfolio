@@ -1,132 +1,93 @@
-import { useEffect, useState } from 'react';
-import { Github, Linkedin, Mail, Twitter, ArrowDown } from 'lucide-react';
+import { ArrowRight, Github, Sparkles } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-const roles = ['Full Stack Developer', 'Django Developer', 'React Builder', 'REST API Architect'];
-
-export default function Hero() {
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [text, setText] = useState('');
-  const [deleting, setDeleting] = useState(false);
-
-  useEffect(() => {
-    const role = roles[roleIndex];
-    let t;
-    if (!deleting && text === role) t = setTimeout(() => setDeleting(true), 2000);
-    else if (deleting && text === '') { setDeleting(false); setRoleIndex((i) => (i + 1) % roles.length); }
-    else t = setTimeout(() => setText(deleting ? role.slice(0, text.length - 1) : role.slice(0, text.length + 1)), deleting ? 40 : 80);
-    return () => clearTimeout(t);
-  }, [text, deleting, roleIndex]);
-
+export default function Hero({ profile }) {
   return (
-    <section className="hero" id="hero">
-      <div className="hero__bg-grid" />
-      <div className="hero__content container">
-        <div className="hero__text">
-          <span className="hero__greeting">Hey there 👋, I'm</span>
-          <h1 className="hero__name">
-            Rishabh<br />
-            <span className="gradient-text">Kumar Tiwari</span>
-          </h1>
-          <div className="hero__role">
-            <span className="hero__role-text">{text}</span>
-            <span className="hero__cursor">|</span>
-          </div>
-          <p className="hero__desc">
-            A passionate Full Stack Developer & CSE student at LPU, building scalable web applications with Django, React, and modern technologies.
-          </p>
-          <div className="hero__cta">
-            <a href="#projects" className="btn btn-primary" onClick={(e) => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }); }}>
-              View My Work
-            </a>
-            <a href="#contact" className="btn btn-outline" onClick={(e) => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
-              Get In Touch
-            </a>
-          </div>
-          <div className="hero__socials">
-            {[
-              { icon: <Mail size={18} />, href: 'mailto:rishabhtiwari3538@gmail.com', label: 'Email' },
-              { icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/rishabhtcodes', label: 'LinkedIn' },
-              { icon: <Github size={18} />, href: 'https://github.com/rishabhtcodes', label: 'GitHub' },
-              { icon: <Twitter size={18} />, href: 'https://twitter.com/rishabhtcodes', label: 'Twitter' },
-            ].map((s) => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="hero__social" aria-label={s.label}>{s.icon}</a>
-            ))}
-          </div>
-        </div>
-        <div className="hero__visual">
-          <div className="hero__code-window glass-card">
-            <div className="hero__code-dots">
-              <span /><span /><span />
+    <section id="home" className="relative isolate overflow-hidden pt-20 sm:pt-24">
+      <div className="absolute inset-0 -z-20 grid-overlay opacity-40" />
+      <div className="absolute left-1/2 top-40 -z-10 h-80 w-80 -translate-x-1/2 rounded-full bg-sky-400/20 blur-[140px]" />
+      <div className="section-shell min-h-screen py-14 sm:py-16 lg:flex lg:items-center">
+        <div className="grid w-full gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, ease: 'easeOut' }}
+            className="max-w-3xl"
+          >
+            <div className="section-kicker">
+              <Sparkles className="mr-2 h-3.5 w-3.5" />
+              Available for freelance and full-time roles
             </div>
-            <pre className="hero__code"><code><span className="hc-keyword">const</span> <span className="hc-variable">rishabh</span> <span className="hc-bracket">= {'{'}</span>{'\n'}
-{'  '}<span className="hc-property">role</span>: <span className="hc-string">"Full Stack Developer"</span>,{'\n'}
-{'  '}<span className="hc-property">university</span>: <span className="hc-string">"LPU"</span>,{'\n'}
-{'  '}<span className="hc-property">skills</span>: <span className="hc-bracket">[</span><span className="hc-string">"Django"</span>, <span className="hc-string">"React"</span>,{'\n'}
-{'    '}<span className="hc-string">"REST APIs"</span>, <span className="hc-string">"Node.js"</span><span className="hc-bracket">]</span>,{'\n'}
-{'  '}<span className="hc-property">passion</span>: <span className="hc-string">"Building products"</span>,{'\n'}
-{'  '}<span className="hc-property">coffee</span>: <span className="hc-keyword">true</span> ☕{'\n'}
-<span className="hc-bracket">{'}'}</span>;</code></pre>
-          </div>
+            <h1 className="mt-8 text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
+              Hi, I&apos;m <span className="text-gradient">{profile.name}</span>
+            </h1>
+            <p className="mt-5 text-lg font-medium text-sky-200 sm:text-xl">{profile.title}</p>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+              {profile.introduction}
+            </p>
+            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+              <a href="#projects" className="primary-button">
+                View Projects
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </a>
+              <a href={profile.github} target="_blank" rel="noreferrer" className="secondary-button">
+                <Github className="mr-2 h-4 w-4" />
+                GitHub Profile
+              </a>
+            </div>
+            <div className="mt-10 flex flex-wrap gap-3 text-xs text-slate-300 sm:text-sm">
+              {profile.highlights.map((item) => (
+                <span key={item} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94, y: 24 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
+            className="relative mx-auto w-full max-w-xl"
+          >
+            <div className="hero-orb absolute inset-x-8 top-10 -z-10 h-72 rounded-full bg-gradient-to-br from-sky-400/20 via-cyan-400/10 to-indigo-500/20 blur-3xl" />
+            <div className="glass-panel mask-fade overflow-hidden p-6 sm:p-8">
+              <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                <div>
+                  <p className="text-sm font-medium text-slate-200">Developer Snapshot</p>
+                  <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-400">React • Node • APIs</p>
+                </div>
+                <div className="flex gap-2">
+                  <span className="h-3 w-3 rounded-full bg-rose-400" />
+                  <span className="h-3 w-3 rounded-full bg-amber-400" />
+                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                </div>
+              </div>
+              <div className="mt-6 space-y-4 font-mono text-sm leading-7 text-slate-300">
+                <p>
+                  <span className="text-sky-300">const</span> developer = {'{'}
+                </p>
+                <p className="pl-4">
+                  name: <span className="text-cyan-200">&quot;{profile.name}&quot;</span>,
+                </p>
+                <p className="pl-4">
+                  role: <span className="text-cyan-200">&quot;{profile.title}&quot;</span>,
+                </p>
+                <p className="pl-4">
+                  focus: <span className="text-cyan-200">&quot;Scalable web products&quot;</span>,
+                </p>
+                <p className="pl-4">
+                  stack: <span className="text-cyan-200">['React', 'Node.js', 'MongoDB']</span>,
+                </p>
+                <p className="pl-4">
+                  shipping: <span className="text-emerald-300">true</span>
+                </p>
+                <p>{'}'};</p>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
-      <a href="#about" className="hero__scroll" onClick={(e) => { e.preventDefault(); document.querySelector('#about')?.scrollIntoView({ behavior: 'smooth' }); }}>
-        <ArrowDown size={18} />
-      </a>
-
-      <style>{`
-        .hero { min-height: 100vh; display: flex; align-items: center; position: relative; overflow: hidden; padding-top: 80px; }
-        .hero__bg-grid {
-          position: absolute; inset: 0; opacity: 0.03;
-          background-image:
-            linear-gradient(var(--text-primary) 1px, transparent 1px),
-            linear-gradient(90deg, var(--text-primary) 1px, transparent 1px);
-          background-size: 60px 60px;
-        }
-        .hero__content { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
-        .hero__greeting { font-family: var(--font-mono); font-size: 0.9rem; color: var(--text-muted); margin-bottom: 12px; display: block; }
-        .hero__name { font-size: clamp(2.5rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; letter-spacing: -0.03em; margin-bottom: 16px; }
-        .gradient-text { background: var(--gradient-text); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-        .hero__role { display: flex; align-items: center; gap: 2px; margin-bottom: 20px; font-size: 1.2rem; font-weight: 600; min-height: 32px; }
-        .hero__role-text { color: var(--text-secondary); }
-        .hero__cursor { animation: pulse-glow 1s step-end infinite; color: var(--accent); }
-        .hero__desc { font-size: 0.95rem; color: var(--text-secondary); max-width: 460px; line-height: 1.7; margin-bottom: 28px; }
-        .hero__cta { display: flex; gap: 12px; margin-bottom: 32px; }
-        .hero__socials { display: flex; gap: 10px; }
-        .hero__social {
-          width: 40px; height: 40px; border-radius: var(--radius-xs);
-          display: flex; align-items: center; justify-content: center;
-          background: var(--bg-card); border: 1px solid var(--border-color);
-          color: var(--text-secondary); transition: all 0.2s;
-        }
-        .hero__social:hover { color: var(--text-primary); border-color: var(--border-hover); transform: translateY(-2px); }
-        .hero__visual { display: flex; justify-content: center; }
-        .hero__code-window { padding: 24px; max-width: 400px; width: 100%; animation: float 6s ease infinite; }
-        .hero__code-dots { display: flex; gap: 6px; margin-bottom: 16px; }
-        .hero__code-dots span { width: 12px; height: 12px; border-radius: 50%; }
-        .hero__code-dots span:nth-child(1) { background: #ff5f57; }
-        .hero__code-dots span:nth-child(2) { background: #febc2e; }
-        .hero__code-dots span:nth-child(3) { background: #28c840; }
-        .hero__code-window { background: #1e1e2e !important; border: 1px solid #313244 !important; }
-        .hero__code { font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.9; color: #cdd6f4; white-space: pre; overflow-x: auto; background: #1e1e2e; }
-        .hc-keyword  { color: #cba6f7; font-style: italic; }
-        .hc-variable { color: #89dceb; }
-        .hc-property { color: #89b4fa; }
-        .hc-string   { color: #a6e3a1; }
-        .hc-bracket  { color: #cdd6f4; }
-        .hero__scroll {
-          position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-          width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border-color);
-          display: flex; align-items: center; justify-content: center;
-          color: var(--text-muted); animation: float 3s ease infinite;
-        }
-        @media (max-width: 768px) {
-          .hero__content { grid-template-columns: 1fr; text-align: center; }
-          .hero__desc { margin: 0 auto 28px; }
-          .hero__cta, .hero__socials { justify-content: center; }
-          .hero__visual { order: -1; }
-          .hero__code-window { max-width: 320px; }
-        }
-      `}</style>
     </section>
   );
 }

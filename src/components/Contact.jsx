@@ -1,123 +1,183 @@
 import { useState } from 'react';
-import { useInView } from 'react-intersection-observer';
-import { Mail, Phone, Github, Linkedin, Twitter, Send } from 'lucide-react';
+import { Mail, Linkedin, Github, Send } from 'lucide-react';
+import { motion } from 'framer-motion';
 
-export default function Contact() {
-  const { ref, inView } = useInView({ threshold: 0.1, triggerOnce: true });
-  const [form, setForm] = useState({ name: '', email: '', message: '' });
-  const [status, setStatus] = useState('idle');
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+export default function Contact({ contact }) {
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
+  const [submitted, setSubmitted] = useState(false);
 
   const validate = () => {
-    const e = {};
-    if (!form.name.trim()) e.name = true;
-    if (!form.email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = true;
-    if (!form.message.trim()) e.message = true;
-    return e;
+    const nextErrors = {};
+
+    if (!formData.name.trim()) {
+      nextErrors.name = 'Name is required.';
+    }
+
+    if (!emailPattern.test(formData.email)) {
+      nextErrors.email = 'Enter a valid email address.';
+    }
+
+    if (formData.message.trim().length < 10) {
+      nextErrors.message = 'Message must be at least 10 characters.';
+    }
+
+    return nextErrors;
   };
 
-  const handleSubmit = async (ev) => {
-    ev.preventDefault();
-    const e = validate();
-    setErrors(e);
-    if (Object.keys(e).length) return;
-    setStatus('sending');
-    try {
-      const res = await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          service_id: 'YOUR_SERVICE_ID', template_id: 'YOUR_TEMPLATE_ID', user_id: 'YOUR_PUBLIC_KEY',
-          template_params: { from_name: form.name, from_email: form.email, message: form.message, to_name: 'Rishabh' },
-        }),
-      });
-      if (res.ok || res.status === 200) { setStatus('success'); setForm({ name: '', email: '', message: '' }); setTimeout(() => setStatus('idle'), 4000); }
-      else throw new Error();
-    } catch { setStatus('error'); setTimeout(() => setStatus('idle'), 4000); }
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((current) => ({ ...current, [name]: value }));
+    setSubmitted(false);
+    setErrors((current) => ({ ...current, [name]: undefined }));
   };
 
-  const change = (f) => (e) => { setForm(p => ({ ...p, [f]: e.target.value })); if (errors[f]) setErrors(p => ({ ...p, [f]: undefined })); };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const nextErrors = validate();
 
-  const socials = [
-    { icon: <Mail size={18} />, href: 'mailto:rishabhtiwari3538@gmail.com', label: 'Email' },
-    { icon: <Linkedin size={18} />, href: 'https://linkedin.com/in/rishabhtcodes', label: 'LinkedIn' },
-    { icon: <Twitter size={18} />, href: 'https://twitter.com/rishabhtcodes', label: 'Twitter' },
-    { icon: <Github size={18} />, href: 'https://github.com/rishabhtcodes', label: 'GitHub' },
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors);
+      return;
+    }
+
+    setErrors({});
+    setSubmitted(true);
+    setFormData({ name: '', email: '', message: '' });
+  };
+
+  const links = [
+    {
+      label: 'Email',
+      value: contact.email,
+      href: `mailto:${contact.email}`,
+      icon: Mail,
+      logo: 'https://cdn.simpleicons.org/gmail/EA4335',
+      logoClass: 'h-6 w-6',
+    },
+    {
+      label: 'LinkedIn',
+      value: contact.linkedinLabel,
+      href: contact.linkedin,
+      icon: Linkedin,
+      logo: 'https://img.icons8.com/color/48/linkedin.png',
+      logoClass: 'h-8 w-8',
+    },
+    {
+      label: 'GitHub',
+      value: contact.githubLabel,
+      href: contact.github,
+      icon: Github,
+      logo: 'https://cdn.simpleicons.org/github/FFFFFF',
+      logoClass: 'h-6 w-6',
+    },
   ];
 
   return (
-    <section className="section" id="contact" ref={ref}>
-      <div className="container">
-        <span className="section-label">GET IN TOUCH</span>
-        <h2 className={`section-title fade-in ${inView ? 'visible' : ''}`}>
-          Contact <span className="gradient-text">Me</span>
-        </h2>
+    <motion.section
+      id="contact"
+      className="section-shell"
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.6, ease: 'easeOut' }}
+    >
+      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <div>
+          <span className="section-kicker">Contact</span>
+          <h2 className="section-title">Let&apos;s build something polished, useful, and production-ready.</h2>
+          <p className="section-copy">{contact.copy}</p>
 
-        <div className="contact__grid">
-          <form className={`contact__form glass-card fade-in stagger-1 ${inView ? 'visible' : ''}`} onSubmit={handleSubmit}>
-            <div className="contact__field">
-              <label>Name</label>
-              <input className={errors.name ? 'error' : ''} value={form.name} onChange={change('name')} placeholder="Your name" />
-            </div>
-            <div className="contact__field">
-              <label>Email</label>
-              <input className={errors.email ? 'error' : ''} value={form.email} onChange={change('email')} type="email" placeholder="your@email.com" />
-            </div>
-            <div className="contact__field">
-              <label>Message</label>
-              <textarea className={errors.message ? 'error' : ''} value={form.message} onChange={change('message')} rows={4} placeholder="How can I help?" />
-            </div>
-            <button type="submit" className="btn btn-primary" disabled={status === 'sending'}>
-              {status === 'sending' ? 'Sending...' : status === 'success' ? '✓ Sent!' : status === 'error' ? 'Failed — Retry' : <><Send size={16} /> Send Message</>}
-            </button>
-          </form>
+          <div className="mt-8 flex flex-wrap gap-4">
+            {links.map((link) => {
+              const Icon = link.icon;
 
-          <div className={`contact__info fade-in stagger-2 ${inView ? 'visible' : ''}`}>
-            <div className="contact__detail glass-card">
-              <Mail size={20} />
-              <div>
-                <strong>Email</strong>
-                <a href="mailto:rishabhtiwari3538@gmail.com">rishabhtiwari3538@gmail.com</a>
-              </div>
-            </div>
-            <div className="contact__detail glass-card">
-              <Phone size={20} />
-              <div>
-                <strong>Phone</strong>
-                <span>+91 XXXXXXXXXX</span>
-              </div>
-            </div>
-            <div className="contact__socials">
-              {socials.map((s) => (
-                <a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer" className="contact__social glass-card" aria-label={s.label}>
-                  {s.icon}
+              return (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+                  rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}
+                  title={link.label}
+                  className="glass-panel flex h-20 w-20 items-center justify-center rounded-2xl p-4 transition duration-300 hover:-translate-y-1 hover:border-sky-300/25 hover:bg-white/8"
+                >
+                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-400/10 text-sky-200">
+                    {link.logo ? (
+                      <img src={link.logo} alt={`${link.label} logo`} className={`${link.logoClass ?? 'h-6 w-6'} object-contain`} loading="lazy" />
+                    ) : (
+                      <Icon className="h-5 w-5" />
+                    )}
+                  </div>
                 </a>
-              ))}
-            </div>
+              );
+            })}
           </div>
+
+          <a href={`mailto:${contact.email}`} className="primary-button mt-6">
+            Contact Button
+          </a>
         </div>
+
+        <form onSubmit={handleSubmit} noValidate className="glass-panel rounded-[2rem] p-6 sm:p-8">
+          <div className="grid gap-5">
+            <div>
+              <label htmlFor="name" className="mb-2 block text-sm font-medium text-slate-200">
+                Name
+              </label>
+              <input
+                id="name"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                placeholder="Your name"
+              />
+              {errors.name ? <p className="mt-2 text-sm text-rose-300">{errors.name}</p> : null}
+            </div>
+
+            <div>
+              <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">
+                Email
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                placeholder="you@example.com"
+              />
+              {errors.email ? <p className="mt-2 text-sm text-rose-300">{errors.email}</p> : null}
+            </div>
+
+            <div>
+              <label htmlFor="message" className="mb-2 block text-sm font-medium text-slate-200">
+                Message
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="6"
+                value={formData.message}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                placeholder="Tell me about the project or role."
+              />
+              {errors.message ? <p className="mt-2 text-sm text-rose-300">{errors.message}</p> : null}
+            </div>
+
+            <button type="submit" className="primary-button w-full sm:w-fit">
+              <Send className="mr-2 h-4 w-4" />
+              Send Message
+            </button>
+
+            {submitted ? <p className="text-sm text-emerald-300">Message validated. Connect this form to EmailJS, Formspree, or your backend when ready.</p> : null}
+          </div>
+        </form>
       </div>
-      <style>{`
-        .contact__grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 32px; margin-top: 40px; align-items: start; }
-        .contact__form { padding: 28px; }
-        .contact__field { margin-bottom: 16px; }
-        .contact__field label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 6px; color: var(--text-secondary); }
-        .contact__field input, .contact__field textarea {
-          width: 100%; padding: 12px 16px; border: 1px solid var(--border-color);
-          border-radius: var(--radius-xs); background: var(--bg-primary);
-          color: var(--text-primary); font-family: var(--font-sans); font-size: 0.88rem;
-          transition: border-color 0.2s; outline: none;
-        }
-        .contact__field input:focus, .contact__field textarea:focus { border-color: var(--border-hover); }
-        .contact__field input.error, .contact__field textarea.error { border-color: #e74c3c; }
-        .contact__field textarea { resize: vertical; min-height: 100px; }
-        .contact__detail { padding: 16px 20px; display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
-        .contact__detail strong { display: block; font-size: 0.82rem; }
-        .contact__detail a, .contact__detail span { font-size: 0.85rem; color: var(--text-secondary); }
-        .contact__socials { display: flex; gap: 10px; margin-top: 8px; }
-        .contact__social { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: var(--text-secondary); }
-        .contact__social:hover { color: var(--text-primary); }
-        @media (max-width: 768px) { .contact__grid { grid-template-columns: 1fr; } }
-      `}</style>
-    </section>
+    </motion.section>
   );
 }

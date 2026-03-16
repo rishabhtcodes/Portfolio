@@ -1,46 +1,47 @@
-import { Github, Linkedin, Mail, Twitter, Heart } from 'lucide-react';
+import { Github, Linkedin, Twitter } from 'lucide-react';
 
-export default function Footer() {
+export default function Footer({ profile }) {
   const socials = [
-    { icon: <Mail size={16} />, href: 'mailto:rishabhtiwari3538@gmail.com' },
-    { icon: <Linkedin size={16} />, href: 'https://linkedin.com/in/rishabhtcodes' },
-    { icon: <Twitter size={16} />, href: 'https://twitter.com/rishabhtcodes' },
-    { icon: <Github size={16} />, href: 'https://github.com/rishabhtcodes' },
+    { label: 'GitHub', href: profile.github, icon: Github },
+    { label: 'LinkedIn', href: profile.linkedin, icon: Linkedin },
+    { label: 'Twitter', href: profile.twitter, icon: Twitter },
   ];
 
   return (
-    <footer className="footer">
-      <div className="footer__inner container">
-        <div className="footer__left">
-          <span className="footer__name"><strong>Rishabh</strong> Tiwari</span>
-          <span className="footer__role">Full Stack Developer</span>
-        </div>
-        <p className="footer__copy">
-          Made with <Heart size={12} style={{ display: 'inline', verticalAlign: 'middle' }} /> © 2026
-        </p>
-        <div className="footer__socials">
-          {socials.map((s, i) => (
-            <a key={i} href={s.href} target="_blank" rel="noopener noreferrer" className="footer__social">{s.icon}</a>
-          ))}
+    <footer className="w-full pt-8">
+      <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
+        <div className="glass-panel flex flex-col gap-6 rounded-[2rem] px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div>
+            <p className="text-lg font-semibold text-white">Rishabh Tiwari</p>
+            <p className="mt-1 text-sm text-slate-400">Full Stack Developer building modern web experiences.</p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {socials.map((social) => {
+              const Icon = social.icon;
+
+              return (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition duration-300 hover:-translate-y-1 hover:border-sky-300/25 hover:text-white"
+                  aria-label={social.label}
+                >
+                  <Icon className="h-4 w-4" />
+                </a>
+              );
+            })}
+          </div>
         </div>
       </div>
-      <style>{`
-        .footer { padding: 32px 0; border-top: 1px solid var(--border-color); }
-        .footer__inner { display: flex; align-items: center; justify-content: space-between; }
-        .footer__left { display: flex; flex-direction: column; }
-        .footer__name { font-size: 1.1rem; }
-        .footer__role { font-size: 0.75rem; color: var(--text-muted); }
-        .footer__copy { font-size: 0.8rem; color: var(--text-muted); }
-        .footer__socials { display: flex; gap: 8px; }
-        .footer__social {
-          width: 34px; height: 34px; border-radius: var(--radius-xs);
-          display: flex; align-items: center; justify-content: center;
-          background: var(--bg-card); border: 1px solid var(--border-color);
-          color: var(--text-secondary); transition: all 0.2s;
-        }
-        .footer__social:hover { color: var(--text-primary); border-color: var(--border-hover); }
-        @media (max-width: 600px) { .footer__inner { flex-direction: column; gap: 16px; text-align: center; } }
-      `}</style>
+
+      <div className="mt-6 border-t border-white/20" />
+
+      <div className="pb-6 pt-4">
+        <p className="text-center text-sm text-slate-500">© 2026 Rishabh Tiwari. Built with React, Vite, Tailwind CSS, and deployed on Vercel.</p>
+      </div>
     </footer>
   );
 }
