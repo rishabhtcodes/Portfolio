@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { Download, Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PhotoModal from './PhotoModal';
+import ResumeFormatModal from './ResumeFormatModal';
 
-export default function Navbar({ links, resumeUrl, profilePhoto, name }) {
+export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto, name }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
+  const [resumeModalOpen, setResumeModalOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 12);
@@ -22,9 +24,48 @@ export default function Navbar({ links, resumeUrl, profilePhoto, name }) {
     document.querySelector(href)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  const downloadResumeFile = (url, fileName) => {
+    if (!url) {
+      window.alert('Resume file is not available yet.');
+      return;
+    }
+
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = fileName;
+    anchor.target = '_blank';
+    anchor.rel = 'noreferrer';
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+  };
+
+  const handleResumeDownload = () => {
+    if (!resumePdfUrl && !resumeDocUrl) {
+      window.alert('Resume file is not available yet.');
+      return;
+    }
+
+    setResumeModalOpen(true);
+  };
+
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
       <PhotoModal isOpen={photoModalOpen} onClose={() => setPhotoModalOpen(false)} photoUrl={profilePhoto} name={name} />
+      <ResumeFormatModal
+        isOpen={resumeModalOpen}
+        onClose={() => setResumeModalOpen(false)}
+        hasPdf={Boolean(resumePdfUrl)}
+        hasDoc={Boolean(resumeDocUrl)}
+        onSelectPdf={() => {
+          setResumeModalOpen(false);
+          downloadResumeFile(resumePdfUrl, 'resume.pdf');
+        }}
+        onSelectDoc={() => {
+          setResumeModalOpen(false);
+          downloadResumeFile(resumeDocUrl, 'resume.docx');
+        }}
+      />
       <motion.nav
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -61,10 +102,10 @@ export default function Navbar({ links, resumeUrl, profilePhoto, name }) {
               {link.label}
             </a>
           ))}
-          <a href={resumeUrl} download className="secondary-button px-4 py-2 text-xs">
+          <button type="button" onClick={handleResumeDownload} className="secondary-button px-4 py-2 text-xs">
             <Download className="mr-2 h-4 w-4" />
             Resume
-          </a>
+          </button>
         </div>
 
         <button
@@ -90,9 +131,9 @@ export default function Navbar({ links, resumeUrl, profilePhoto, name }) {
                 {link.label}
               </a>
             ))}
-            <a href={resumeUrl} download className="secondary-button mt-2 w-full text-center text-sm">
+            <button type="button" onClick={handleResumeDownload} className="secondary-button mt-2 w-full text-center text-sm">
               Resume
-            </a>
+            </button>
           </div>
         </div>
       ) : null}

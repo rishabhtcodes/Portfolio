@@ -20,7 +20,7 @@ const entityConfigs = {
     fields: [
       { key: 'title', label: 'Title' },
       { key: 'status', label: 'Status' },
-      { key: 'image', label: 'Image URL' },
+      { key: 'image', label: 'Project Image', type: 'image' },
       { key: 'github', label: 'GitHub URL' },
       { key: 'demo', label: 'Demo URL' },
       { key: 'order', label: 'Order', type: 'number' },
@@ -76,7 +76,7 @@ const entityConfigs = {
       { key: 'date', label: 'Date' },
       { key: 'credentialId', label: 'Credential ID' },
       { key: 'credentialLink', label: 'Credential URL' },
-      { key: 'icon', label: 'Icon key' },
+      { key: 'icon', label: 'Certificate Icon', type: 'image' },
       { key: 'order', label: 'Order', type: 'number' },
     ],
     columns: ['title', 'issuer', 'date'],
@@ -86,6 +86,8 @@ const entityConfigs = {
 };
 
 function createProfileForm(profile) {
+  const profileResume = profile?.resume || {};
+
   return {
     name: profile?.name || '',
     title: profile?.title || '',
@@ -105,10 +107,12 @@ function createProfileForm(profile) {
     contactCopy: profile?.contact?.copy || '',
     contactLinkedinLabel: profile?.contact?.linkedinLabel || '',
     contactGithubLabel: profile?.contact?.githubLabel || '',
-    resumeTitle: profile?.resume?.title || '',
-    resumeLink: profile?.resume?.resumeLink || '',
-    resumeHighlights: Array.isArray(profile?.resume?.highlights)
-      ? profile.resume.highlights.map((item) => `${item.label}|${item.detail}`).join('\n')
+    resumeTitle: profileResume.title || '',
+    resumeLink: profileResume.resumeLink || '',
+    resumePdfLink: profileResume.resumePdfLink || profileResume.resumeLink || '',
+    resumeDocLink: profileResume.resumeDocLink || '',
+    resumeHighlights: Array.isArray(profileResume.highlights)
+      ? profileResume.highlights.map((item) => `${item.label}|${item.detail}`).join('\n')
       : '',
   };
 }
@@ -143,7 +147,9 @@ function buildProfilePayload(form) {
     },
     resume: {
       title: form.resumeTitle,
-      resumeLink: form.resumeLink,
+      resumeLink: form.resumePdfLink || form.resumeDocLink || form.resumeLink,
+      resumePdfLink: form.resumePdfLink,
+      resumeDocLink: form.resumeDocLink,
       highlights: form.resumeHighlights
         .split('\n')
         .map((item) => item.trim())
@@ -322,6 +328,82 @@ export default function AdminDashboard() {
     reader.readAsDataURL(file);
   };
 
+  const handleResumeFileUpload = (event, targetField) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    const lowerName = file.name.toLowerCase();
+    const allowed = targetField === 'resumePdfLink'
+      ? lowerName.endsWith('.pdf')
+      : (lowerName.endsWith('.doc') || lowerName.endsWith('.docx'));
+
+    if (!allowed) {
+      setError(targetField === 'resumePdfLink' ? 'Please select a PDF file.' : 'Please select a DOC or DOCX file.');
+      return;
+    }
+
+    setError('');
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setProfileForm((current) => ({ ...current, [targetField]: reader.result }));
+      }
+    };
+    reader.onerror = () => setError('Unable to read the selected resume file.');
+    reader.readAsDataURL(file);
+  };
+
+  const handleEntityImageUpload = (event, section, targetField) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file.');
+      return;
+    }
+
+    setError('');
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') {
+        return;
+      }
+
+      const image = new Image();
+      image.onload = () => {
+        const maxSide = 900;
+        const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const context = canvas.getContext('2d');
+        if (!context) {
+          setError('Unable to process image in this browser.');
+          return;
+        }
+
+        context.drawImage(image, 0, 0, width, height);
+        const compressed = canvas.toDataURL('image/jpeg', 0.82);
+        setEntityForms((current) => ({
+          ...current,
+          [section]: { ...current[section], [targetField]: compressed },
+        }));
+      };
+
+      image.onerror = () => setError('Unable to read the selected image.');
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
   const saveProfile = async (event) => {
     event.preventDefault();
     try {
@@ -420,8 +502,45 @@ export default function AdminDashboard() {
         </div>
 
         <form onSubmit={(event) => handleEntitySubmit(event, section)} className="glass-panel rounded-[2rem] p-6 sm:p-8">
+          {config.fields.filter((f) => f.type === 'image').length > 0 && (
+            <div className="mb-6 space-y-4 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+              {config.fields
+                .filter((f) => f.type === 'image')
+                .map((field) => (
+                  <div key={field.key}>
+                    <p className="mb-4 text-xs uppercase tracking-[0.24em] text-rose-200">{field.label}</p>
+                    <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                      <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
+                        {form[field.key] ? (
+                          <img src={form[field.key]} alt={field.label} className="h-full w-full object-cover" />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">No Image</div>
+                        )}
+                      </div>
+
+                      <div className="flex-1 space-y-3">
+                        <input
+                          type="text"
+                          value={form[field.key] || ''}
+                          onChange={(event) => updateEntityForm(section, field.key, event.target.value)}
+                          placeholder={`${field.label} URL or data`}
+                          className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                        />
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(event) => handleEntityImageUpload(event, section, field.key)}
+                          className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+            </div>
+          )}
+
           <div className="grid gap-5 lg:grid-cols-2">
-            {config.fields.map((field) => (
+            {config.fields.filter((f) => f.type !== 'image').map((field) => (
               <div key={field.key} className={field.type === 'textarea' ? 'lg:col-span-2' : ''}>
                 <label className="mb-2 block text-sm font-medium text-slate-200">{field.label}</label>
                 {field.type === 'textarea' ? (
@@ -476,7 +595,6 @@ export default function AdminDashboard() {
     ['contactLinkedinLabel', 'LinkedIn display label'],
     ['contactGithubLabel', 'GitHub display label'],
     ['resumeTitle', 'Resume title'],
-    ['resumeLink', 'Resume link'],
   ];
 
   if (loading) {
@@ -582,6 +700,45 @@ export default function AdminDashboard() {
                         type="file"
                         accept="image/*"
                         onChange={(event) => handleImageUpload(event, 'aboutPhoto')}
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mb-6 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-rose-200">Resume Files</p>
+                  <div className="mt-4 grid gap-4 lg:grid-cols-2">
+                    <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+                      <p className="text-sm font-semibold text-slate-200">PDF Resume</p>
+                      <input
+                        name="resumePdfLink"
+                        value={profileForm.resumePdfLink || ''}
+                        onChange={handleProfileChange}
+                        placeholder="PDF file URL or data"
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                      />
+                      <input
+                        type="file"
+                        accept=".pdf,application/pdf"
+                        onChange={(event) => handleResumeFileUpload(event, 'resumePdfLink')}
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                      />
+                    </div>
+
+                    <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
+                      <p className="text-sm font-semibold text-slate-200">DOC / DOCX Resume</p>
+                      <input
+                        name="resumeDocLink"
+                        value={profileForm.resumeDocLink || ''}
+                        onChange={handleProfileChange}
+                        placeholder="DOC or DOCX file URL or data"
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                      />
+                      <input
+                        type="file"
+                        accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                        onChange={(event) => handleResumeFileUpload(event, 'resumeDocLink')}
                         className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
                       />
                     </div>

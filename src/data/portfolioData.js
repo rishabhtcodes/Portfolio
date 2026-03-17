@@ -214,6 +214,8 @@ export const resume = {
     { label: 'Hackathons', detail: 'Top 10 & Rank 4' },
   ],
   resumeLink: '/resume.pdf',
+  resumePdfLink: '/resume.pdf',
+  resumeDocLink: '/resume.docx',
 };
 
 export const certificates = [

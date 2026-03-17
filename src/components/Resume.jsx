@@ -1,7 +1,39 @@
+import { useState } from 'react';
 import { Download } from 'lucide-react';
 import { motion } from 'framer-motion';
+import ResumeFormatModal from './ResumeFormatModal';
 
 export default function Resume({ resume }) {
+  const [resumeModalOpen, setResumeModalOpen] = useState(false);
+
+  const downloadResumeFile = (url, fileName) => {
+    if (!url) {
+      window.alert('Resume file is not available yet.');
+      return;
+    }
+
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = fileName;
+    anchor.target = '_blank';
+    anchor.rel = 'noreferrer';
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+  };
+
+  const handleResumeDownload = () => {
+    const pdfUrl = resume.resumePdfLink || resume.resumeLink;
+    const docUrl = resume.resumeDocLink;
+
+    if (!pdfUrl && !docUrl) {
+      window.alert('Resume file is not available yet.');
+      return;
+    }
+
+    setResumeModalOpen(true);
+  };
+
   return (
     <motion.section
       id="resume"
@@ -11,6 +43,21 @@ export default function Resume({ resume }) {
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
+      <ResumeFormatModal
+        isOpen={resumeModalOpen}
+        onClose={() => setResumeModalOpen(false)}
+        hasPdf={Boolean(resume.resumePdfLink || resume.resumeLink)}
+        hasDoc={Boolean(resume.resumeDocLink)}
+        onSelectPdf={() => {
+          setResumeModalOpen(false);
+          downloadResumeFile(resume.resumePdfLink || resume.resumeLink, 'resume.pdf');
+        }}
+        onSelectDoc={() => {
+          setResumeModalOpen(false);
+          downloadResumeFile(resume.resumeDocLink, 'resume.docx');
+        }}
+      />
+
       <span className="section-kicker">Resume</span>
       <h2 className="section-title">Download my resume and learn more about my background.</h2>
       <p className="section-copy">
@@ -39,10 +86,10 @@ export default function Resume({ resume }) {
       </div>
 
       <div className="mt-10 flex justify-center">
-        <a href={resume.resumeLink} target="_blank" rel="noreferrer" className="primary-button">
+        <button type="button" onClick={handleResumeDownload} className="primary-button">
           <Download className="mr-2 h-4 w-4" />
           Download Resume
-        </a>
+        </button>
       </div>
     </motion.section>
   );

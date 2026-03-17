@@ -40,6 +40,8 @@ const profileSchema = new mongoose.Schema(
       title: { type: String, trim: true },
       highlights: [highlightSchema],
       resumeLink: { type: String, trim: true },
+      resumePdfLink: { type: String, trim: true },
+      resumeDocLink: { type: String, trim: true },
     },
   },
   { timestamps: true },

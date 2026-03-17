@@ -51,6 +51,17 @@ export default function Home() {
           return;
         }
 
+        const incomingResume = profilePayload.resume || {};
+        const resolvedResume = {
+          ...resume,
+          ...incomingResume,
+          highlights: Array.isArray(incomingResume.highlights) && incomingResume.highlights.length > 0
+            ? incomingResume.highlights
+            : resume.highlights,
+          resumePdfLink: incomingResume.resumePdfLink || incomingResume.resumeLink || resume.resumePdfLink || resume.resumeLink,
+          resumeDocLink: incomingResume.resumeDocLink || resume.resumeDocLink || '',
+        };
+
         setPortfolioData({
           profile: {
             name: profilePayload.name,
@@ -66,7 +77,7 @@ export default function Home() {
           },
           about: profilePayload.about || about,
           contact: profilePayload.contact || contact,
-          resume: profilePayload.resume || resume,
+          resume: resolvedResume,
           projects: projectsPayload,
           skills: skillsPayload,
           achievements: achievementsPayload,
@@ -86,7 +97,13 @@ export default function Home() {
 
   return (
     <div className="app-shell">
-      <Navbar links={navigationLinks} resumeUrl={portfolioData.resume.resumeLink} profilePhoto={portfolioData.profile.profilePhoto} name={portfolioData.profile.name} />
+      <Navbar
+        links={navigationLinks}
+        resumePdfUrl={portfolioData.resume.resumePdfLink || portfolioData.resume.resumeLink}
+        resumeDocUrl={portfolioData.resume.resumeDocLink}
+        profilePhoto={portfolioData.profile.profilePhoto}
+        name={portfolioData.profile.name}
+      />
       <main>
         <Hero profile={portfolioData.profile} />
         <About about={portfolioData.about} name={portfolioData.profile.name} />
