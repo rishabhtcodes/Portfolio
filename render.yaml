@@ -1,7 +1,7 @@
 services:
   - type: web
     name:  portfolio-backend
-        plan: free
+    plan: free
     runtime: node
     rootDir: backend
     buildCommand: npm install
