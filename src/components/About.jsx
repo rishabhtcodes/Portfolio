@@ -19,7 +19,15 @@ const cards = [
   },
 ];
 
-export default function About({ about }) {
+export default function About({ about, name }) {
+  const displayPhoto = about?.photo;
+  const initials = (name || 'RT')
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join('') || 'RT';
+
   return (
     <motion.section
       id="about"
@@ -33,8 +41,12 @@ export default function About({ about }) {
         <div className="glass-panel relative overflow-hidden p-8 sm:p-10">
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-r from-sky-400/20 via-cyan-400/10 to-indigo-400/20" />
           <div className="relative">
-            <div className="mx-auto flex h-36 w-36 items-center justify-center rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 text-4xl font-bold text-sky-200 shadow-[0_24px_80px_rgba(14,165,233,0.18)] sm:mx-0">
-              RT
+            <div className="mx-auto h-36 w-36 overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 shadow-[0_24px_80px_rgba(14,165,233,0.18)] sm:mx-0">
+              {displayPhoto ? (
+                <img src={displayPhoto} alt="About profile" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-sky-200">{initials}</div>
+              )}
             </div>
             <div className="mt-8 space-y-3 text-sm leading-7 text-slate-300">
               <p>{about.summary}</p>

@@ -21,6 +21,7 @@ const profileSchema = new mongoose.Schema(
     twitter: { type: String, trim: true },
     profilePhoto: { type: String, trim: true },
     about: {
+      photo: { type: String, trim: true },
       summary: { type: String, trim: true },
       interests: { type: String, trim: true },
       description: { type: String, trim: true },

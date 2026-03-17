@@ -97,6 +97,7 @@ function createProfileForm(profile) {
     linkedin: profile?.linkedin || '',
     twitter: profile?.twitter || '',
     profilePhoto: profile?.profilePhoto || '',
+    aboutPhoto: profile?.about?.photo || '',
     aboutSummary: profile?.about?.summary || '',
     aboutInterests: profile?.about?.interests || '',
     aboutDescription: profile?.about?.description || '',
@@ -125,6 +126,7 @@ function buildProfilePayload(form) {
     twitter: form.twitter,
     profilePhoto: form.profilePhoto,
     about: {
+      photo: form.aboutPhoto,
       summary: form.aboutSummary,
       interests: form.aboutInterests,
       description: form.aboutDescription,
@@ -178,7 +180,7 @@ function AdminTable({ items, columns, onEdit, onDelete }) {
                 ))}
                 <td className="px-4 py-4 align-top">
                   <div className="flex gap-2">
-                    <button type="button" onClick={() => onEdit(item)} className="secondary-button px-4 py-2 text-xs">
+                    <button type="button" onClick={() => onEdit(item)} className="inline-flex items-center rounded-full border border-rose-300/30 bg-rose-500/10 px-4 py-2 text-xs font-semibold text-rose-100 transition hover:-translate-y-0.5 hover:bg-rose-500/20">
                       <Pencil className="mr-2 h-3.5 w-3.5" /> Edit
                     </button>
                     <button type="button" onClick={() => onDelete(item)} className="inline-flex items-center rounded-full border border-rose-300/20 bg-rose-400/10 px-4 py-2 text-xs font-semibold text-rose-200 transition hover:bg-rose-400/20">
@@ -274,7 +276,7 @@ export default function AdminDashboard() {
     setProfileForm((current) => ({ ...current, [name]: value }));
   };
 
-  const handleProfilePhotoUpload = (event) => {
+  const handleImageUpload = (event, targetField) => {
     const file = event.target.files?.[0];
     if (!file) {
       return;
@@ -311,7 +313,7 @@ export default function AdminDashboard() {
 
         context.drawImage(image, 0, 0, width, height);
         const compressed = canvas.toDataURL('image/jpeg', 0.82);
-        setProfileForm((current) => ({ ...current, profilePhoto: compressed }));
+        setProfileForm((current) => ({ ...current, [targetField]: compressed }));
       };
 
       image.onerror = () => setError('Unable to read the selected image.');
@@ -409,10 +411,10 @@ export default function AdminDashboard() {
       <div className="space-y-8">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <p className="text-sm uppercase tracking-[0.24em] text-sky-200">Admin Manager</p>
+            <p className="text-sm uppercase tracking-[0.24em] text-rose-200">Admin Manager</p>
             <h2 className="mt-3 text-3xl font-semibold text-white">{config.title}</h2>
           </div>
-          <button type="button" onClick={() => resetEntityForm(section)} className="secondary-button px-5 py-3 text-sm">
+          <button type="button" onClick={() => resetEntityForm(section)} className="inline-flex items-center justify-center rounded-full border border-rose-300/30 bg-rose-500/10 px-5 py-3 text-sm font-semibold text-rose-100 transition hover:-translate-y-0.5 hover:bg-rose-500/20">
             <Plus className="mr-2 h-4 w-4" /> New {config.title.slice(0, -1)}
           </button>
         </div>
@@ -427,14 +429,14 @@ export default function AdminDashboard() {
                     value={form[field.key] || ''}
                     onChange={(event) => updateEntityForm(section, field.key, event.target.value)}
                     rows={5}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
                   />
                 ) : (
                   <input
                     type={field.type || 'text'}
                     value={form[field.key] || ''}
                     onChange={(event) => updateEntityForm(section, field.key, event.target.value)}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
                   />
                 )}
               </div>
@@ -442,11 +444,11 @@ export default function AdminDashboard() {
           </div>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <button type="submit" className="primary-button px-5 py-3 text-sm">
+            <button type="submit" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-rose-500 via-red-400 to-rose-500 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(244,63,94,0.35)]">
               <Save className="mr-2 h-4 w-4" /> {editingId[section] ? 'Update Entry' : 'Create Entry'}
             </button>
             {editingId[section] ? (
-              <button type="button" onClick={() => resetEntityForm(section)} className="secondary-button px-5 py-3 text-sm">Cancel Edit</button>
+              <button type="button" onClick={() => resetEntityForm(section)} className="inline-flex items-center justify-center rounded-full border border-rose-300/30 bg-rose-500/10 px-5 py-3 text-sm font-semibold text-rose-100 transition hover:-translate-y-0.5 hover:bg-rose-500/20">Cancel Edit</button>
             ) : null}
           </div>
         </form>
@@ -485,10 +487,10 @@ export default function AdminDashboard() {
     <div className="min-h-screen bg-slate-950 text-white">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 lg:flex-row lg:px-8">
         <aside className="glass-panel h-fit w-full rounded-[2rem] p-5 lg:sticky lg:top-8 lg:w-72">
-          <div className="flex items-center gap-3 rounded-2xl border border-sky-300/10 bg-sky-400/10 px-4 py-3 text-sky-100">
+          <div className="flex items-center gap-3 rounded-2xl border border-rose-300/20 bg-rose-500/10 px-4 py-3 text-rose-100">
             <ShieldCheck className="h-5 w-5" />
             <div>
-              <p className="text-xs uppercase tracking-[0.24em] text-sky-200">Admin</p>
+              <p className="text-xs uppercase tracking-[0.24em] text-rose-200">Admin</p>
               <p className="text-sm font-medium">Portfolio CMS</p>
             </div>
           </div>
@@ -501,7 +503,7 @@ export default function AdminDashboard() {
                 onClick={() => setActiveSection(item.key)}
                 className={[
                   'flex w-full items-center rounded-2xl px-4 py-3 text-left text-sm font-medium transition',
-                  activeSection === item.key ? 'bg-sky-400/15 text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white',
+                  activeSection === item.key ? 'bg-rose-500/20 text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white',
                 ].join(' ')}
               >
                 {item.label}
@@ -509,7 +511,7 @@ export default function AdminDashboard() {
             ))}
           </nav>
 
-          <button type="button" onClick={handleLogout} className="secondary-button mt-6 w-full justify-center px-4 py-3 text-sm">
+          <button type="button" onClick={handleLogout} className="mt-6 inline-flex w-full items-center justify-center rounded-full border border-rose-300/30 bg-rose-500/10 px-4 py-3 text-sm font-semibold text-rose-100 transition hover:-translate-y-0.5 hover:bg-rose-500/20">
             <LogOut className="mr-2 h-4 w-4" /> Logout
           </button>
         </aside>
@@ -521,13 +523,13 @@ export default function AdminDashboard() {
           {activeSection === 'profile' ? (
             <div className="space-y-8">
               <div>
-                <p className="text-sm uppercase tracking-[0.24em] text-sky-200">Admin Manager</p>
+                <p className="text-sm uppercase tracking-[0.24em] text-rose-200">Admin Manager</p>
                 <h1 className="mt-3 text-3xl font-semibold">Profile, about, resume, and contact settings</h1>
               </div>
 
               <form onSubmit={saveProfile} className="glass-panel rounded-[2rem] p-6 sm:p-8">
                 <div className="mb-6 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
-                  <p className="text-xs uppercase tracking-[0.24em] text-sky-200">Profile Photo</p>
+                  <p className="text-xs uppercase tracking-[0.24em] text-rose-200">Profile Photo</p>
                   <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
                     <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
                       {profileForm.profilePhoto ? (
@@ -543,12 +545,43 @@ export default function AdminDashboard() {
                         value={profileForm.profilePhoto || ''}
                         onChange={handleProfileChange}
                         placeholder="Profile photo URL"
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
                       />
+                      <p className="text-xs text-slate-400">This photo is used in the navbar.</p>
                       <input
                         type="file"
                         accept="image/*"
-                        onChange={handleProfilePhotoUpload}
+                        onChange={(event) => handleImageUpload(event, 'profilePhoto')}
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mb-6 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-rose-200">About Section Photo</p>
+                  <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
+                      {profileForm.aboutPhoto ? (
+                        <img src={profileForm.aboutPhoto} alt="About" className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">No Photo</div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 space-y-3">
+                      <input
+                        name="aboutPhoto"
+                        value={profileForm.aboutPhoto || ''}
+                        onChange={handleProfileChange}
+                        placeholder="About section photo URL"
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                      />
+                      <p className="text-xs text-slate-400">This photo is shown in the About section card.</p>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(event) => handleImageUpload(event, 'aboutPhoto')}
                         className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
                       />
                     </div>
@@ -563,39 +596,39 @@ export default function AdminDashboard() {
                         value={profileForm[key] || ''}
                         onChange={handleProfileChange}
                         name={key}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
                       />
                     </div>
                   ))}
 
                   <div className="lg:col-span-2">
                     <label className="mb-2 block text-sm font-medium text-slate-200">Introduction</label>
-                    <textarea name="introduction" rows={4} value={profileForm.introduction} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40" />
+                    <textarea name="introduction" rows={4} value={profileForm.introduction} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-200">About summary</label>
-                    <textarea name="aboutSummary" rows={4} value={profileForm.aboutSummary} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40" />
+                    <textarea name="aboutSummary" rows={4} value={profileForm.aboutSummary} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div>
                     <label className="mb-2 block text-sm font-medium text-slate-200">About interests</label>
-                    <textarea name="aboutInterests" rows={4} value={profileForm.aboutInterests} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40" />
+                    <textarea name="aboutInterests" rows={4} value={profileForm.aboutInterests} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div className="lg:col-span-2">
                     <label className="mb-2 block text-sm font-medium text-slate-200">About description</label>
-                    <textarea name="aboutDescription" rows={5} value={profileForm.aboutDescription} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40" />
+                    <textarea name="aboutDescription" rows={5} value={profileForm.aboutDescription} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div className="lg:col-span-2">
                     <label className="mb-2 block text-sm font-medium text-slate-200">Contact copy</label>
-                    <textarea name="contactCopy" rows={5} value={profileForm.contactCopy} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40" />
+                    <textarea name="contactCopy" rows={5} value={profileForm.contactCopy} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div className="lg:col-span-2">
                     <label className="mb-2 block text-sm font-medium text-slate-200">Resume highlights</label>
-                    <textarea name="resumeHighlights" rows={6} value={profileForm.resumeHighlights} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40" placeholder="Use one highlight per line: Label|Detail" />
+                    <textarea name="resumeHighlights" rows={6} value={profileForm.resumeHighlights} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" placeholder="Use one highlight per line: Label|Detail" />
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <button type="submit" className="primary-button px-5 py-3 text-sm">
+                  <button type="submit" className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-rose-500 via-red-400 to-rose-500 px-5 py-3 text-sm font-semibold text-white transition duration-300 hover:-translate-y-0.5 hover:shadow-[0_12px_40px_rgba(244,63,94,0.35)]">
                     <Save className="mr-2 h-4 w-4" /> Save Profile Content
                   </button>
                 </div>

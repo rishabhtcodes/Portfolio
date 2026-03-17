@@ -89,7 +89,7 @@ export default function Home() {
       <Navbar links={navigationLinks} resumeUrl={portfolioData.resume.resumeLink} profilePhoto={portfolioData.profile.profilePhoto} name={portfolioData.profile.name} />
       <main>
         <Hero profile={portfolioData.profile} />
-        <About about={portfolioData.about} />
+        <About about={portfolioData.about} name={portfolioData.profile.name} />
         <Resume resume={portfolioData.resume} />
         <Skills skills={portfolioData.skills} />
         <Projects projects={portfolioData.projects} />
