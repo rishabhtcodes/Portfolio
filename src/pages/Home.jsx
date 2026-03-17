@@ -86,7 +86,7 @@ export default function Home() {
 
   return (
     <div className="app-shell">
-      <Navbar links={navigationLinks} githubUrl={portfolioData.profile.github} profilePhoto={portfolioData.profile.profilePhoto} name={portfolioData.profile.name} />
+      <Navbar links={navigationLinks} resumeUrl={portfolioData.resume.resumeLink} profilePhoto={portfolioData.profile.profilePhoto} name={portfolioData.profile.name} />
       <main>
         <Hero profile={portfolioData.profile} />
         <About about={portfolioData.about} />

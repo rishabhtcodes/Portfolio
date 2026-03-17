@@ -274,6 +274,52 @@ export default function AdminDashboard() {
     setProfileForm((current) => ({ ...current, [name]: value }));
   };
 
+  const handleProfilePhotoUpload = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) {
+      return;
+    }
+
+    if (!file.type.startsWith('image/')) {
+      setError('Please select a valid image file.');
+      return;
+    }
+
+    setError('');
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result !== 'string') {
+        return;
+      }
+
+      const image = new Image();
+      image.onload = () => {
+        const maxSide = 900;
+        const scale = Math.min(1, maxSide / Math.max(image.width, image.height));
+        const width = Math.max(1, Math.round(image.width * scale));
+        const height = Math.max(1, Math.round(image.height * scale));
+
+        const canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+
+        const context = canvas.getContext('2d');
+        if (!context) {
+          setError('Unable to process image in this browser.');
+          return;
+        }
+
+        context.drawImage(image, 0, 0, width, height);
+        const compressed = canvas.toDataURL('image/jpeg', 0.82);
+        setProfileForm((current) => ({ ...current, profilePhoto: compressed }));
+      };
+
+      image.onerror = () => setError('Unable to read the selected image.');
+      image.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  };
+
   const saveProfile = async (event) => {
     event.preventDefault();
     try {
@@ -423,7 +469,6 @@ export default function AdminDashboard() {
     ['github', 'GitHub URL'],
     ['linkedin', 'LinkedIn URL'],
     ['twitter', 'Twitter URL'],
-    ['profilePhoto', 'Profile photo URL'],
     ['highlights', 'Hero highlights (comma separated)'],
     ['aboutTechFocus', 'About tech focus (comma separated)'],
     ['contactLinkedinLabel', 'LinkedIn display label'],
@@ -481,6 +526,35 @@ export default function AdminDashboard() {
               </div>
 
               <form onSubmit={saveProfile} className="glass-panel rounded-[2rem] p-6 sm:p-8">
+                <div className="mb-6 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+                  <p className="text-xs uppercase tracking-[0.24em] text-sky-200">Profile Photo</p>
+                  <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
+                    <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
+                      {profileForm.profilePhoto ? (
+                        <img src={profileForm.profilePhoto} alt="Profile" className="h-full w-full object-cover" />
+                      ) : (
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">No Photo</div>
+                      )}
+                    </div>
+
+                    <div className="flex-1 space-y-3">
+                      <input
+                        name="profilePhoto"
+                        value={profileForm.profilePhoto || ''}
+                        onChange={handleProfileChange}
+                        placeholder="Profile photo URL"
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                      />
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleProfilePhotoUpload}
+                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="grid gap-5 lg:grid-cols-2">
                   {profileFields.map(([key, label]) => (
                     <div key={key}>

@@ -5,8 +5,18 @@ async function parseResponse(response) {
   const body = contentType.includes('application/json') ? await response.json() : await response.text();
 
   if (!response.ok) {
-    const message = typeof body === 'string' ? body : body?.message;
-    throw new Error(message || 'Request failed.');
+    const rawMessage = typeof body === 'string' ? body : body?.message;
+    const message = typeof rawMessage === 'string' ? rawMessage.trim() : '';
+
+    if (message) {
+      throw new Error(message);
+    }
+
+    if (!API_BASE_URL && [500, 502, 503, 504].includes(response.status)) {
+      throw new Error('Backend API appears offline. Start the backend server on port 5000 and try again.');
+    }
+
+    throw new Error(`Request failed (${response.status} ${response.statusText}).`);
   }
 
   return body;

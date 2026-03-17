@@ -5,9 +5,7 @@ import {
 } from 'lucide-react';
 
 export const navigationLinks = [
-  { label: 'Home', href: '#home' },
   { label: 'About', href: '#about' },
-  { label: 'Resume', href: '#resume' },
   { label: 'Skills', href: '#skills' },
   { label: 'Projects', href: '#projects' },
   { label: 'Certificates', href: '#certificates' },
@@ -25,7 +23,7 @@ export const profile = {
   phone: '+91 7986307281',
   github: 'https://github.com/rishabhtcodes',
   linkedin: 'https://www.linkedin.com/in/rishabhtcodes/',
-  twitter: 'https://twitter.com/rishabhtcodes',
+  twitter: 'https://x.com/rishabhtcodes',
   profilePhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
 };
 
