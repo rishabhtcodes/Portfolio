@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Mail, Linkedin, Github, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { apiRequest } from '../lib/api';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -8,6 +9,8 @@ export default function Contact({ contact }) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const validate = () => {
     const nextErrors = {};
@@ -31,10 +34,11 @@ export default function Contact({ contact }) {
     const { name, value } = event.target;
     setFormData((current) => ({ ...current, [name]: value }));
     setSubmitted(false);
+    setSubmitError('');
     setErrors((current) => ({ ...current, [name]: undefined }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const nextErrors = validate();
 
@@ -44,8 +48,23 @@ export default function Contact({ contact }) {
     }
 
     setErrors({});
-    setSubmitted(true);
-    setFormData({ name: '', email: '', message: '' });
+    setSubmitError('');
+    setSending(true);
+
+    try {
+      await apiRequest('/api/contact/send', {
+        method: 'POST',
+        body: formData,
+      });
+
+      setSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
+    } catch (error) {
+      setSubmitted(false);
+      setSubmitError(error.message || 'Failed to send message. Please try again.');
+    } finally {
+      setSending(false);
+    }
   };
 
   const links = [
@@ -169,12 +188,13 @@ export default function Contact({ contact }) {
               {errors.message ? <p className="mt-2 text-sm text-rose-300">{errors.message}</p> : null}
             </div>
 
-            <button type="submit" className="primary-button w-full sm:w-fit">
+            <button type="submit" disabled={sending} className="primary-button w-full sm:w-fit disabled:cursor-not-allowed disabled:opacity-70">
               <Send className="mr-2 h-4 w-4" />
-              Send Message
+              {sending ? 'Sending...' : 'Send Message'}
             </button>
 
-            {submitted ? <p className="text-sm text-emerald-300">Message validated. Connect this form to EmailJS, Formspree, or your backend when ready.</p> : null}
+            {submitError ? <p className="text-sm text-rose-300">{submitError}</p> : null}
+            {submitted ? <p className="text-sm text-emerald-300">Thanks for contacting me.</p> : null}
           </div>
         </form>
       </div>

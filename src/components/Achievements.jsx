@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { resolvePortfolioIcon } from '../lib/iconMaps';
 
 export default function Achievements({ achievements }) {
   return (
@@ -18,7 +19,7 @@ export default function Achievements({ achievements }) {
 
       <div className="mt-10 grid gap-5 lg:grid-cols-3">
         {achievements.map((achievement, index) => {
-          const Icon = achievement.icon;
+          const Icon = resolvePortfolioIcon(achievement.icon);
 
           return (
             <motion.article

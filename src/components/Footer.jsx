@@ -1,4 +1,5 @@
 import { Github, Linkedin, Twitter } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export default function Footer({ profile }) {
   const socials = [
@@ -12,8 +13,8 @@ export default function Footer({ profile }) {
       <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
         <div className="glass-panel flex flex-col gap-6 rounded-[2rem] px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <div>
-            <p className="text-lg font-semibold text-white">Rishabh Tiwari</p>
-            <p className="mt-1 text-sm text-slate-400">Full Stack Developer building modern web experiences.</p>
+            <p className="text-lg font-semibold text-white">{profile.name}</p>
+            <p className="mt-1 text-sm text-slate-400">{profile.title}</p>
           </div>
 
           <div className="flex items-center gap-3">
@@ -40,8 +41,15 @@ export default function Footer({ profile }) {
       <div className="mt-6 border-t border-white/20" />
 
       <div className="pb-6 pt-4">
-        <p className="text-center text-sm text-slate-500">© 2026 Rishabh Tiwari. Built with React, Vite, Tailwind CSS, and deployed on Vercel.</p>
+        <p className="text-center text-sm text-slate-500">© 2026 rishabhtcodes. All the rights are reserved to rishabhtcodes.</p>
       </div>
+
+      <Link
+        to="/admin/login"
+        className="fixed bottom-3 right-4 z-40 text-[10px] font-medium uppercase tracking-[0.28em] text-slate-600 transition hover:text-slate-300"
+      >
+        rishabhtcodes
+      </Link>
     </footer>
   );
 }

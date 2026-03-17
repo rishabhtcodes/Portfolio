@@ -1,5 +1,6 @@
 import { ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { resolvePortfolioIcon } from '../lib/iconMaps';
 
 export default function Certificates({ certificates }) {
   return (
@@ -19,7 +20,7 @@ export default function Certificates({ certificates }) {
 
       <div className="mt-10 grid gap-5 lg:grid-cols-2">
         {certificates.map((cert, index) => {
-          const Icon = cert.icon;
+          const Icon = resolvePortfolioIcon(cert.icon);
 
           return (
             <motion.article

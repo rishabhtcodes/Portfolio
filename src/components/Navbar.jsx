@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { Github, Menu, X } from 'lucide-react';
+import { Download, Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
 import PhotoModal from './PhotoModal';
 
-export default function Navbar({ links, githubUrl, profilePhoto, name }) {
+export default function Navbar({ links, resumeUrl, profilePhoto, name }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [photoModalOpen, setPhotoModalOpen] = useState(false);
@@ -61,9 +61,9 @@ export default function Navbar({ links, githubUrl, profilePhoto, name }) {
               {link.label}
             </a>
           ))}
-          <a href={githubUrl} target="_blank" rel="noreferrer" className="secondary-button px-4 py-2 text-xs">
-            <Github className="mr-2 h-4 w-4" />
-            GitHub
+          <a href={resumeUrl} download className="secondary-button px-4 py-2 text-xs">
+            <Download className="mr-2 h-4 w-4" />
+            Resume
           </a>
         </div>
 
@@ -90,8 +90,8 @@ export default function Navbar({ links, githubUrl, profilePhoto, name }) {
                 {link.label}
               </a>
             ))}
-            <a href={githubUrl} target="_blank" rel="noreferrer" className="secondary-button mt-2 w-full text-center text-sm">
-              View GitHub
+            <a href={resumeUrl} download className="secondary-button mt-2 w-full text-center text-sm">
+              Resume
             </a>
           </div>
         </div>
