@@ -24,11 +24,11 @@ export const profile = {
   github: 'https://github.com/rishabhtcodes',
   linkedin: 'https://www.linkedin.com/in/rishabhtcodes/',
   twitter: 'https://x.com/rishabhtcodes',
-  profilePhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
+  profilePhoto: '',
 };
 
 export const about = {
-  photo: 'https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=400&h=400&fit=crop',
+  photo: '',
   summary:
     'I am a Computer Science student at Lovely Professional University with hands-on experience in full-stack development, C++ programming, and problem-solving. I focus on building scalable applications and implementing efficient algorithms.',
   interests:

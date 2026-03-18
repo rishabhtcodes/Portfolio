@@ -34,6 +34,7 @@ export async function apiRequest(path, options = {}) {
     const response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
       headers,
+      cache: 'no-store',
       body: options.body ? JSON.stringify(options.body) : undefined,
     });
 

@@ -82,11 +82,17 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
             className="group relative h-10 w-10 overflow-hidden rounded-full border border-white/20 transition hover:border-sky-400/50"
             aria-label="View profile photo"
           >
-            <img
-              src={profilePhoto}
-              alt={name}
-              className="h-full w-full object-cover transition group-hover:scale-110"
-            />
+            {profilePhoto ? (
+              <img
+                src={profilePhoto}
+                alt={name}
+                className="h-full w-full object-cover transition group-hover:scale-110"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center bg-slate-800 text-xs font-bold text-sky-200">
+                {name ? name.split(' ').map(n => n[0]).slice(0, 2).join('') : 'RT'}
+              </div>
+            )}
             <div className="absolute inset-0 bg-gradient-to-br from-sky-400/0 to-indigo-500/0 transition group-hover:from-sky-400/20 group-hover:to-indigo-500/20" />
           </button>
 
