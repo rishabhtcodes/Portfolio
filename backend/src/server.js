@@ -18,12 +18,18 @@ const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173').split
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      // Also strictly allow local development patterns if not already in allowedOrigins
+      if (!origin || 
+          allowedOrigins.includes(origin) || 
+          origin.startsWith('http://localhost:') || 
+          origin.startsWith('http://127.0.0.1:')) {
         callback(null, true);
         return;
       }
 
-      callback(new Error('Origin not allowed by CORS.'));
+      console.error(`CORS Error: Origin ${origin} is not in the allowed list:`, allowedOrigins);
+      callback(new Error(`Origin ${origin} not allowed by CORS.`));
     },
     credentials: true,
   }),
