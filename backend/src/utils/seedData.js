@@ -98,7 +98,7 @@ export const seedSkills = [
   { name: 'Git', logo: 'https://cdn.simpleicons.org/git/F05032', description: 'Version control, branching workflows, and team collaboration.', category: 'Tools', order: 15 },
   { name: 'GitHub', logo: 'https://cdn.simpleicons.org/github/FFFFFF', description: 'Repository management, collaboration, and project hosting.', category: 'Tools', order: 16 },
   { name: 'Postman', logo: 'https://cdn.simpleicons.org/postman/FF6C37', description: 'API testing, debugging, and endpoint documentation.', category: 'Tools', order: 17 },
-  { name: 'VS Code', logo: 'https://cdn.simpleicons.org/visualstudiocode/007ACC', description: 'Primary development environment for efficient coding workflows.', category: 'Tools', order: 18 },
+  { name: 'VS Code', logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg', description: 'Primary development environment for efficient coding workflows.', category: 'Tools', order: 18 },
 ];
 
 export const seedAchievements = [

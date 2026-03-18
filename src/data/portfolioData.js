@@ -126,7 +126,7 @@ export const skills = [
   },
   {
     name: 'VS Code',
-    logo: 'https://cdn.simpleicons.org/visualstudiocode/007ACC',
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg',
     description: 'Primary development environment for efficient coding workflows.',
   },
 ];

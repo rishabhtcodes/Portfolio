@@ -52,6 +52,15 @@ export async function bootstrapDatabase() {
     await store.seedProjects(seedProjects);
   }
 
+  const allSkills = await store.listSkills();
+  for (const skill of allSkills) {
+    if (skill.name === 'VS Code' && skill.logo?.includes('simpleicons.org/visualstudiocode')) {
+      await store.updateSkill(skill._id, {
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg',
+      });
+    }
+  }
+
   if ((await store.countSkills()) === 0) {
     await store.seedSkills(seedSkills);
   }
