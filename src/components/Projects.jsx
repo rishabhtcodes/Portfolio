@@ -7,8 +7,7 @@ export default function Projects({ projects }) {
       id="projects"
       className="section-shell"
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <div>
@@ -18,15 +17,14 @@ export default function Projects({ projects }) {
         </div>
       </div>
 
-      <div className="mt-10 grid gap-6 lg:grid-cols-3">
+      <div className="mt-10 flex w-full snap-x snap-mandatory gap-6 overflow-x-auto pb-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {projects.map((project, index) => (
           <motion.article
             key={project.title}
             initial={{ opacity: 0, y: 18 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.08 }}
-            className="glass-panel overflow-hidden rounded-[2rem] transition duration-300 hover:-translate-y-2 hover:border-sky-300/25"
+            className="glass-panel w-[85vw] max-w-[420px] shrink-0 snap-start overflow-hidden rounded-[2rem] transition duration-300 hover:-translate-y-2 hover:border-sky-300/25"
           >
             <img src={project.image} alt={project.title} className="h-52 w-full object-cover" />
             <div className="p-6">

@@ -14,6 +14,7 @@ const experiences = [
         type: 'education', icon: <GraduationCap size={20} />,
         title: 'B.Tech CSE', org: 'Lovely Professional University', location: 'Jalandhar, Punjab',
         period: '2023 — 2027',
+        orgLogo: 'https://upload.wikimedia.org/wikipedia/en/thumb/2/2e/Lovely_Professional_University_logo.png/220px-Lovely_Professional_University_logo.png',
         desc: 'Currently pursuing B.Tech in Computer Science & Engineering. Active in hackathons, open-source contributions, and technical clubs.',
         skills: ['DSA', 'Algorithms', 'DBMS', 'OS'],
         color: '#666',
@@ -22,6 +23,7 @@ const experiences = [
         type: 'education', icon: <GraduationCap size={20} />,
         title: 'Senior Secondary (XII)', org: 'CBSE Board', location: 'India',
         period: '2021 — 2023',
+        orgLogo: 'https://upload.wikimedia.org/wikipedia/en/thumb/9/95/CBSE_new_logo.svg/1200px-CBSE_new_logo.svg.png',
         desc: 'Completed senior secondary education with Science stream (PCM + CS).',
         skills: ['Physics', 'Maths', 'CS'],
         color: '#999',
@@ -52,7 +54,10 @@ export default function Experience() {
                                     <span className="timeline__period"><Calendar size={12} /> {exp.period}</span>
                                 </div>
                                 <h3 className="timeline__title">{exp.title}</h3>
-                                <p className="timeline__org"><MapPin size={12} /> {exp.org} · {exp.location}</p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+                                    {exp.orgLogo && <img src={exp.orgLogo} alt={exp.org} style={{ width: '20px', height: '20px', objectFit: 'contain', backgroundColor: 'white', borderRadius: '4px', padding: '2px' }} />}
+                                    <p className="timeline__org" style={{ marginBottom: 0 }}><MapPin size={12} /> {exp.org} · {exp.location}</p>
+                                </div>
                                 <p className="timeline__desc">{exp.desc}</p>
                                 <div className="timeline__skills">
                                     {exp.skills.map((s) => <span key={s} className="timeline__skill">{s}</span>)}

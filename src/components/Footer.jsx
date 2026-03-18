@@ -9,7 +9,7 @@ export default function Footer({ profile }) {
   ];
 
   return (
-    <footer className="w-full pt-8">
+    <footer className="w-full pb-12 pt-8">
       <div className="mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12">
         <div className="glass-panel flex flex-col gap-6 rounded-[2rem] px-6 py-6 sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <div>
@@ -36,12 +36,6 @@ export default function Footer({ profile }) {
             })}
           </div>
         </div>
-      </div>
-
-      <div className="mt-6 border-t border-white/20" />
-
-      <div className="pb-6 pt-4">
-        <p className="text-center text-sm text-slate-500">© 2026 rishabhtcodes. All the rights are reserved to rishabhtcodes.</p>
       </div>
 
       <Link
