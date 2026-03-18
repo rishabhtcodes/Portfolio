@@ -59,6 +59,26 @@ export async function bootstrapDatabase() {
         logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vscode/vscode-original.svg',
       });
     }
+    if (skill.name === 'Java') {
+      await store.updateSkill(skill._id, {
+        logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg',
+      });
+    }
+    if (skill.name === 'PHP') {
+      await store.updateSkill(skill._id, {
+        logo: 'https://cdn.simpleicons.org/php/A78BFA',
+      });
+    }
+    if (skill.name === 'MySQL') {
+      await store.updateSkill(skill._id, {
+        logo: 'https://cdn.simpleicons.org/mysql/FFFFFF',
+      });
+    }
+    if (skill.name === 'Django') {
+      await store.updateSkill(skill._id, {
+        logo: 'https://cdn.simpleicons.org/django/FFFFFF',
+      });
+    }
   }
 
   if ((await store.countSkills()) === 0) {
