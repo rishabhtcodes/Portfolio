@@ -23,8 +23,29 @@ export async function bootstrapDatabase() {
     await store.createUser({ email: adminEmail.toLowerCase(), passwordHash, role: 'admin' });
   }
 
-  if ((await store.countProfile()) === 0) {
-    await store.upsertProfile(seedProfile);
+  const currentProfile = await store.getProfile();
+  if (currentProfile) {
+    const unsplashMatches = [
+      'images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
+      'images.unsplash.com/photo-1527980965255-d3b416303d12'
+    ];
+    
+    let needsUpdate = false;
+    const updatedProfile = { ...currentProfile };
+
+    if (unsplashMatches.some(m => currentProfile.profilePhoto?.includes(m))) {
+      updatedProfile.profilePhoto = '';
+      needsUpdate = true;
+    }
+
+    if (unsplashMatches.some(m => currentProfile.about?.photo?.includes(m))) {
+      updatedProfile.about = { ...currentProfile.about, photo: '' };
+      needsUpdate = true;
+    }
+
+    if (needsUpdate) {
+      await store.upsertProfile(updatedProfile);
+    }
   }
 
   if ((await store.countProjects()) === 0) {
