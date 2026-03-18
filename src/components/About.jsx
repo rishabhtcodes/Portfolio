@@ -33,8 +33,7 @@ export default function About({ about, name }) {
       id="about"
       className="section-shell"
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">

@@ -24,6 +24,12 @@
   ::selection {
     @apply bg-sky-400/30 text-white;
   }
+
+  @media (min-width: 768px) {
+    *, *::before, *::after {
+      cursor: none !important;
+    }
+  }
 }
 
 @layer components {
@@ -85,5 +91,16 @@
 
   .mask-fade {
     mask-image: linear-gradient(180deg, black 70%, transparent 100%);
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
