@@ -56,7 +56,7 @@ export const skills = [
   },
   {
     name: 'Java',
-    logo: 'https://cdn.simpleicons.org/openjdk/EA2D2E',
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg',
     description: 'Core Java programming and object-oriented application development.',
   },
   {
@@ -66,7 +66,7 @@ export const skills = [
   },
   {
     name: 'PHP',
-    logo: 'https://cdn.simpleicons.org/php/777BB4',
+    logo: 'https://cdn.simpleicons.org/php/A78BFA',
     description: 'Server-side scripting for dynamic web applications.',
   },
   {
@@ -91,7 +91,7 @@ export const skills = [
   },
   {
     name: 'Django',
-    logo: 'https://cdn.simpleicons.org/django/092E20',
+    logo: 'https://cdn.simpleicons.org/django/FFFFFF',
     description: 'Python framework for secure and rapid backend development.',
   },
   {
@@ -101,7 +101,7 @@ export const skills = [
   },
   {
     name: 'MySQL',
-    logo: 'https://cdn.simpleicons.org/mysql/4479A1',
+    logo: 'https://cdn.simpleicons.org/mysql/FFFFFF',
     description: 'Relational database design and SQL query optimization.',
   },
   {
@@ -208,7 +208,7 @@ export const contact = {
 export const resume = {
   title: 'Education & Experience',
   highlights: [
-    { label: 'B.Tech CSE', detail: 'LPU (2025-Present) | CGPA: 7.10' },
+    { label: 'B.Tech CSE', detail: 'Lovely Professional University (2023-2027)' },
     { label: 'Languages', detail: 'C++, Python, JavaScript, Java' },
     { label: 'Full Stack', detail: 'MERN Stack Expert' },
     { label: 'Hackathons', detail: 'Top 10 & Rank 4' },

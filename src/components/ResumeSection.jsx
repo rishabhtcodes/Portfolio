@@ -3,7 +3,7 @@ import { Download, FileText, Code, Briefcase, GraduationCap } from 'lucide-react
 
 const highlights = [
     { icon: <Code size={20} />, label: 'Full Stack Dev', detail: 'Django & React' },
-    { icon: <GraduationCap size={20} />, label: 'B.Tech CSE', detail: 'LPU (2023-2027)' },
+    { icon: <GraduationCap size={20} />, label: 'B.Tech CSE', detail: 'Lovely Professional University (2023-2027)' },
     { icon: <Briefcase size={20} />, label: 'Projects', detail: '10+ Completed' },
     { icon: <FileText size={20} />, label: 'Open Source', detail: 'Active Contributor' },
 ];
