@@ -18,7 +18,7 @@ export default function Hero({ profile }) {
               <Sparkles className="mr-2 h-3.5 w-3.5" />
               Available for freelance and full-time roles
             </div>
-            <h1 className="mt-8 text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
+            <h1 className="mt-8 break-words text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
               Hi, I&apos;m <span className="text-gradient">{profile.name}</span>
             </h1>
             <p className="mt-5 text-lg font-medium text-sky-200 sm:text-xl">{profile.title}</p>
@@ -63,7 +63,7 @@ export default function Hero({ profile }) {
                   <span className="h-3 w-3 rounded-full bg-emerald-400" />
                 </div>
               </div>
-              <div className="mt-6 space-y-4 font-mono text-sm leading-7 text-slate-300">
+              <div className="mt-6 space-y-4 overflow-x-auto font-mono text-sm leading-7 text-slate-300">
                 <p>
                   <span className="text-sky-300">const</span> developer = {'{'}
                 </p>

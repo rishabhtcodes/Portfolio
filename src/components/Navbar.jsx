@@ -125,7 +125,7 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
       </motion.nav>
 
       {open ? (
-        <div className="mx-auto mt-3 max-w-7xl rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-glass backdrop-blur-xl md:hidden">
+        <div className="mx-auto mt-3 max-h-[80vh] max-w-7xl overflow-y-auto rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-glass backdrop-blur-xl md:hidden">
           <div className="flex flex-col gap-2">
             {links.map((link) => (
               <a
