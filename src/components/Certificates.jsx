@@ -8,8 +8,7 @@ export default function Certificates({ certificates }) {
       id="certificates"
       className="section-shell"
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <span className="section-kicker">Certificates</span>
@@ -26,8 +25,7 @@ export default function Certificates({ certificates }) {
             <motion.article
               key={cert.title}
               initial={{ opacity: 0, y: 18 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: index * 0.08 }}
               className="glass-panel rounded-2xl p-6 transition duration-300 hover:-translate-y-2 hover:border-cyan-300/20"
             >

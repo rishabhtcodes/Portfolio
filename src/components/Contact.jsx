@@ -99,8 +99,7 @@ export default function Contact({ contact }) {
       id="contact"
       className="section-shell"
       initial={{ opacity: 0, y: 28 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.15 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
