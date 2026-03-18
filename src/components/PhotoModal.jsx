@@ -31,18 +31,18 @@ export default function PhotoModal({ isOpen, onClose, photoUrl, name }) {
               <X className="h-6 w-6" />
             </button>
 
-            {/* Photo */}
-            <div className="overflow-hidden rounded-3xl border border-white/20 bg-slate-950 shadow-2xl">
+            {/* Photo Container */}
+            <div className="relative flex max-h-[80vh] flex-col overflow-hidden rounded-3xl border border-white/20 bg-slate-950 shadow-2xl sm:max-h-[90vh]">
               <img
                 src={photoUrl}
                 alt={name}
-                className="h-auto w-full object-cover"
+                className="h-full w-full object-contain"
               />
-            </div>
-
-            {/* Name and Title Overlay */}
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent px-6 py-8">
-              <p className="text-center text-xl font-bold text-white sm:text-2xl">{name}</p>
+              
+              {/* Name and Title Overlay */}
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent px-6 py-8">
+                <p className="text-center text-xl font-bold text-white sm:text-2xl">{name}</p>
+              </div>
             </div>
           </motion.div>
         </motion.div>
