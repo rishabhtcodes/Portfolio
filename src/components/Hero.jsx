@@ -1,4 +1,4 @@
-import { ArrowRight, Github, Sparkles } from 'lucide-react';
+import { ArrowRight, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Hero({ profile }) {
@@ -14,10 +14,19 @@ export default function Hero({ profile }) {
             transition={{ duration: 0.7, ease: 'easeOut' }}
             className="max-w-3xl"
           >
-            <div className="section-kicker">
-              <Sparkles className="mr-2 h-3.5 w-3.5" />
+            <motion.div
+              animate={{
+                y: [0, -8, 0],
+              }}
+              transition={{
+                duration: 2.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+              className="section-kicker shadow-[0_0_20px_rgba(56,189,248,0.15)]"
+            >
               Available for freelance and full-time roles
-            </div>
+            </motion.div>
             <h1 className="mt-8 break-words text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
               Hi, I&apos;m <span className="text-gradient">{profile.name}</span>
             </h1>

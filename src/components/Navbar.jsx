@@ -79,7 +79,7 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
           <button
             type="button"
             onClick={() => setPhotoModalOpen(true)}
-            className="group relative h-10 w-10 overflow-hidden rounded-full border border-white/20 transition hover:border-sky-400/50"
+            className="group relative h-10 w-10 overflow-hidden rounded-full border border-white/20 transition hover:border-emerald-400/50"
             aria-label="View profile photo"
           >
             {profilePhoto ? (
@@ -89,11 +89,14 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
                 className="h-full w-full object-cover transition group-hover:scale-110"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-slate-800 text-xs font-bold text-sky-200">
-                {name ? name.split(' ').map(n => n[0]).slice(0, 2).join('') : 'RT'}
+              <div className="flex h-full w-full items-center justify-center bg-slate-950 text-emerald-500">
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
+                  <path d="M16 3L27.2583 9.5V22.5L16 29L4.74167 22.5V9.5L16 3Z" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                  <text x="16" y="20" fill="currentColor" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="Arial, sans-serif">RK</text>
+                </svg>
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-br from-sky-400/0 to-indigo-500/0 transition group-hover:from-sky-400/20 group-hover:to-indigo-500/20" />
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/0 to-green-500/0 transition group-hover:from-emerald-400/20 group-hover:to-green-500/20" />
           </button>
 
           {/* Name - Links to Home */}
