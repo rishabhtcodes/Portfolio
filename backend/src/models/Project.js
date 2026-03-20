@@ -6,6 +6,7 @@ const projectSchema = new mongoose.Schema(
     description: { type: String, required: true, trim: true },
     github: { type: String, trim: true },
     demo: { type: String, trim: true },
+    isLive: { type: Boolean, default: true },
     status: { type: String, default: 'Completed', trim: true },
     image: { type: String, trim: true },
     techStack: [{ type: String, trim: true }],

@@ -34,7 +34,9 @@ export default function Projects({ projects }) {
                   {project.status}
                 </span>
               </div>
-              <p className="mt-4 text-sm leading-7 text-slate-300">{project.description}</p>
+              <div className="mt-4 h-32 overflow-y-auto pr-2 custom-scrollbar">
+                <p className="text-sm leading-7 text-slate-300">{project.description}</p>
+              </div>
               <div className="mt-5 flex flex-wrap gap-2">
                 {project.techStack.map((tech) => (
                   <span key={tech} className="rounded-full bg-slate-900/80 px-3 py-1 text-xs font-medium text-sky-200 ring-1 ring-inset ring-white/10">
@@ -47,10 +49,12 @@ export default function Projects({ projects }) {
                   <Github className="mr-2 h-4 w-4" />
                   GitHub
                 </a>
-                <a href={project.demo} target="_blank" rel="noreferrer" className="primary-button flex-1 px-4 py-2 text-sm">
-                  <ExternalLink className="mr-2 h-4 w-4" />
-                  Live Demo
-                </a>
+                {project.isLive !== false && project.demo && (
+                  <a href={project.demo} target="_blank" rel="noreferrer" className="primary-button flex-1 px-4 py-2 text-sm">
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Live Demo
+                  </a>
+                )}
               </div>
             </div>
           </motion.article>

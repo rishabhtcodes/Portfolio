@@ -16,10 +16,11 @@ const entityConfigs = {
   projects: {
     title: 'Projects',
     path: '/api/projects',
-    empty: { title: '', description: '', github: '', demo: '', status: 'Completed', image: '', techStack: '', order: '0' },
+    empty: { title: '', description: '', github: '', demo: '', isLive: true, status: 'Completed', image: '', techStack: '', order: '0' },
     fields: [
       { key: 'title', label: 'Title' },
       { key: 'status', label: 'Status' },
+      { key: 'isLive', label: 'Is Live?', type: 'checkbox' },
       { key: 'image', label: 'Project Image', type: 'image' },
       { key: 'github', label: 'GitHub URL' },
       { key: 'demo', label: 'Demo URL' },
@@ -550,6 +551,16 @@ export default function AdminDashboard() {
                     rows={5}
                     className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
                   />
+                ) : field.type === 'checkbox' ? (
+                  <div className="flex items-center gap-3 py-2">
+                    <input
+                      type="checkbox"
+                      checked={!!form[field.key]}
+                      onChange={(event) => updateEntityForm(section, field.key, event.target.checked)}
+                      className="h-5 w-5 rounded border-white/10 bg-slate-950/60 text-rose-500 transition focus:ring-rose-300/40"
+                    />
+                    <span className="text-sm text-slate-300">Project has a live demo link</span>
+                  </div>
                 ) : (
                   <input
                     type={field.type || 'text'}

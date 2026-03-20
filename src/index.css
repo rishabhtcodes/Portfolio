@@ -120,4 +120,14 @@
       background-position: 200% 0;
     }
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-white/10 transition hover:bg-white/20;
+  }
 }
