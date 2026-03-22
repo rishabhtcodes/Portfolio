@@ -1,5 +1,6 @@
 import { Code2, Cpu, Globe2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import aboutBanner from '../assets/about-banner.png';
 
 const cards = [
   {
@@ -38,7 +39,10 @@ export default function About({ about, name }) {
     >
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
         <div className="glass-panel relative overflow-hidden p-8 sm:p-10">
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-r from-sky-400/20 via-cyan-400/10 to-indigo-400/20" />
+          <div className="absolute inset-x-0 top-0 h-32 overflow-hidden">
+            <img src={aboutBanner} alt="" className="h-full w-full object-cover opacity-50 contrast-125 transition-transform duration-700 hover:scale-105" />
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/20 to-slate-900/60" />
+          </div>
           <div className="relative">
             <div className="mx-auto h-36 w-36 overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-slate-800 to-slate-900 shadow-[0_24px_80px_rgba(14,165,233,0.18)] sm:mx-0">
               {displayPhoto ? (
