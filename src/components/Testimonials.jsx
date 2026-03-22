@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { ChevronLeft, ChevronRight, Quote } from 'lucide-react';
+import gridBg from '../assets/grid.jpg';
 
 const testimonials = [
     { text: '"Rishabh delivered an outstanding e-commerce platform. His Django expertise and attention to detail are impressive."', name: 'Project Client', role: 'E-Commerce Project' },
@@ -26,7 +27,8 @@ export default function Testimonials() {
                 <h2 className={`section-title fade-in ${inView ? 'visible' : ''}`}>
                     What People <span className="gradient-text">Say</span>
                 </h2>
-                <div className={`testi glass-card fade-in stagger-1 ${inView ? 'visible' : ''}`}>
+                <div className={`testi glass-card group relative overflow-hidden fade-in stagger-1 ${inView ? 'visible' : ''}`}>
+                    <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-5 transition duration-500 group-hover:opacity-15 group-hover:scale-110" />
                     <Quote size={32} className="testi__quote" />
                     <p className="testi__text">{t.text}</p>
                     <div className="testi__author">

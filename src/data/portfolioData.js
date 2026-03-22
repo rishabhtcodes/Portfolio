@@ -15,10 +15,10 @@ export const navigationLinks = [
 
 export const profile = {
   name: 'Rishabh Kumar Tiwari',
-  title: 'Full Stack Developer | C++ | Python | MERN Stack',
+  title: 'Full Stack Developer | Django | MERN Stack',
   introduction:
     'Computer Science student at Lovely Professional University with strong problem-solving skills and experience in full-stack development. Proficient in C++, Python, JavaScript, and modern frameworks like React and Django. Passionate about building efficient systems, developing scalable web applications, and creating innovative solutions.',
-  highlights: ['C++ & Python', 'React + Node.js', 'MongoDB & MySQL', 'Problem Solving'],
+  highlights: ['Django', 'React + Node.js', 'MongoDB & MySQL', 'Problem Solving'],
   email: 'rishabhtiwari3538@gmail.com',
   phone: '+91 7986307281',
   github: 'https://github.com/rishabhtcodes',
