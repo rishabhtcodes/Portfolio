@@ -47,7 +47,7 @@ export default function About({ about, name }) {
                 <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-sky-200">{initials}</div>
               )}
             </div>
-            <div className="mt-8 space-y-3 text-sm leading-7 text-slate-300">
+            <div className="mt-8 space-y-4 text-base leading-relaxed text-slate-300 sm:text-lg">
               <p>{about.summary}</p>
               <p>{about.interests}</p>
             </div>
@@ -69,7 +69,7 @@ export default function About({ about, name }) {
                     <Icon className="h-5 w-5" />
                   </div>
                   <h3 className="mt-4 text-base font-semibold text-white">{card.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-300">{card.text}</p>
+                  <p className="mt-2 text-base leading-relaxed text-slate-400">{card.text}</p>
                 </div>
               );
             })}
@@ -77,7 +77,7 @@ export default function About({ about, name }) {
 
           <div className="mt-8 flex flex-wrap gap-3">
             {about.techFocus.map((item) => (
-              <span key={item} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-200">
+              <span key={item} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-base text-slate-200">
                 {item}
               </span>
             ))}
