@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { resolvePortfolioIcon } from '../lib/iconMaps';
+import gridBg from '../assets/grid.jpg';
 
 export default function Achievements({ achievements }) {
   return (
@@ -26,8 +27,9 @@ export default function Achievements({ achievements }) {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35, delay: index * 0.08 }}
-              className="glass-panel rounded-[2rem] p-6 transition duration-300 hover:-translate-y-2 hover:border-cyan-300/20"
+              className="glass-panel group relative overflow-hidden rounded-[2rem] p-6 transition duration-300 hover:-translate-y-2 hover:border-cyan-300/20"
             >
+              <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400/15 to-indigo-400/15 text-sky-200">
                 <Icon className="h-6 w-6" />
               </div>

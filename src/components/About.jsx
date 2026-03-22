@@ -1,6 +1,7 @@
 import { Code2, Cpu, Globe2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import aboutBanner from '../assets/about-banner.png';
+import gridBg from '../assets/grid.jpg';
 
 const cards = [
   {
@@ -38,7 +39,8 @@ export default function About({ about, name }) {
       transition={{ duration: 0.6, ease: 'easeOut' }}
     >
       <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="glass-panel relative overflow-hidden p-8 sm:p-10">
+        <div className="glass-panel group relative overflow-hidden p-8 sm:p-10">
+          <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-5 transition duration-500 group-hover:opacity-20 group-hover:scale-105" />
           <div className="absolute inset-x-0 top-0 h-32 overflow-hidden">
             <img src={aboutBanner} alt="" className="h-full w-full object-cover opacity-50 contrast-125 transition-transform duration-700 hover:scale-105" />
             <div className="absolute inset-0 bg-gradient-to-b from-transparent via-slate-900/20 to-slate-900/60" />
@@ -68,7 +70,8 @@ export default function About({ about, name }) {
               const Icon = card.icon;
 
               return (
-                <div key={card.title} className="glass-panel rounded-2xl p-5 transition duration-300 hover:-translate-y-1 hover:border-sky-300/20 hover:bg-white/8">
+                <div key={card.title} className="glass-panel group relative overflow-hidden rounded-2xl p-5 transition duration-300 hover:-translate-y-1 hover:border-sky-300/20 hover:bg-white/8">
+                  <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-20 transition duration-500 group-hover:opacity-40 group-hover:scale-110" />
                   <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-sky-400/10 text-sky-200">
                     <Icon className="h-5 w-5" />
                   </div>
