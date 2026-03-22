@@ -1,5 +1,6 @@
 import { useInView } from 'react-intersection-observer';
 import { ArrowUpRight, Calendar } from 'lucide-react';
+import gridBg from '../assets/grid.jpg';
 
 const articles = [
     { title: 'Building REST APIs with Django REST Framework', desc: 'A comprehensive guide to creating scalable REST APIs using DRF, serializers, and viewsets.', date: 'Feb 2026', tags: ['Django', 'REST API'], link: '#' },
@@ -19,7 +20,8 @@ export default function Blog() {
                 </h2>
                 <div className="blog__grid">
                     {articles.map((a, idx) => (
-                        <a key={idx} href={a.link} className={`blog__card glass-card fade-in stagger-${idx + 1} ${inView ? 'visible' : ''}`}>
+                        <a key={idx} href={a.link} className={`blog__card glass-card group relative overflow-hidden fade-in stagger-${idx + 1} ${inView ? 'visible' : ''}`}>
+                            <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
                             <div className="blog__date"><Calendar size={12} /> {a.date}</div>
                             <h3 className="blog__title">{a.title} <ArrowUpRight size={14} /></h3>
                             <p className="blog__desc">{a.desc}</p>
