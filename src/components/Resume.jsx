@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Download, GraduationCap, Code, Layers, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ResumeFormatModal from './ResumeFormatModal';
+import gridBg from '../assets/resume_grid.jpg';
 
 export default function Resume({ resume }) {
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
@@ -72,9 +73,10 @@ export default function Resume({ resume }) {
           return (
             <div
               key={highlight.label}
-              className={`glass-panel rounded-2xl p-6 text-center transition duration-300 hover:-translate-y-1 hover:border-sky-300/20 hover:bg-white/8`}
+              className={`glass-panel group relative overflow-hidden rounded-2xl p-6 text-center transition duration-300 hover:-translate-y-1 hover:border-sky-300/20 hover:bg-white/8`}
               style={{ animation: `fadeIn 0.5s ease-out ${index * 0.1}s both` }}
             >
+              <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
               <div className="flex justify-center mb-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-400/10 text-sky-200 shadow-inner ring-1 ring-sky-300/20">
                   <Icon className="h-5 w-5" />

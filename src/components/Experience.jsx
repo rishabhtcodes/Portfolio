@@ -1,5 +1,6 @@
 import { useInView } from 'react-intersection-observer';
 import { Briefcase, GraduationCap, Calendar, MapPin } from 'lucide-react';
+import gridBg from '../assets/grid.jpg';
 
 const experiences = [
     {
@@ -48,7 +49,8 @@ export default function Experience() {
                             className={`timeline__item fade-in stagger-${Math.min(idx + 1, 6)} ${inView ? 'visible' : ''} ${idx % 2 === 0 ? 'timeline__item--left' : 'timeline__item--right'}`}
                         >
                             <div className="timeline__dot" style={{ background: exp.color }}>{exp.icon}</div>
-                            <div className="timeline__card glass-card">
+                            <div className="timeline__card glass-card group relative overflow-hidden">
+                                <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-5 transition duration-500 group-hover:opacity-20 group-hover:scale-110" />
                                 <div className="timeline__meta">
                                     <span className="timeline__type">{exp.type === 'work' ? '💼 Work' : '🎓 Education'}</span>
                                     <span className="timeline__period"><Calendar size={12} /> {exp.period}</span>

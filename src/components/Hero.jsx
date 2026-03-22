@@ -86,10 +86,10 @@ export default function Hero({ profile }) {
                   focus: <span className="text-cyan-200">&quot;Scalable web products&quot;</span>,
                 </p>
                 <p className="pl-4">
-                  stack: <span className="text-cyan-200">['React', 'Node.js', 'MongoDB']</span>,
+                  stack: <span className="text-cyan-200">['React', 'Node.js', 'MongoDB', 'Django']</span>,
                 </p>
                 <p className="pl-4">
-                  shipping: <span className="text-emerald-300">true</span>
+                  coffee: <span className="text-emerald-300">true</span>
                 </p>
                 <p>{'}'};</p>
               </div>

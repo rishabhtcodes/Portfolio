@@ -1,5 +1,6 @@
 import { ExternalLink, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
+import gridBg from '../assets/grid.jpg';
 
 export default function Projects({ projects }) {
   return (
@@ -24,8 +25,9 @@ export default function Projects({ projects }) {
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.08 }}
-            className="glass-panel w-[85vw] max-w-[420px] shrink-0 snap-start overflow-hidden rounded-[2rem] transition duration-300 hover:-translate-y-2 hover:border-sky-300/25"
+            className="glass-panel group relative w-[85vw] max-w-[420px] shrink-0 snap-start overflow-hidden rounded-[2rem] transition duration-300 hover:-translate-y-2 hover:border-sky-300/25"
           >
+            <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
             <img src={project.image} alt={project.title} className="h-52 w-full object-cover" />
             <div className="p-6">
               <div className="flex items-start justify-between gap-4">
