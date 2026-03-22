@@ -1,7 +1,7 @@
 import { ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { resolvePortfolioIcon } from '../lib/iconMaps';
-import gridBg from '../assets/grid.jpg';
+import gridBg from '../assets/certificate_grid.jpg';
 
 export default function Certificates({ certificates }) {
   return (
