@@ -70,6 +70,11 @@ export const skills = [
     description: 'Server-side scripting for dynamic web applications.',
   },
   {
+    name: 'Laravel',
+    logo: 'https://cdn.simpleicons.org/laravel/FF2D20',
+    description: 'Elegant PHP framework for modern, scalable web applications.',
+  },
+  {
     name: 'HTML5',
     logo: 'https://cdn.simpleicons.org/html5/E34F26',
     description: 'Semantic markup and accessible page structure.',
