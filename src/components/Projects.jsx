@@ -1,6 +1,6 @@
 import { ExternalLink, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
-import gridBg from '../assets/grid.jpg';
+import gridBg from '../assets/projects_grid.jpg';
 
 export default function Projects({ projects }) {
   return (
