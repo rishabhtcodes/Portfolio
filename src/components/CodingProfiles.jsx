@@ -1,5 +1,6 @@
 import { useInView } from 'react-intersection-observer';
 import { ExternalLink } from 'lucide-react';
+import gridBg from '../assets/grid.jpg';
 
 const profiles = [
     { name: 'LeetCode', handle: 'rishabhtcodes', url: 'https://leetcode.com/rishabhtcodes', emoji: '🟡' },
@@ -20,7 +21,8 @@ export default function CodingProfiles() {
                 </h2>
                 <div className="coding__grid">
                     {profiles.map((p, idx) => (
-                        <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer" className={`coding__card glass-card fade-in stagger-${idx + 1} ${inView ? 'visible' : ''}`}>
+                        <a key={p.name} href={p.url} target="_blank" rel="noopener noreferrer" className={`coding__card glass-card group relative overflow-hidden fade-in stagger-${idx + 1} ${inView ? 'visible' : ''}`}>
+                            <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
                             <span className="coding__emoji">{p.emoji}</span>
                             <div>
                                 <h3 className="coding__name">{p.name}</h3>

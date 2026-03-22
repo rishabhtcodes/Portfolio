@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Mail, Linkedin, Github, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { apiRequest } from '../lib/api';
+import resumeGridBg from '../assets/resume_grid.jpg';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -138,7 +139,8 @@ export default function Contact({ contact }) {
           </a>
         </div>
 
-        <form onSubmit={handleSubmit} noValidate className="glass-panel rounded-[2rem] p-6 sm:p-8">
+        <form onSubmit={handleSubmit} noValidate className="glass-panel group relative overflow-hidden rounded-[2rem] p-6 sm:p-8">
+          <img src={resumeGridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
           <div className="grid gap-5">
             <div>
               <label htmlFor="name" className="mb-2 block text-sm font-medium text-slate-200">
