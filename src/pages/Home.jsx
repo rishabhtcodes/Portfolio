@@ -39,6 +39,15 @@ export default function Home() {
   useEffect(() => {
     let active = true;
 
+    // Force loading screen to disappear after 800ms
+    // This reduces the 'Loading Space' time and allows the page to render instantly
+    // while the API requests continue in the background.
+    const maxLoadingTimer = setTimeout(() => {
+      if (active) {
+        setIsLoading(false);
+      }
+    }, 800);
+
     async function loadPortfolioData() {
       try {
         const [profilePayload, projectsPayload, skillsPayload, achievementsPayload, certificatesPayload] = await Promise.all([
@@ -89,6 +98,7 @@ export default function Home() {
         console.error('Falling back to static portfolio data:', error);
       } finally {
         if (active) {
+          clearTimeout(maxLoadingTimer);
           setIsLoading(false);
         }
       }
@@ -98,6 +108,7 @@ export default function Home() {
 
     return () => {
       active = false;
+      clearTimeout(maxLoadingTimer);
     };
   }, []);
 
