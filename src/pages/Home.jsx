@@ -34,7 +34,7 @@ export default function Home() {
     skills,
   });
 
-  const [isLoading, setIsLoading] = useState(true);
+
 
   useEffect(() => {
     let active = true;
@@ -89,7 +89,7 @@ export default function Home() {
         console.error('Falling back to static portfolio data:', error);
       } finally {
         if (active) {
-          setIsLoading(false);
+          // fetch completed
         }
       }
     }
@@ -100,17 +100,6 @@ export default function Home() {
       active = false;
     };
   }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
-        <div className="flex flex-col items-center gap-6">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-sky-400/20 border-t-sky-400"></div>
-          <p className="text-xs font-semibold tracking-[0.3em] text-sky-200 uppercase">Loading Space</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="app-shell">
