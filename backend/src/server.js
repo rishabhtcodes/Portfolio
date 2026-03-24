@@ -63,6 +63,21 @@ async function startServer() {
   app.listen(port, () => {
     const suffix = connection.mode === 'mongo' ? 'using MongoDB.' : `using local JSON storage fallback. MongoDB unavailable: ${connection.reason}`;
     console.log(`Portfolio backend running on port ${port} ${suffix}`);
+
+    // Self-ping to keep the free Render service awake
+    // Render typically sleeps after 15 minutes of inactivity
+    const pingInterval = 14 * 60 * 1000; // 14 minutes
+    const backendUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${port}`;
+    
+    setInterval(() => {
+      fetch(`${backendUrl}/api/health`)
+        .then((res) => {
+          console.log(`[Keep-Alive] Pinged ${backendUrl}/api/health: ${res.status}`);
+        })
+        .catch((err) => {
+          console.error(`[Keep-Alive] Ping failed:`, err.message);
+        });
+    }, pingInterval);
   });
 }
 
