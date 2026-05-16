@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
+import mongoose from 'mongoose';
 import { connectDatabase } from './config/db.js';
 import { bootstrapDatabase } from './utils/bootstrap.js';
 import adminRoutes from './routes/adminRoutes.js';
@@ -37,7 +38,13 @@ app.use(
 app.use(express.json({ limit: '8mb' }));
 
 app.get('/api/health', (_request, response) => {
-  response.json({ status: 'ok' });
+  const dbState = mongoose.connection.readyState;
+  // 0=disconnected, 1=connected, 2=connecting, 3=disconnecting
+  const dbStatus = ['disconnected', 'connected', 'connecting', 'disconnecting'][dbState] || 'unknown';
+  const isHealthy = dbState === 1;
+  response
+    .status(isHealthy ? 200 : 503)
+    .json({ status: isHealthy ? 'ok' : 'degraded', db: dbStatus });
 });
 
 app.use('/api/admin', adminRoutes);
@@ -57,12 +64,11 @@ app.use((error, _request, response, _next) => {
 });
 
 async function startServer() {
-  const connection = await connectDatabase();
+  await connectDatabase();
   await bootstrapDatabase();
 
   app.listen(port, () => {
-    const suffix = connection.mode === 'mongo' ? 'using MongoDB.' : `using local JSON storage fallback. MongoDB unavailable: ${connection.reason}`;
-    console.log(`Portfolio backend running on port ${port} ${suffix}`);
+    console.log(`Portfolio backend running on port ${port} — connected to MongoDB.`);
 
     // Self-ping to keep the free Render service awake
     // Render typically sleeps after 15 minutes of inactivity
