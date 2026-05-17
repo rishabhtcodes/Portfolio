@@ -49,11 +49,13 @@ export default function Home() {
           apiRequest('/api/certificates'),
         ]);
 
-        if (!active || !profilePayload) {
+        if (!active) {
           return;
         }
 
-        const incomingResume = profilePayload.resume || {};
+        // Profile may be null if it hasn't been set up yet — fall back to static data for profile
+        const resolvedProfile = profilePayload || {};
+        const incomingResume = resolvedProfile.resume || {};
         const resolvedResume = {
           ...resume,
           ...incomingResume,
@@ -66,24 +68,24 @@ export default function Home() {
 
         setPortfolioData({
           profile: {
-            name: profilePayload.name,
-            title: profilePayload.title,
-            introduction: profilePayload.introduction,
-            highlights: profilePayload.highlights || [],
-            email: profilePayload.email,
-            phone: profilePayload.phone,
-            github: profilePayload.github,
-            linkedin: profilePayload.linkedin,
-            twitter: profilePayload.twitter,
-            profilePhoto: profilePayload.profilePhoto,
+            name: resolvedProfile.name || profile.name,
+            title: resolvedProfile.title || profile.title,
+            introduction: resolvedProfile.introduction || profile.introduction,
+            highlights: resolvedProfile.highlights || profile.highlights || [],
+            email: resolvedProfile.email || profile.email,
+            phone: resolvedProfile.phone || profile.phone,
+            github: resolvedProfile.github || profile.github,
+            linkedin: resolvedProfile.linkedin || profile.linkedin,
+            twitter: resolvedProfile.twitter || profile.twitter,
+            profilePhoto: resolvedProfile.profilePhoto || profile.profilePhoto,
           },
-          about: profilePayload.about || about,
-          contact: profilePayload.contact || contact,
+          about: resolvedProfile.about || about,
+          contact: resolvedProfile.contact || contact,
           resume: resolvedResume,
-          projects: projectsPayload,
-          skills: skillsPayload,
-          achievements: achievementsPayload,
-          certificates: certificatesPayload,
+          projects: Array.isArray(projectsPayload) && projectsPayload.length > 0 ? projectsPayload : projects,
+          skills: Array.isArray(skillsPayload) && skillsPayload.length > 0 ? skillsPayload : skills,
+          achievements: Array.isArray(achievementsPayload) && achievementsPayload.length > 0 ? achievementsPayload : achievements,
+          certificates: Array.isArray(certificatesPayload) && certificatesPayload.length > 0 ? certificatesPayload : certificates,
         });
       } catch (error) {
         console.error('Falling back to static portfolio data:', error);
