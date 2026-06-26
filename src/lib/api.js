@@ -34,7 +34,6 @@ export async function apiRequest(path, options = {}) {
     const response = await fetch(`${API_BASE_URL}${path}`, {
       ...options,
       headers,
-      cache: 'no-store',
       body: options.body ? JSON.stringify(options.body) : undefined,
     });
 
@@ -46,6 +45,14 @@ export async function apiRequest(path, options = {}) {
 
     throw error;
   }
+}
+
+/**
+ * Fetches all public portfolio data in a single request.
+ * The backend returns { profile, projects, skills, achievements, certificates }.
+ */
+export async function getPortfolioData() {
+  return apiRequest('/api/portfolio');
 }
 
 export async function apiDelete(path, token) {

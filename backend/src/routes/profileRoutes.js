@@ -1,6 +1,7 @@
 import express from 'express';
 import { requireAuth } from '../middleware/auth.js';
 import { store } from '../store/portfolioStore.js';
+import { invalidatePortfolioCache } from './portfolioRoutes.js';
 
 const router = express.Router();
 
@@ -16,6 +17,7 @@ router.get('/', async (_request, response, next) => {
 router.put('/', requireAuth, async (request, response, next) => {
   try {
     const savedProfile = await store.upsertProfile(request.body);
+    invalidatePortfolioCache();
     return response.json(savedProfile);
   } catch (error) {
     return next(error);

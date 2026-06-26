@@ -9,7 +9,7 @@ import Certificates from '../components/Certificates';
 import Achievements from '../components/Achievements';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
-import { apiRequest } from '../lib/api';
+import { getPortfolioData } from '../lib/api';
 import {
   about,
   achievements,
@@ -23,6 +23,7 @@ import {
 } from '../data/portfolioData';
 
 export default function Home() {
+  // Initialise with real static data — the page renders instantly on first paint
   const [portfolioData, setPortfolioData] = useState({
     about,
     achievements,
@@ -34,35 +35,27 @@ export default function Home() {
     skills,
   });
 
-  const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     let active = true;
 
     async function loadPortfolioData() {
       try {
-        const [profilePayload, projectsPayload, skillsPayload, achievementsPayload, certificatesPayload] = await Promise.all([
-          apiRequest('/api/profile'),
-          apiRequest('/api/projects'),
-          apiRequest('/api/skills'),
-          apiRequest('/api/achievements'),
-          apiRequest('/api/certificates'),
-        ]);
+        // Single request — backend handles Promise.all + in-memory cache
+        const payload = await getPortfolioData();
 
-        if (!active) {
-          return;
-        }
+        if (!active) return;
 
-        // Profile may be null if it hasn't been set up yet — fall back to static data for profile
-        const resolvedProfile = profilePayload || {};
+        const resolvedProfile = payload.profile || {};
         const incomingResume = resolvedProfile.resume || {};
         const resolvedResume = {
           ...resume,
           ...incomingResume,
-          highlights: Array.isArray(incomingResume.highlights) && incomingResume.highlights.length > 0
-            ? incomingResume.highlights
-            : resume.highlights,
-          resumePdfLink: incomingResume.resumePdfLink || incomingResume.resumeLink || resume.resumePdfLink || resume.resumeLink,
+          highlights:
+            Array.isArray(incomingResume.highlights) && incomingResume.highlights.length > 0
+              ? incomingResume.highlights
+              : resume.highlights,
+          resumePdfLink:
+            incomingResume.resumePdfLink || incomingResume.resumeLink || resume.resumePdfLink || resume.resumeLink,
           resumeDocLink: incomingResume.resumeDocLink || resume.resumeDocLink || '',
         };
 
@@ -82,17 +75,18 @@ export default function Home() {
           about: resolvedProfile.about || about,
           contact: resolvedProfile.contact || contact,
           resume: resolvedResume,
-          projects: Array.isArray(projectsPayload) && projectsPayload.length > 0 ? projectsPayload : projects,
-          skills: Array.isArray(skillsPayload) && skillsPayload.length > 0 ? skillsPayload : skills,
-          achievements: Array.isArray(achievementsPayload) && achievementsPayload.length > 0 ? achievementsPayload : achievements,
-          certificates: Array.isArray(certificatesPayload) && certificatesPayload.length > 0 ? certificatesPayload : certificates,
+          projects:
+            Array.isArray(payload.projects) && payload.projects.length > 0 ? payload.projects : projects,
+          skills:
+            Array.isArray(payload.skills) && payload.skills.length > 0 ? payload.skills : skills,
+          achievements:
+            Array.isArray(payload.achievements) && payload.achievements.length > 0 ? payload.achievements : achievements,
+          certificates:
+            Array.isArray(payload.certificates) && payload.certificates.length > 0 ? payload.certificates : certificates,
         });
       } catch (error) {
-        console.error('Falling back to static portfolio data:', error);
-      } finally {
-        if (active) {
-          setIsLoading(false);
-        }
+        // Backend unreachable (cold start / DB down) — static data already visible, no crash
+        console.warn('[Portfolio] Could not load live data, showing static fallback:', error.message);
       }
     }
 
@@ -103,17 +97,7 @@ export default function Home() {
     };
   }, []);
 
-  if (isLoading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-950">
-        <div className="flex flex-col items-center gap-6">
-          <div className="h-12 w-12 animate-spin rounded-full border-4 border-sky-400/20 border-t-sky-400"></div>
-          <p className="text-xs font-semibold tracking-[0.3em] text-sky-200 uppercase">Loading Space</p>
-        </div>
-      </div>
-    );
-  }
-
+  // No blocking spinner — page is already populated with static data above
   return (
     <div className="app-shell">
       <Navbar

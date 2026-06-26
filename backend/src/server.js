@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import { connectDatabase } from './config/db.js';
 import { bootstrapDatabase } from './utils/bootstrap.js';
 import adminRoutes from './routes/adminRoutes.js';
+import portfolioRoutes from './routes/portfolioRoutes.js';
 import profileRoutes from './routes/profileRoutes.js';
 import projectsRoutes from './routes/projectsRoutes.js';
 import skillsRoutes from './routes/skillsRoutes.js';
@@ -48,6 +49,7 @@ app.get('/api/health', (_request, response) => {
 });
 
 app.use('/api/admin', adminRoutes);
+app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/projects', projectsRoutes);
 app.use('/api/skills', skillsRoutes);
