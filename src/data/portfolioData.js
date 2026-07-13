@@ -170,6 +170,36 @@ export const projects = [
       'https://images.unsplash.com/photo-1488190344049-ce7a6949597a?auto=format&fit=crop&w=1200&q=80',
     techStack: ['HTML', 'CSS', 'JavaScript', 'MySQL', 'PHP'],
   },
+  {
+    title: 'CodeArena - Online Judge Sandbox',
+    description:
+      'Designed and built an online judge platform featuring real-time code execution, execution sandboxing, and competition scoreboard. Integrates Django REST Framework and a custom Docker execution sandbox for running C++ and Python submissions securely.',
+    github: 'https://github.com/rishabhtcodes',
+    demo: 'https://github.com/rishabhtcodes',
+    status: 'Live',
+    image: '',
+    techStack: ['Django', 'Python', 'Docker', 'React'],
+  },
+  {
+    title: 'DevFlow - Developer Q&A Portal',
+    description:
+      'Created a full-stack Q&A application similar to StackOverflow. Implemented recommendation systems based on tag usage, markdown parsing, syntax highlighting, upvoting mechanisms, and badge awards. Powered by MongoDB and Express.',
+    github: 'https://github.com/rishabhtcodes',
+    demo: 'https://github.com/rishabhtcodes',
+    status: 'Completed',
+    image: '',
+    techStack: ['React', 'Express', 'MongoDB', 'Node.js'],
+  },
+  {
+    title: 'AlgoVisualizer - Simulator',
+    description:
+      'A lightweight interactive web simulator built to visualize classical algorithms including Dijkstra, A* search, QuickSort, and MergeSort. Allows speed tuning, maze generation, and custom obstacle placing to demonstrate execution time differences.',
+    github: 'https://github.com/rishabhtcodes',
+    demo: 'https://github.com/rishabhtcodes',
+    status: 'Completed',
+    image: '',
+    techStack: ['HTML', 'CSS', 'JavaScript'],
+  },
 ];
 
 export const achievements = [
