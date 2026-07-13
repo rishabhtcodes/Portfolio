@@ -22,7 +22,9 @@ export default function Hero({ profile }) {
 
           {/* Heading */}
           <h1>
-            Hi, I&apos;m <span className="accent">{firstName}<br />{lastName}</span>
+            Hi, I&apos;m <span className="accent">{firstName}</span>
+            <br />
+            <span>{lastName}</span>
           </h1>
 
           {/* Subtitle / Role */}
