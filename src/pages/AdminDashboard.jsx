@@ -39,11 +39,13 @@ const entityConfigs = {
   skills: {
     title: 'Skills',
     path: '/api/skills',
-    empty: { name: '', category: 'General', logo: '', description: '', order: '0' },
+    empty: { name: '', category: 'General', logo: '', languageIcon: '', gridBg: '', description: '', order: '0' },
     fields: [
       { key: 'name', label: 'Name' },
       { key: 'category', label: 'Category' },
-      { key: 'logo', label: 'Logo URL' },
+      { key: 'logo', label: 'Skill Logo', type: 'image' },
+      { key: 'languageIcon', label: 'Language Icon (Lucide name / Devicon Class / URL)' },
+      { key: 'gridBg', label: 'Grid Background (CSS Color / Gradient)' },
       { key: 'order', label: 'Order', type: 'number' },
       { key: 'description', label: 'Description', type: 'textarea' },
     ],
