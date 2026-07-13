@@ -38,9 +38,17 @@ export default function About({ about, name }) {
 
         <div className="about-grid">
           {/* Left — Portrait */}
-          <div className="about-portrait">
+          <div className="about-portrait overflow-hidden">
             <div className="grid-overlay" />
-            <div className="initials">{initials}</div>
+            {about?.photo ? (
+              <img
+                src={about.photo}
+                alt={name || 'About'}
+                className="w-full h-full object-cover relative z-10"
+              />
+            ) : (
+              <div className="initials">{initials}</div>
+            )}
           </div>
 
           {/* Right — Info */}

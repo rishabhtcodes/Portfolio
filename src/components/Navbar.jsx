@@ -50,10 +50,18 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
             <button
               type="button"
               onClick={() => setPhotoModalOpen(true)}
-              className="brand-mark focus:outline-none"
+              className="brand-mark focus:outline-none overflow-hidden"
               aria-label="View profile photo"
             >
-              RT
+              {profilePhoto ? (
+                <img
+                  src={profilePhoto}
+                  alt={name || 'Profile'}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                'RT'
+              )}
             </button>
             <a
               href="#home"
