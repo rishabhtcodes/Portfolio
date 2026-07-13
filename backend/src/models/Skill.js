@@ -4,6 +4,8 @@ const skillSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
     logo: { type: String, trim: true },
+    languageIcon: { type: String, trim: true },
+    gridBg: { type: String, trim: true },
     description: { type: String, required: true, trim: true },
     category: { type: String, default: 'General', trim: true },
     order: { type: Number, default: 0 },
