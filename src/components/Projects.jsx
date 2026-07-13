@@ -1,3 +1,4 @@
+import { Github } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function Projects({ projects }) {
@@ -52,12 +53,13 @@ export default function Projects({ projects }) {
                 {/* Actions */}
                 <div className="project-actions">
                   <a
-                    className="btn btn-secondary btn-sm flex-1 justify-center"
+                    className="btn btn-secondary btn-sm flex-1 justify-center gap-2"
                     href={project.github}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Code
+                    <Github className="h-4 w-4" />
+                    GitHub
                   </a>
                   {project.isLive !== false && project.demo && (
                     <a
