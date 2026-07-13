@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -11,10 +11,13 @@
 
   body {
     @apply min-h-screen antialiased;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #eef0f5;
+    font-family: 'Sora', sans-serif;
+    background-color: #f8fafc;
     background-image:
-      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.35'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.03) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(14, 165, 233, 0.03) 0%, transparent 40%),
+      radial-gradient(#e2e8f0 1.2px, transparent 0);
+    background-size: 100% 100%, 100% 100%, 30px 30px;
     color: #0f172a;
   }
 
@@ -99,16 +102,17 @@
 
   /* Dark project card */
   .project-card {
-    @apply overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md;
+    @apply overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md;
   }
 
   /* Project card image/header area — dark with CSS grid pattern */
   .project-card-header {
-    @apply relative h-[180px] w-full overflow-hidden bg-slate-900;
+    @apply relative h-[160px] w-full overflow-hidden bg-[#0f172a] border-b border-slate-800;
     background-image:
-      linear-gradient(rgba(99,131,255,0.15) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(99,131,255,0.15) 1px, transparent 1px);
-    background-size: 32px 32px;
+      linear-gradient(rgba(99, 102, 241, 0.18) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99, 102, 241, 0.18) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-position: center;
   }
 }
 

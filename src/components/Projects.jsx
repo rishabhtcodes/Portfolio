@@ -28,24 +28,13 @@ export default function Projects({ projects }) {
             transition={{ duration: 0.4, delay: index * 0.08 }}
             className="project-card"
           >
-            {/* Dark top header with CSS grid lines pattern */}
             <div className="project-card-header">
-              {/* Project image overlaid on top of the grid pattern */}
-              {project.image && (
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="absolute inset-0 h-full w-full object-cover opacity-40 mix-blend-luminosity"
-                />
-              )}
-              {/* Slight gradient overlay at bottom of header */}
-              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/80 to-transparent" />
               {/* Status badge — top right */}
               <div className="absolute right-3 top-3">
-                <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${
+                <span className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider backdrop-blur-sm ${
                   project.status?.toLowerCase() === 'live'
-                    ? 'border border-emerald-700/40 bg-slate-900/80 text-emerald-400'
-                    : 'border border-slate-600/40 bg-slate-900/80 text-slate-300'
+                    ? 'border-emerald-500/20 bg-slate-950/60 text-emerald-400'
+                    : 'border-slate-500/20 bg-slate-950/60 text-slate-300'
                 }`}>
                   <span className={`h-1.5 w-1.5 rounded-full ${
                     project.status?.toLowerCase() === 'live' ? 'bg-emerald-400' : 'bg-slate-400'
@@ -95,10 +84,9 @@ export default function Projects({ projects }) {
                     href={project.demo}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex flex-1 items-center justify-center rounded-full bg-indigo-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-indigo-700"
+                    className="inline-flex flex-1 items-center justify-center gap-1 rounded-full bg-blue-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 hover:shadow"
                   >
-                    Live Demo
-                    <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
+                    Live Demo <span className="text-[10px] font-bold">↗</span>
                   </a>
                 )}
               </div>
