@@ -25,14 +25,17 @@ export default function Hero({ profile }) {
               Available for freelance and full-time roles
             </motion.span>
 
-            <h1 className="mt-7 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl" style={{ letterSpacing: '-0.03em' }}>
+            <h1
+              className="mt-7 text-4xl font-black text-slate-900 sm:text-5xl lg:text-6xl"
+              style={{ letterSpacing: '-0.04em', lineHeight: '1.05' }}
+            >
               Hi, I&apos;m{' '}
               <span className="text-gradient">{profile.name}</span>
             </h1>
 
-            <p className="mt-4 text-base font-medium text-slate-500 sm:text-lg">{profile.title}</p>
+            <p className="mt-4 text-sm font-medium text-slate-500 sm:text-base">{profile.title}</p>
 
-            <p className="mt-5 max-w-xl text-base leading-7 text-slate-500">
+            <p className="mt-4 max-w-xl text-sm leading-7 text-slate-500 sm:text-base">
               {profile.introduction}
             </p>
 

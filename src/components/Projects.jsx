@@ -8,59 +8,71 @@ export default function Projects({ projects }) {
       className="section-shell"
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.55, ease: 'easeOut' }}
+      viewport={{ once: true, amount: 0.08 }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
     >
       <span className="section-kicker">Projects</span>
       <h2 className="section-title">Selected builds focused on user experience, performance, and delivery.</h2>
-      <p className="section-copy">
+      <p className="section-copy mt-4">
         Real-world applications built from scratch — from design to deployment.
       </p>
 
-      {/* Horizontal scroll row */}
-      <div className="mt-10 flex w-full snap-x snap-mandatory gap-5 overflow-x-auto pb-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* 3-column grid matching the mockup */}
+      <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (
           <motion.article
             key={project.title}
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: index * 0.08 }}
-            className="project-card group relative w-[88vw] max-w-[380px] shrink-0 snap-start overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-slate-700"
+            className="project-card"
           >
-            {/* Project image */}
-            {project.image && (
-              <div className="relative h-48 w-full overflow-hidden bg-slate-800">
+            {/* Dark top header with CSS grid lines pattern */}
+            <div className="project-card-header">
+              {/* Project image overlaid on top of the grid pattern */}
+              {project.image && (
                 <img
                   src={project.image}
                   alt={project.title}
-                  className="h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
+                  className="absolute inset-0 h-full w-full object-cover opacity-40 mix-blend-luminosity"
                 />
-                {/* Overlay gradient */}
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
-              </div>
-            )}
-
-            <div className="p-5">
-              {/* Title + status */}
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="text-base font-semibold text-slate-100">{project.title}</h3>
-                <span className="shrink-0 rounded-full border border-slate-700 bg-slate-800 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-400">
+              )}
+              {/* Slight gradient overlay at bottom of header */}
+              <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-900/80 to-transparent" />
+              {/* Status badge — top right */}
+              <div className="absolute right-3 top-3">
+                <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider ${
+                  project.status?.toLowerCase() === 'live'
+                    ? 'border border-emerald-700/40 bg-slate-900/80 text-emerald-400'
+                    : 'border border-slate-600/40 bg-slate-900/80 text-slate-300'
+                }`}>
+                  <span className={`h-1.5 w-1.5 rounded-full ${
+                    project.status?.toLowerCase() === 'live' ? 'bg-emerald-400' : 'bg-slate-400'
+                  }`} />
                   {project.status}
                 </span>
               </div>
+            </div>
+
+            {/* White card body */}
+            <div className="p-5">
+              {/* Title */}
+              <h3 className="text-base font-bold text-slate-900" style={{ letterSpacing: '-0.01em' }}>
+                {project.title}
+              </h3>
 
               {/* Description */}
-              <div className="mt-3 h-24 overflow-y-auto pr-1 custom-scrollbar">
-                <p className="text-xs leading-6 text-slate-400">{project.description}</p>
-              </div>
+              <p className="mt-2 text-sm leading-6 text-slate-500 line-clamp-3">
+                {project.description}
+              </p>
 
-              {/* Tech stack */}
+              {/* Tech stack tags */}
               <div className="mt-4 flex flex-wrap gap-1.5">
                 {project.techStack.map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-full border border-slate-700/60 bg-slate-800 px-2.5 py-0.5 text-[10px] font-medium text-indigo-300"
+                    className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-[11px] font-medium text-slate-600"
                   >
                     {tech}
                   </span>
@@ -73,20 +85,20 @@ export default function Projects({ projects }) {
                   href={project.github}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-slate-600 hover:bg-slate-700"
+                  className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-slate-300 hover:shadow"
                 >
                   <Github className="mr-1.5 h-3.5 w-3.5" />
-                  Code
+                  GitHub
                 </a>
                 {project.isLive !== false && project.demo && (
                   <a
                     href={project.demo}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex flex-1 items-center justify-center rounded-full bg-indigo-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-indigo-500"
+                    className="inline-flex flex-1 items-center justify-center rounded-full bg-indigo-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-indigo-700"
                   >
-                    <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
                     Live Demo
+                    <ExternalLink className="ml-1.5 h-3.5 w-3.5" />
                   </a>
                 )}
               </div>

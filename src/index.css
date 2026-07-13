@@ -12,11 +12,9 @@
   body {
     @apply min-h-screen antialiased;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background-color: #f1f5f9;
+    background-color: #eef0f5;
     background-image:
-      radial-gradient(circle at 20% 10%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
-      radial-gradient(circle at 80% 90%, rgba(14, 165, 233, 0.06) 0%, transparent 50%),
-      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.2'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2394a3b8' fill-opacity='0.35'%3E%3Ccircle cx='1' cy='1' r='1'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
     color: #0f172a;
   }
 
@@ -50,15 +48,24 @@
     @apply rounded-2xl border border-slate-200 bg-white shadow-sm;
   }
 
-  /* Section badge/kicker */
+  /* Section badge/kicker — with green dot */
   .section-kicker {
-    @apply inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.25em] text-indigo-600;
+    @apply inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-600 shadow-sm;
+  }
+  .section-kicker::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    flex-shrink: 0;
   }
 
   .section-title {
-    @apply mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl;
+    @apply mt-5 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl;
     font-family: 'Inter', sans-serif;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
   .section-copy {
@@ -92,7 +99,16 @@
 
   /* Dark project card */
   .project-card {
-    @apply rounded-2xl border border-slate-800 bg-slate-900 shadow-xl;
+    @apply overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-200 hover:-translate-y-1 hover:shadow-md;
+  }
+
+  /* Project card image/header area — dark with CSS grid pattern */
+  .project-card-header {
+    @apply relative h-[180px] w-full overflow-hidden bg-slate-900;
+    background-image:
+      linear-gradient(rgba(99,131,255,0.15) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(99,131,255,0.15) 1px, transparent 1px);
+    background-size: 32px 32px;
   }
 }
 
