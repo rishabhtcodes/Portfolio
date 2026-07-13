@@ -34,10 +34,18 @@ export default function Projects({ projects }) {
               className="project-card h-full"
             >
               {/* Thumbnail head */}
-              <div className="project-thumb">
-                <div className="grid-overlay" />
+              <div className="project-thumb relative overflow-hidden">
+                {project.image ? (
+                  <img
+                    src={project.image}
+                    alt={project.title}
+                    className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 hover:scale-105 z-10"
+                  />
+                ) : (
+                  <div className="grid-overlay" />
+                )}
                 {/* Status chip */}
-                <div className="status-chip">
+                <div className="status-chip z-20">
                   <span className="dot" />
                   {project.status?.toUpperCase()}
                 </div>
@@ -147,10 +155,18 @@ export default function Projects({ projects }) {
                     className="project-card w-[295px] sm:w-[350px] flex-shrink-0"
                   >
                     {/* Thumbnail head */}
-                    <div className="project-thumb">
-                      <div className="grid-overlay" />
+                    <div className="project-thumb relative overflow-hidden">
+                      {project.image ? (
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 hover:scale-105 z-10"
+                        />
+                      ) : (
+                        <div className="grid-overlay" />
+                      )}
                       {/* Status chip */}
-                      <div className="status-chip">
+                      <div className="status-chip z-20">
                         <span className="dot" />
                         {project.status?.toUpperCase()}
                       </div>
