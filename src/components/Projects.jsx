@@ -23,7 +23,7 @@ export default function Projects({ projects }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="project-card"
+              className="project-card h-full"
             >
               {/* Thumbnail head */}
               <div className="project-thumb">
