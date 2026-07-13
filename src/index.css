@@ -273,6 +273,12 @@
   .hero h1 {
     font-size: 58px; line-height: 1.05; color: var(--ink);
   }
+  .accent {
+    background: linear-gradient(135deg, var(--accent-light), var(--accent) 60%, var(--accent-deep));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+  }
   @media (max-width: 720px) {
     .hero h1 {
       font-size: 38px;
