@@ -430,7 +430,11 @@
   }
   .status-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: #37f5a0; box-shadow: 0 0 6px #37f5a0; }
   .project-body { padding: 22px; flex: 1; display: flex; flex-direction: column; }
-  .project-body h3 { font-size: 18px; margin-bottom: 10px; }
+  .project-body h3 {
+    font-size: 18px; margin-bottom: 10px;
+    height: 52px; overflow: hidden;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+  }
   .project-body p { font-size: 13.5px; color: var(--ink-soft); line-height: 1.6; margin: 0 0 16px; }
   .project-actions { display: flex; gap: 10px; margin-top: auto; }
 

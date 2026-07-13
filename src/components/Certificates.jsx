@@ -6,9 +6,9 @@ import { resolvePortfolioIcon } from '../lib/iconMaps';
 export default function Certificates({ certificates }) {
   const [showModal, setShowModal] = useState(false);
 
-  // Normal laptop screen quantity: 8 displayed on the main page grid
-  const chosenCerts = certificates.slice(0, 8);
-  const otherCerts = certificates.slice(8);
+  // Normal laptop screen quantity: 6 displayed on the main page grid
+  const chosenCerts = certificates.slice(0, 6);
+  const otherCerts = certificates.slice(6);
 
   return (
     <section id="certificates">
@@ -60,7 +60,7 @@ export default function Certificates({ certificates }) {
         </div>
 
         {/* Show More Trigger */}
-        {certificates.length > 8 && (
+        {certificates.length > 6 && (
           <div className="flex justify-center mt-12">
             <button
               type="button"

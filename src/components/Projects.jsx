@@ -46,7 +46,7 @@ export default function Projects({ projects }) {
               {/* Body */}
               <div className="project-body">
                 <h3>{project.title}</h3>
-                <p className="custom-scrollbar overflow-y-auto h-[90px] pr-2 text-justify">
+                <p className="custom-scrollbar overflow-y-auto h-[90px] pr-2 text-left">
                   {project.description}
                 </p>
 
@@ -159,7 +159,7 @@ export default function Projects({ projects }) {
                     {/* Body */}
                     <div className="project-body">
                       <h3>{project.title}</h3>
-                      <p className="custom-scrollbar overflow-y-auto h-[90px] pr-2 text-justify">
+                      <p className="custom-scrollbar overflow-y-auto h-[90px] pr-2 text-left">
                         {project.description}
                       </p>
 
