@@ -45,98 +45,84 @@ export default function Contact({ contact }) {
   };
 
   const socialLinks = [
-    { label: 'Email', href: `mailto:${contact.email}`, icon: Mail, bg: 'bg-rose-50', color: 'text-rose-600', border: 'border-rose-100' },
-    { label: 'LinkedIn', href: contact.linkedin, icon: Linkedin, bg: 'bg-blue-50', color: 'text-blue-600', border: 'border-blue-100' },
-    { label: 'GitHub', href: contact.github, icon: Github, bg: 'bg-slate-100', color: 'text-slate-700', border: 'border-slate-200' },
+    { label: 'Email', href: `mailto:${contact.email}`, icon: Mail },
+    { label: 'LinkedIn', href: contact.linkedin, icon: Linkedin },
+    { label: 'GitHub', href: contact.github, icon: Github },
   ];
 
   return (
-    <motion.section
-      id="contact"
-      className="section-shell"
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.55, ease: 'easeOut' }}
-    >
-      <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+    <section id="contact">
+      <div className="wrap">
+        <div className="contact-grid">
+          {/* Left Side */}
+          <div>
+            <span className="eyebrow" id="contactEyebrow">
+              Contact
+            </span>
+            <h2 className="section-title" id="contactTitle">
+              Let&apos;s build something polished, useful, and production-ready.
+            </h2>
+            <p className="section-desc" id="contactDesc">
+              {contact.copy}
+            </p>
 
-        {/* Left — copy + social */}
-        <div>
-          <span className="section-kicker">Contact</span>
-          <h2 className="section-title">Let&apos;s build something polished, useful, and production-ready.</h2>
-          <p className="section-copy">{contact.copy}</p>
-
-          <div className="mt-8 flex gap-3">
-            {socialLinks.map((link) => {
-              const Icon = link.icon;
-              return (
-                <a
-                  key={link.label}
-                  href={link.href}
-                  target={link.href.startsWith('mailto:') ? undefined : '_blank'}
-                  rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}
-                  title={link.label}
-                  aria-label={link.label}
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl border ${link.bg} ${link.color} ${link.border} shadow-sm transition hover:-translate-y-0.5 hover:shadow-md`}
-                >
-                  <Icon className="h-5 w-5" />
-                </a>
-              );
-            })}
+            {/* Social Links */}
+            <div className="contact-links" id="contactLinks">
+              {socialLinks.map((link) => {
+                const Icon = link.icon;
+                return (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    target={link.href.startsWith('mailto:') ? undefined : '_blank'}
+                    rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}
+                    title={link.label}
+                    aria-label={link.label}
+                    className="icon-btn"
+                  >
+                    <Icon className="h-5 w-5" />
+                  </a>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Right — form */}
-        <form
-          onSubmit={handleSubmit}
-          noValidate
-          className="glass-panel p-6 sm:p-8"
-        >
-          <div className="grid gap-5">
-            <div>
-              <label htmlFor="contact-name" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-slate-500">
-                Name
-              </label>
+          {/* Right Side — Form */}
+          <form onSubmit={handleSubmit} noValidate className="panel form-panel">
+            <div className="field">
+              <label htmlFor="contact-name">Name</label>
               <input
                 id="contact-name"
                 name="name"
+                type="text"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 placeholder="Your name"
               />
               {errors.name && <p className="mt-1.5 text-xs text-rose-500">{errors.name}</p>}
             </div>
 
-            <div>
-              <label htmlFor="contact-email" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-slate-500">
-                Email
-              </label>
+            <div className="field">
+              <label htmlFor="contact-email">Email</label>
               <input
                 id="contact-email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 placeholder="you@example.com"
               />
               {errors.email && <p className="mt-1.5 text-xs text-rose-500">{errors.email}</p>}
             </div>
 
-            <div>
-              <label htmlFor="contact-message" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-slate-500">
-                Message
-              </label>
+            <div className="field">
+              <label htmlFor="contact-message">Message</label>
               <textarea
                 id="contact-message"
                 name="message"
-                rows={5}
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
-                placeholder="Tell me about the project or role."
+                placeholder="Tell me about the project or role..."
               />
               {errors.message && <p className="mt-1.5 text-xs text-rose-500">{errors.message}</p>}
             </div>
@@ -144,17 +130,17 @@ export default function Contact({ contact }) {
             <button
               type="submit"
               disabled={sending}
-              className="primary-button w-full disabled:cursor-not-allowed disabled:opacity-60"
+              className="btn btn-primary btn-block disabled:cursor-not-allowed disabled:opacity-60"
             >
               <Send className="mr-2 h-4 w-4" />
               {sending ? 'Sending…' : 'Send Message'}
             </button>
 
-            {submitError && <p className="text-xs text-rose-500">{submitError}</p>}
-            {submitted && <p className="text-xs font-medium text-emerald-600">✓ Message sent! I&apos;ll get back to you soon.</p>}
-          </div>
-        </form>
+            {submitError && <p className="text-xs text-rose-500 mt-2">{submitError}</p>}
+            {submitted && <p className="text-xs font-semibold text-emerald-600 mt-2">✓ Message sent! I&apos;ll get back to you soon.</p>}
+          </form>
+        </div>
       </div>
-    </motion.section>
+    </section>
   );
 }
