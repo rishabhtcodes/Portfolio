@@ -1,59 +1,91 @@
 import { ExternalLink, Github } from 'lucide-react';
 import { motion } from 'framer-motion';
-import gridBg from '../assets/projects_grid.jpg';
 
 export default function Projects({ projects }) {
   return (
     <motion.section
       id="projects"
       className="section-shell"
-      initial={{ opacity: 0, y: 28 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
     >
-      <div>
-        <div>
-          <span className="section-kicker">Projects</span>
-          <h2 className="section-title">Selected builds focused on user experience, performance, and delivery.</h2>
-        </div>
-      </div>
+      <span className="section-kicker">Projects</span>
+      <h2 className="section-title">Selected builds focused on user experience, performance, and delivery.</h2>
+      <p className="section-copy">
+        Real-world applications built from scratch — from design to deployment.
+      </p>
 
-      <div className="mt-10 flex w-full snap-x snap-mandatory gap-6 overflow-x-auto pb-8 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      {/* Horizontal scroll row */}
+      <div className="mt-10 flex w-full snap-x snap-mandatory gap-5 overflow-x-auto pb-6 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {projects.map((project, index) => (
           <motion.article
             key={project.title}
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: index * 0.08 }}
-            className="glass-panel group relative w-[85vw] max-w-[420px] shrink-0 snap-start overflow-hidden rounded-[2rem] transition duration-300 hover:-translate-y-2 hover:border-sky-300/25"
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: index * 0.08 }}
+            className="project-card group relative w-[88vw] max-w-[380px] shrink-0 snap-start overflow-hidden transition duration-300 hover:-translate-y-1 hover:border-slate-700"
           >
-            <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
-            <img src={project.image} alt={project.title} className="h-52 w-full object-cover" />
-            <div className="p-6">
-              <div className="flex items-start justify-between gap-4">
-                <h3 className="text-xl font-semibold text-white">{project.title}</h3>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-slate-300">
+            {/* Project image */}
+            {project.image && (
+              <div className="relative h-48 w-full overflow-hidden bg-slate-800">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  className="h-full w-full object-cover opacity-80 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
+                />
+                {/* Overlay gradient */}
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+              </div>
+            )}
+
+            <div className="p-5">
+              {/* Title + status */}
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-base font-semibold text-slate-100">{project.title}</h3>
+                <span className="shrink-0 rounded-full border border-slate-700 bg-slate-800 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-400">
                   {project.status}
                 </span>
               </div>
-              <div className="mt-4 h-32 overflow-y-auto pr-2 custom-scrollbar">
-                <p className="text-sm leading-7 text-slate-300">{project.description}</p>
+
+              {/* Description */}
+              <div className="mt-3 h-24 overflow-y-auto pr-1 custom-scrollbar">
+                <p className="text-xs leading-6 text-slate-400">{project.description}</p>
               </div>
-              <div className="mt-5 flex flex-wrap gap-2">
+
+              {/* Tech stack */}
+              <div className="mt-4 flex flex-wrap gap-1.5">
                 {project.techStack.map((tech) => (
-                  <span key={tech} className="rounded-full bg-slate-900/80 px-3 py-1 text-xs font-medium text-sky-200 ring-1 ring-inset ring-white/10">
+                  <span
+                    key={tech}
+                    className="rounded-full border border-slate-700/60 bg-slate-800 px-2.5 py-0.5 text-[10px] font-medium text-indigo-300"
+                  >
                     {tech}
                   </span>
                 ))}
               </div>
-              <div className="mt-6 flex gap-3">
-                <a href={project.github} target="_blank" rel="noreferrer" className="secondary-button flex-1 px-4 py-2 text-sm">
-                  <Github className="mr-2 h-4 w-4" />
-                  GitHub
+
+              {/* Action buttons */}
+              <div className="mt-5 flex gap-2.5">
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex flex-1 items-center justify-center rounded-full border border-slate-700 bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-300 transition hover:border-slate-600 hover:bg-slate-700"
+                >
+                  <Github className="mr-1.5 h-3.5 w-3.5" />
+                  Code
                 </a>
                 {project.isLive !== false && project.demo && (
-                  <a href={project.demo} target="_blank" rel="noreferrer" className="primary-button flex-1 px-4 py-2 text-sm">
-                    <ExternalLink className="mr-2 h-4 w-4" />
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex flex-1 items-center justify-center rounded-full bg-indigo-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-indigo-500"
+                  >
+                    <ExternalLink className="mr-1.5 h-3.5 w-3.5" />
                     Live Demo
                   </a>
                 )}

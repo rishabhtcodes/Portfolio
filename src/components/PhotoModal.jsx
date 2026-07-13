@@ -25,14 +25,14 @@ export default function PhotoModal({ isOpen, onClose, photoUrl, name }) {
             <button
               type="button"
               onClick={onClose}
-              className="absolute -right-12 -top-12 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white transition hover:bg-white/20 sm:right-0 sm:top-0"
+              className="absolute -right-12 -top-12 flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-100 sm:right-0 sm:top-0"
               aria-label="Close modal"
             >
               <X className="h-6 w-6" />
             </button>
 
             {/* Photo Container */}
-            <div className="relative flex max-h-[80vh] flex-col overflow-hidden rounded-3xl border border-white/20 bg-slate-950 shadow-2xl sm:max-h-[90vh]">
+            <div className="relative flex max-h-[80vh] flex-col overflow-hidden rounded-3xl border border-white/20 bg-slate-50 shadow-2xl sm:max-h-[90vh]">
               <img
                 src={photoUrl}
                 alt={name}

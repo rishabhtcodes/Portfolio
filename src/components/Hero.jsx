@@ -4,97 +4,127 @@ import { motion } from 'framer-motion';
 export default function Hero({ profile }) {
   return (
     <section id="home" className="relative isolate overflow-hidden pt-20 sm:pt-24">
-      <div className="absolute inset-0 -z-20 grid-overlay opacity-40" />
-      <div className="absolute left-1/2 top-40 -z-10 h-80 w-80 -translate-x-1/2 rounded-full bg-sky-400/20 blur-[140px]" />
-      <div className="section-shell min-h-screen py-14 sm:py-16 lg:flex lg:items-center">
-        <div className="grid w-full gap-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+      {/* Subtle ambient blobs */}
+      <div className="absolute -top-40 left-1/4 -z-10 h-72 w-72 rounded-full bg-indigo-100/60 blur-[100px]" />
+      <div className="absolute top-20 right-1/4 -z-10 h-56 w-56 rounded-full bg-sky-100/60 blur-[80px]" />
+
+      <div className="section-shell min-h-[90vh] py-14 sm:py-20 lg:flex lg:items-center">
+        <div className="grid w-full gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+
+          {/* Left — Text */}
           <motion.div
-            initial={{ opacity: 0, y: 32 }}
+            initial={{ opacity: 0, y: 28 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: 'easeOut' }}
-            className="max-w-3xl"
+            transition={{ duration: 0.6, ease: 'easeOut' }}
           >
-            <motion.div
-              animate={{
-                y: [0, -8, 0],
-              }}
-              transition={{
-                duration: 2.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-              className="section-kicker shadow-[0_0_20px_rgba(56,189,248,0.15)]"
+            <motion.span
+              animate={{ y: [0, -6, 0] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              className="section-kicker"
             >
               Available for freelance and full-time roles
-            </motion.div>
-            <h1 className="mt-8 break-words text-5xl font-extrabold tracking-tight text-white sm:text-6xl lg:text-7xl">
-              Hi, I&apos;m <span className="text-gradient">{profile.name}</span>
+            </motion.span>
+
+            <h1 className="mt-7 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl lg:text-6xl" style={{ letterSpacing: '-0.03em' }}>
+              Hi, I&apos;m{' '}
+              <span className="text-gradient">{profile.name}</span>
             </h1>
-            <p className="mt-5 text-lg font-medium text-sky-200 sm:text-xl">{profile.title}</p>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-slate-300 sm:text-lg">
+
+            <p className="mt-4 text-base font-medium text-slate-500 sm:text-lg">{profile.title}</p>
+
+            <p className="mt-5 max-w-xl text-base leading-7 text-slate-500">
               {profile.introduction}
             </p>
-            <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+
+            <div className="mt-8 flex flex-wrap gap-3">
               <a href="#projects" className="primary-button">
-                View Projects
+                View Work
                 <ArrowRight className="ml-2 h-4 w-4" />
               </a>
               <a href={profile.github} target="_blank" rel="noreferrer" className="secondary-button">
                 <Github className="mr-2 h-4 w-4" />
-                GitHub Profile
+                GitHub
               </a>
             </div>
-            <div className="mt-10 flex flex-wrap gap-3 text-xs text-slate-300 sm:text-sm">
+
+            {/* Highlight chips */}
+            <div className="mt-8 flex flex-wrap gap-2">
               {profile.highlights.map((item) => (
-                <span key={item} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 backdrop-blur-sm">
+                <span
+                  key={item}
+                  className="rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-medium text-slate-600 shadow-sm"
+                >
                   {item}
                 </span>
               ))}
             </div>
           </motion.div>
 
+          {/* Right — Dark code terminal */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.94, y: 24 }}
+            initial={{ opacity: 0, scale: 0.96, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: 'easeOut' }}
-            className="relative mx-auto w-full max-w-xl"
+            transition={{ duration: 0.7, delay: 0.15, ease: 'easeOut' }}
+            className="relative mx-auto w-full max-w-lg"
           >
-            <div className="hero-orb absolute inset-x-8 top-10 -z-10 h-72 rounded-full bg-gradient-to-br from-sky-400/20 via-cyan-400/10 to-indigo-500/20 blur-3xl" />
-            <div className="glass-panel mask-fade overflow-hidden p-6 sm:p-8">
-              <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                <div>
-                  <p className="text-sm font-medium text-slate-200">Developer Snapshot</p>
-                  <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-400">React • Node • APIs</p>
-                </div>
-                <div className="flex gap-2">
-                  <span className="h-3 w-3 rounded-full bg-rose-400" />
-                  <span className="h-3 w-3 rounded-full bg-amber-400" />
-                  <span className="h-3 w-3 rounded-full bg-emerald-400" />
-                </div>
+            {/* Glow behind terminal */}
+            <div className="absolute inset-x-12 top-8 -z-10 h-64 rounded-full bg-indigo-400/20 blur-3xl" />
+
+            <div className="code-panel overflow-hidden">
+              {/* Window chrome */}
+              <div className="flex items-center gap-1.5 border-b border-slate-800 bg-slate-900/60 px-5 py-3.5">
+                <span className="h-3 w-3 rounded-full bg-rose-500" />
+                <span className="h-3 w-3 rounded-full bg-amber-400" />
+                <span className="h-3 w-3 rounded-full bg-emerald-400" />
+                <span className="ml-4 text-xs text-slate-500 font-mono">developer.js</span>
               </div>
-              <div className="mt-6 space-y-4 overflow-x-auto font-mono text-sm leading-7 text-slate-300">
-                <p>
-                  <span className="text-sky-300">const</span> developer = {'{'}
+
+              {/* Code body */}
+              <div className="p-6 font-mono text-sm leading-7 sm:p-8">
+                <p className="text-slate-400">
+                  <span className="text-indigo-400">const</span>{' '}
+                  <span className="text-sky-300">developer</span>{' '}
+                  <span className="text-slate-400">=</span>{' '}
+                  <span className="text-slate-300">{'{'}</span>
                 </p>
-                <p className="pl-4">
-                  name: <span className="text-cyan-200">&quot;{profile.name}&quot;</span>,
+                <p className="pl-6 text-slate-300">
+                  <span className="text-sky-300">name</span>
+                  <span className="text-slate-400">: </span>
+                  <span className="text-emerald-400">&quot;{profile.name}&quot;</span>
+                  <span className="text-slate-400">,</span>
                 </p>
-                <p className="pl-4">
-                  role: <span className="text-cyan-200">&quot;{profile.title}&quot;</span>,
+                <p className="pl-6 text-slate-300">
+                  <span className="text-sky-300">role</span>
+                  <span className="text-slate-400">: </span>
+                  <span className="text-emerald-400">&quot;{profile.title}&quot;</span>
+                  <span className="text-slate-400">,</span>
                 </p>
-                <p className="pl-4">
-                  focus: <span className="text-cyan-200">&quot;Scalable web products&quot;</span>,
+                <p className="pl-6 text-slate-300">
+                  <span className="text-sky-300">focus</span>
+                  <span className="text-slate-400">: </span>
+                  <span className="text-emerald-400">&quot;Scalable web products&quot;</span>
+                  <span className="text-slate-400">,</span>
                 </p>
-                <p className="pl-4">
-                  stack: <span className="text-cyan-200">['React', 'Node.js', 'MongoDB', 'Django']</span>,
+                <p className="pl-6 text-slate-300">
+                  <span className="text-sky-300">stack</span>
+                  <span className="text-slate-400">: </span>
+                  <span className="text-amber-300">['React', 'Node.js', 'MongoDB']</span>
+                  <span className="text-slate-400">,</span>
                 </p>
-                <p className="pl-4">
-                  coffee: <span className="text-emerald-300">true</span>
+                <p className="pl-6 text-slate-300">
+                  <span className="text-sky-300">openToWork</span>
+                  <span className="text-slate-400">: </span>
+                  <span className="text-indigo-400">true</span>
                 </p>
-                <p>{'}'};</p>
+                <p className="text-slate-300">{'};'}</p>
+                <p className="mt-4 text-slate-500">
+                  <span className="text-slate-600">// </span>
+                  <span className="animate-pulse">▋</span>
+                </p>
               </div>
             </div>
           </motion.div>
+
         </div>
       </div>
     </section>

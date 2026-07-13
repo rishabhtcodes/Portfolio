@@ -1,48 +1,46 @@
 import { motion } from 'framer-motion';
 import { resolvePortfolioIcon } from '../lib/iconMaps';
-import gridBg from '../assets/grid.jpg';
 
 export default function Achievements({ achievements }) {
   return (
     <motion.section
       id="achievements"
       className="section-shell"
-      initial={{ opacity: 0, y: 28 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
     >
       <span className="section-kicker">Achievements</span>
-      <h2 className="section-title">Recognition blocks ready to be swapped with future API data.</h2>
+      <h2 className="section-title">Recognition earned through building under pressure.</h2>
       <p className="section-copy">
-        The cards are data-driven placeholders now, so replacing the content with fetched achievements later is a straight data update.
+        Milestones and awards that reflect a commitment to quality and real-world impact.
       </p>
 
-      <div className="mt-10 grid gap-5 lg:grid-cols-3">
+      <div className="mt-10 grid gap-4 lg:grid-cols-3">
         {achievements.map((achievement, index) => {
           const Icon = resolvePortfolioIcon(achievement.icon);
-
           return (
             <motion.article
               key={achievement.title}
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: index * 0.08 }}
-              className="glass-panel group relative overflow-hidden rounded-[2rem] p-6 transition duration-300 hover:-translate-y-2 hover:border-cyan-300/20"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08, duration: 0.4 }}
+              className="glass-panel group flex flex-col p-6 transition hover:-translate-y-0.5 hover:shadow-md"
             >
-              <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
-              <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-400/15 to-indigo-400/15 text-sky-200">
-                <Icon className="h-6 w-6" />
-              </div>
-              <div className="mt-5 flex items-start justify-between gap-4">
-                <div>
-                  <h3 className="text-lg font-semibold text-white">{achievement.title}</h3>
-                  <p className="mt-1 text-sm text-sky-200">{achievement.subtitle}</p>
+              <div className="flex items-center justify-between">
+                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-amber-50 text-amber-600 ring-1 ring-amber-100">
+                  <Icon className="h-5 w-5" />
                 </div>
-                <span className="rounded-full border border-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.24em] text-slate-300">
+                <span className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-slate-500">
                   {achievement.year}
                 </span>
               </div>
-              <p className="mt-4 text-sm leading-7 text-slate-300">{achievement.description}</p>
+
+              <h3 className="mt-5 text-sm font-semibold text-slate-900">{achievement.title}</h3>
+              <p className="mt-1 text-xs font-medium text-indigo-600">{achievement.subtitle}</p>
+              <p className="mt-3 text-xs leading-6 text-slate-500">{achievement.description}</p>
             </motion.article>
           );
         })}

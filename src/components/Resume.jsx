@@ -2,36 +2,24 @@ import { useState } from 'react';
 import { Download, GraduationCap, Code, Layers, Trophy } from 'lucide-react';
 import { motion } from 'framer-motion';
 import ResumeFormatModal from './ResumeFormatModal';
-import gridBg from '../assets/resume_grid.jpg';
+
+const ICONS = [GraduationCap, Code, Layers, Trophy];
 
 export default function Resume({ resume }) {
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
 
   const downloadResumeFile = (url, fileName) => {
-    if (!url) {
-      window.alert('Resume file is not available yet.');
-      return;
-    }
-
+    if (!url) { window.alert('Resume file is not available yet.'); return; }
     const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = fileName;
-    anchor.target = '_blank';
-    anchor.rel = 'noreferrer';
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    anchor.href = url; anchor.download = fileName;
+    anchor.target = '_blank'; anchor.rel = 'noreferrer';
+    document.body.appendChild(anchor); anchor.click(); anchor.remove();
   };
 
   const handleResumeDownload = () => {
     const pdfUrl = resume.resumePdfLink || resume.resumeLink;
     const docUrl = resume.resumeDocLink;
-
-    if (!pdfUrl && !docUrl) {
-      window.alert('Resume file is not available yet.');
-      return;
-    }
-
+    if (!pdfUrl && !docUrl) { window.alert('Resume file is not available yet.'); return; }
     setResumeModalOpen(true);
   };
 
@@ -39,24 +27,18 @@ export default function Resume({ resume }) {
     <motion.section
       id="resume"
       className="section-shell"
-      initial={{ opacity: 0, y: 28 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      viewport={{ once: true, amount: 0.15 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
     >
       <ResumeFormatModal
         isOpen={resumeModalOpen}
         onClose={() => setResumeModalOpen(false)}
         hasPdf={Boolean(resume.resumePdfLink || resume.resumeLink)}
         hasDoc={Boolean(resume.resumeDocLink)}
-        onSelectPdf={() => {
-          setResumeModalOpen(false);
-          downloadResumeFile(resume.resumePdfLink || resume.resumeLink, 'resume.pdf');
-        }}
-        onSelectDoc={() => {
-          setResumeModalOpen(false);
-          downloadResumeFile(resume.resumeDocLink, 'resume.docx');
-        }}
+        onSelectPdf={() => { setResumeModalOpen(false); downloadResumeFile(resume.resumePdfLink || resume.resumeLink, 'resume.pdf'); }}
+        onSelectDoc={() => { setResumeModalOpen(false); downloadResumeFile(resume.resumeDocLink, 'resume.docx'); }}
       />
 
       <span className="section-kicker">Resume</span>
@@ -67,24 +49,24 @@ export default function Resume({ resume }) {
 
       <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {resume.highlights.map((highlight, index) => {
-          const icons = [GraduationCap, Code, Layers, Trophy];
-          const Icon = icons[index % icons.length];
-
+          const Icon = ICONS[index % ICONS.length];
           return (
-            <div
+            <motion.div
               key={highlight.label}
-              className={`glass-panel group relative overflow-hidden rounded-2xl p-6 text-center transition duration-300 hover:-translate-y-1 hover:border-sky-300/20 hover:bg-white/8`}
-              style={{ animation: `fadeIn 0.5s ease-out ${index * 0.1}s both` }}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.08, duration: 0.4 }}
+              className="glass-panel p-6 text-center transition hover:-translate-y-1 hover:shadow-md"
             >
-              <img src={gridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
-              <div className="flex justify-center mb-4">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-400/10 text-sky-200 shadow-inner ring-1 ring-sky-300/20">
+              <div className="flex justify-center">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
                   <Icon className="h-5 w-5" />
                 </div>
               </div>
-              <h3 className="mt-4 text-[15px] font-semibold text-slate-100">{highlight.label}</h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-slate-400">{highlight.detail}</p>
-            </div>
+              <h3 className="mt-4 text-sm font-semibold text-slate-900">{highlight.label}</h3>
+              <p className="mt-1.5 text-xs leading-relaxed text-slate-500">{highlight.detail}</p>
+            </motion.div>
           );
         })}
       </div>

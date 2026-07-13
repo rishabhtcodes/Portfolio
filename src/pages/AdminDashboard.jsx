@@ -166,10 +166,10 @@ function buildProfilePayload(form) {
 
 function AdminTable({ items, columns, onEdit, onDelete }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10 bg-slate-950/40">
+    <div className="overflow-hidden rounded-3xl border border-slate-200/50 bg-slate-50/40">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-white/10 text-left text-sm text-slate-200">
-          <thead className="bg-white/5 text-xs uppercase tracking-[0.24em] text-slate-400">
+        <table className="min-w-full divide-y divide-white/10 text-left text-sm text-slate-700">
+          <thead className="bg-white/60 text-xs uppercase tracking-[0.24em] text-slate-500">
             <tr>
               {columns.map((column) => (
                 <th key={column} className="px-4 py-4 font-medium">{column}</th>
@@ -181,7 +181,7 @@ function AdminTable({ items, columns, onEdit, onDelete }) {
             {items.map((item) => (
               <tr key={item._id}>
                 {columns.map((column) => (
-                  <td key={column} className="px-4 py-4 align-top text-slate-300">
+                  <td key={column} className="px-4 py-4 align-top text-slate-600">
                     {Array.isArray(item[column]) ? item[column].join(', ') : item[column]}
                   </td>
                 ))}
@@ -495,7 +495,7 @@ export default function AdminDashboard() {
         <div className="flex items-center justify-between gap-4">
           <div>
             <p className="text-sm uppercase tracking-[0.24em] text-rose-200">Admin Manager</p>
-            <h2 className="mt-3 text-3xl font-semibold text-white">{config.title}</h2>
+            <h2 className="mt-3 text-3xl font-semibold text-slate-900">{config.title}</h2>
           </div>
           <button type="button" onClick={() => resetEntityForm(section)} className="inline-flex items-center justify-center rounded-full border border-rose-300/30 bg-rose-500/10 px-5 py-3 text-sm font-semibold text-rose-100 transition hover:-translate-y-0.5 hover:bg-rose-500/20">
             <Plus className="mr-2 h-4 w-4" /> New {config.title.slice(0, -1)}
@@ -504,18 +504,18 @@ export default function AdminDashboard() {
 
         <form onSubmit={(event) => handleEntitySubmit(event, section)} className="glass-panel rounded-[2rem] p-6 sm:p-8">
           {config.fields.filter((f) => f.type === 'image').length > 0 && (
-            <div className="mb-6 space-y-4 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+            <div className="mb-6 space-y-4 rounded-3xl border border-slate-200/50 bg-slate-50/50 p-5">
               {config.fields
                 .filter((f) => f.type === 'image')
                 .map((field) => (
                   <div key={field.key}>
                     <p className="mb-4 text-xs uppercase tracking-[0.24em] text-rose-200">{field.label}</p>
                     <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                      <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
+                      <div className="h-20 w-20 overflow-hidden rounded-2xl border border-slate-200/50 bg-slate-900/70">
                         {form[field.key] ? (
                           <img src={form[field.key]} alt={field.label} className="h-full w-full object-cover" />
                         ) : (
-                          <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">No Image</div>
+                          <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">No Image</div>
                         )}
                       </div>
 
@@ -525,13 +525,13 @@ export default function AdminDashboard() {
                           value={form[field.key] || ''}
                           onChange={(event) => updateEntityForm(section, field.key, event.target.value)}
                           placeholder={`${field.label} URL or data`}
-                          className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                          className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                         />
                         <input
                           type="file"
                           accept="image/*"
                           onChange={(event) => handleEntityImageUpload(event, section, field.key)}
-                          className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                          className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-200 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-slate-300"
                         />
                       </div>
                     </div>
@@ -543,13 +543,13 @@ export default function AdminDashboard() {
           <div className="grid gap-5 lg:grid-cols-2">
             {config.fields.filter((f) => f.type !== 'image').map((field) => (
               <div key={field.key} className={field.type === 'textarea' ? 'lg:col-span-2' : ''}>
-                <label className="mb-2 block text-sm font-medium text-slate-200">{field.label}</label>
+                <label className="mb-2 block text-sm font-medium text-slate-700">{field.label}</label>
                 {field.type === 'textarea' ? (
                   <textarea
                     value={form[field.key] || ''}
                     onChange={(event) => updateEntityForm(section, field.key, event.target.value)}
                     rows={5}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                    className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                   />
                 ) : field.type === 'checkbox' ? (
                   <div className="flex items-center gap-3 py-2">
@@ -557,16 +557,16 @@ export default function AdminDashboard() {
                       type="checkbox"
                       checked={!!form[field.key]}
                       onChange={(event) => updateEntityForm(section, field.key, event.target.checked)}
-                      className="h-5 w-5 rounded border-white/10 bg-slate-950/60 text-rose-500 transition focus:ring-rose-300/40"
+                      className="h-5 w-5 rounded border-slate-200/50 bg-white/60 text-rose-500 transition focus:ring-rose-300/40"
                     />
-                    <span className="text-sm text-slate-300">Project has a live demo link</span>
+                    <span className="text-sm text-slate-600">Project has a live demo link</span>
                   </div>
                 ) : (
                   <input
                     type={field.type || 'text'}
                     value={form[field.key] || ''}
                     onChange={(event) => updateEntityForm(section, field.key, event.target.value)}
-                    className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                    className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                   />
                 )}
               </div>
@@ -609,11 +609,11 @@ export default function AdminDashboard() {
   ];
 
   if (loading) {
-    return <div className="flex min-h-screen items-center justify-center bg-slate-950 text-slate-200">Loading admin dashboard...</div>;
+    return <div className="flex min-h-screen items-center justify-center bg-slate-50 text-slate-700">Loading admin dashboard...</div>;
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="min-h-screen bg-slate-50 text-slate-900">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 px-6 py-8 lg:flex-row lg:px-8">
         <aside className="glass-panel h-fit w-full rounded-[2rem] p-5 lg:sticky lg:top-8 lg:w-72">
           <div className="flex items-center gap-3 rounded-2xl border border-rose-300/20 bg-rose-500/10 px-4 py-3 text-rose-100">
@@ -632,7 +632,7 @@ export default function AdminDashboard() {
                 onClick={() => setActiveSection(item.key)}
                 className={[
                   'flex w-full items-center rounded-2xl px-4 py-3 text-left text-sm font-medium transition',
-                  activeSection === item.key ? 'bg-rose-500/20 text-white' : 'text-slate-300 hover:bg-white/5 hover:text-white',
+                  activeSection === item.key ? 'bg-rose-500/20 text-slate-900' : 'text-slate-600 hover:bg-white/60 hover:text-slate-900',
                 ].join(' ')}
               >
                 {item.label}
@@ -657,14 +657,14 @@ export default function AdminDashboard() {
               </div>
 
               <form onSubmit={saveProfile} className="glass-panel rounded-[2rem] p-6 sm:p-8">
-                <div className="mb-6 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+                <div className="mb-6 rounded-3xl border border-slate-200/50 bg-slate-50/50 p-5">
                   <p className="text-xs uppercase tracking-[0.24em] text-rose-200">Profile Photo</p>
                   <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
+                    <div className="h-20 w-20 overflow-hidden rounded-2xl border border-slate-200/50 bg-slate-900/70">
                       {profileForm.profilePhoto ? (
                         <img src={profileForm.profilePhoto} alt="Profile" className="h-full w-full object-cover" />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">No Photo</div>
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">No Photo</div>
                       )}
                     </div>
 
@@ -674,27 +674,27 @@ export default function AdminDashboard() {
                         value={profileForm.profilePhoto || ''}
                         onChange={handleProfileChange}
                         placeholder="Profile photo URL"
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                       />
-                      <p className="text-xs text-slate-400">This photo is used in the navbar.</p>
+                      <p className="text-xs text-slate-500">This photo is used in the navbar.</p>
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(event) => handleImageUpload(event, 'profilePhoto')}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-200 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-slate-300"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="mb-6 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+                <div className="mb-6 rounded-3xl border border-slate-200/50 bg-slate-50/50 p-5">
                   <p className="text-xs uppercase tracking-[0.24em] text-rose-200">About Section Photo</p>
                   <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                    <div className="h-20 w-20 overflow-hidden rounded-2xl border border-white/10 bg-slate-900/70">
+                    <div className="h-20 w-20 overflow-hidden rounded-2xl border border-slate-200/50 bg-slate-900/70">
                       {profileForm.aboutPhoto ? (
                         <img src={profileForm.aboutPhoto} alt="About" className="h-full w-full object-cover" />
                       ) : (
-                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-400">No Photo</div>
+                        <div className="flex h-full w-full items-center justify-center text-xs text-slate-500">No Photo</div>
                       )}
                     </div>
 
@@ -704,53 +704,53 @@ export default function AdminDashboard() {
                         value={profileForm.aboutPhoto || ''}
                         onChange={handleProfileChange}
                         placeholder="About section photo URL"
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                       />
-                      <p className="text-xs text-slate-400">This photo is shown in the About section card.</p>
+                      <p className="text-xs text-slate-500">This photo is shown in the About section card.</p>
                       <input
                         type="file"
                         accept="image/*"
                         onChange={(event) => handleImageUpload(event, 'aboutPhoto')}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-200 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-slate-300"
                       />
                     </div>
                   </div>
                 </div>
 
-                <div className="mb-6 rounded-3xl border border-white/10 bg-slate-950/50 p-5">
+                <div className="mb-6 rounded-3xl border border-slate-200/50 bg-slate-50/50 p-5">
                   <p className="text-xs uppercase tracking-[0.24em] text-rose-200">Resume Files</p>
                   <div className="mt-4 grid gap-4 lg:grid-cols-2">
-                    <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
-                      <p className="text-sm font-semibold text-slate-200">PDF Resume</p>
+                    <div className="space-y-3 rounded-2xl border border-slate-200/50 bg-slate-900/40 p-4">
+                      <p className="text-sm font-semibold text-slate-700">PDF Resume</p>
                       <input
                         name="resumePdfLink"
                         value={profileForm.resumePdfLink || ''}
                         onChange={handleProfileChange}
                         placeholder="PDF file URL or data"
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                       />
                       <input
                         type="file"
                         accept=".pdf,application/pdf"
                         onChange={(event) => handleResumeFileUpload(event, 'resumePdfLink')}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-200 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-slate-300"
                       />
                     </div>
 
-                    <div className="space-y-3 rounded-2xl border border-white/10 bg-slate-900/40 p-4">
-                      <p className="text-sm font-semibold text-slate-200">DOC / DOCX Resume</p>
+                    <div className="space-y-3 rounded-2xl border border-slate-200/50 bg-slate-900/40 p-4">
+                      <p className="text-sm font-semibold text-slate-700">DOC / DOCX Resume</p>
                       <input
                         name="resumeDocLink"
                         value={profileForm.resumeDocLink || ''}
                         onChange={handleProfileChange}
                         placeholder="DOC or DOCX file URL or data"
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                       />
                       <input
                         type="file"
                         accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                         onChange={(event) => handleResumeFileUpload(event, 'resumeDocLink')}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-slate-300 file:mr-4 file:rounded-full file:border-0 file:bg-slate-700 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-white hover:file:bg-slate-600"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-600 file:mr-4 file:rounded-full file:border-0 file:bg-slate-200 file:px-4 file:py-2 file:text-xs file:font-semibold file:text-slate-900 hover:file:bg-slate-300"
                       />
                     </div>
                   </div>
@@ -759,39 +759,39 @@ export default function AdminDashboard() {
                 <div className="grid gap-5 lg:grid-cols-2">
                   {profileFields.map(([key, label]) => (
                     <div key={key}>
-                      <label className="mb-2 block text-sm font-medium text-slate-200">{label}</label>
+                      <label className="mb-2 block text-sm font-medium text-slate-700">{label}</label>
                       <input
                         value={profileForm[key] || ''}
                         onChange={handleProfileChange}
                         name={key}
-                        className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40"
+                        className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40"
                       />
                     </div>
                   ))}
 
                   <div className="lg:col-span-2">
-                    <label className="mb-2 block text-sm font-medium text-slate-200">Introduction</label>
-                    <textarea name="introduction" rows={4} value={profileForm.introduction} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
+                    <label className="mb-2 block text-sm font-medium text-slate-700">Introduction</label>
+                    <textarea name="introduction" rows={4} value={profileForm.introduction} onChange={handleProfileChange} className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-200">About summary</label>
-                    <textarea name="aboutSummary" rows={4} value={profileForm.aboutSummary} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
+                    <label className="mb-2 block text-sm font-medium text-slate-700">About summary</label>
+                    <textarea name="aboutSummary" rows={4} value={profileForm.aboutSummary} onChange={handleProfileChange} className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-slate-200">About interests</label>
-                    <textarea name="aboutInterests" rows={4} value={profileForm.aboutInterests} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
+                    <label className="mb-2 block text-sm font-medium text-slate-700">About interests</label>
+                    <textarea name="aboutInterests" rows={4} value={profileForm.aboutInterests} onChange={handleProfileChange} className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div className="lg:col-span-2">
-                    <label className="mb-2 block text-sm font-medium text-slate-200">About description</label>
-                    <textarea name="aboutDescription" rows={5} value={profileForm.aboutDescription} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
+                    <label className="mb-2 block text-sm font-medium text-slate-700">About description</label>
+                    <textarea name="aboutDescription" rows={5} value={profileForm.aboutDescription} onChange={handleProfileChange} className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div className="lg:col-span-2">
-                    <label className="mb-2 block text-sm font-medium text-slate-200">Contact copy</label>
-                    <textarea name="contactCopy" rows={5} value={profileForm.contactCopy} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" />
+                    <label className="mb-2 block text-sm font-medium text-slate-700">Contact copy</label>
+                    <textarea name="contactCopy" rows={5} value={profileForm.contactCopy} onChange={handleProfileChange} className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40" />
                   </div>
                   <div className="lg:col-span-2">
-                    <label className="mb-2 block text-sm font-medium text-slate-200">Resume highlights</label>
-                    <textarea name="resumeHighlights" rows={6} value={profileForm.resumeHighlights} onChange={handleProfileChange} className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-rose-300/40" placeholder="Use one highlight per line: Label|Detail" />
+                    <label className="mb-2 block text-sm font-medium text-slate-700">Resume highlights</label>
+                    <textarea name="resumeHighlights" rows={6} value={profileForm.resumeHighlights} onChange={handleProfileChange} className="w-full rounded-2xl border border-slate-200/50 bg-white/60 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-rose-300/40" placeholder="Use one highlight per line: Label|Detail" />
                   </div>
                 </div>
 

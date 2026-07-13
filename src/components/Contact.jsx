@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Mail, Linkedin, Github, Send } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { apiRequest } from '../lib/api';
-import resumeGridBg from '../assets/resume_grid.jpg';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -14,50 +13,27 @@ export default function Contact({ contact }) {
   const [submitError, setSubmitError] = useState('');
 
   const validate = () => {
-    const nextErrors = {};
-
-    if (!formData.name.trim()) {
-      nextErrors.name = 'Name is required.';
-    }
-
-    if (!emailPattern.test(formData.email)) {
-      nextErrors.email = 'Enter a valid email address.';
-    }
-
-    if (formData.message.trim().length < 10) {
-      nextErrors.message = 'Message must be at least 10 characters.';
-    }
-
-    return nextErrors;
+    const e = {};
+    if (!formData.name.trim()) e.name = 'Name is required.';
+    if (!emailPattern.test(formData.email)) e.email = 'Enter a valid email address.';
+    if (formData.message.trim().length < 10) e.message = 'Message must be at least 10 characters.';
+    return e;
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData((current) => ({ ...current, [name]: value }));
-    setSubmitted(false);
-    setSubmitError('');
-    setErrors((current) => ({ ...current, [name]: undefined }));
+    setFormData((c) => ({ ...c, [name]: value }));
+    setSubmitted(false); setSubmitError('');
+    setErrors((c) => ({ ...c, [name]: undefined }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const nextErrors = validate();
-
-    if (Object.keys(nextErrors).length > 0) {
-      setErrors(nextErrors);
-      return;
-    }
-
-    setErrors({});
-    setSubmitError('');
-    setSending(true);
-
+    const errs = validate();
+    if (Object.keys(errs).length > 0) { setErrors(errs); return; }
+    setErrors({}); setSubmitError(''); setSending(true);
     try {
-      await apiRequest('/api/contact/send', {
-        method: 'POST',
-        body: formData,
-      });
-
+      await apiRequest('/api/contact/send', { method: 'POST', body: formData });
       setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {
@@ -68,51 +44,32 @@ export default function Contact({ contact }) {
     }
   };
 
-  const links = [
-    {
-      label: 'Email',
-      value: contact.email,
-      href: `mailto:${contact.email}`,
-      icon: Mail,
-      logo: 'https://cdn.simpleicons.org/gmail/EA4335',
-      logoClass: 'h-6 w-6',
-    },
-    {
-      label: 'LinkedIn',
-      value: contact.linkedinLabel,
-      href: contact.linkedin,
-      icon: Linkedin,
-      logo: 'https://img.icons8.com/color/48/linkedin.png',
-      logoClass: 'h-8 w-8',
-    },
-    {
-      label: 'GitHub',
-      value: contact.githubLabel,
-      href: contact.github,
-      icon: Github,
-      logo: 'https://cdn.simpleicons.org/github/FFFFFF',
-      logoClass: 'h-6 w-6',
-    },
+  const socialLinks = [
+    { label: 'Email', href: `mailto:${contact.email}`, icon: Mail, bg: 'bg-rose-50', color: 'text-rose-600', border: 'border-rose-100' },
+    { label: 'LinkedIn', href: contact.linkedin, icon: Linkedin, bg: 'bg-blue-50', color: 'text-blue-600', border: 'border-blue-100' },
+    { label: 'GitHub', href: contact.github, icon: Github, bg: 'bg-slate-100', color: 'text-slate-700', border: 'border-slate-200' },
   ];
 
   return (
     <motion.section
       id="contact"
       className="section-shell"
-      initial={{ opacity: 0, y: 28 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      initial={{ opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.55, ease: 'easeOut' }}
     >
-      <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+
+        {/* Left — copy + social */}
         <div>
           <span className="section-kicker">Contact</span>
           <h2 className="section-title">Let&apos;s build something polished, useful, and production-ready.</h2>
           <p className="section-copy">{contact.copy}</p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
-            {links.map((link) => {
+          <div className="mt-8 flex gap-3">
+            {socialLinks.map((link) => {
               const Icon = link.icon;
-
               return (
                 <a
                   key={link.label}
@@ -120,82 +77,81 @@ export default function Contact({ contact }) {
                   target={link.href.startsWith('mailto:') ? undefined : '_blank'}
                   rel={link.href.startsWith('mailto:') ? undefined : 'noreferrer'}
                   title={link.label}
-                  className="glass-panel flex h-20 w-20 items-center justify-center rounded-2xl p-4 transition duration-300 hover:-translate-y-1 hover:border-sky-300/25 hover:bg-white/8"
+                  aria-label={link.label}
+                  className={`flex h-12 w-12 items-center justify-center rounded-xl border ${link.bg} ${link.color} ${link.border} shadow-sm transition hover:-translate-y-0.5 hover:shadow-md`}
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-400/10 text-sky-200">
-                    {link.logo ? (
-                      <img src={link.logo} alt={`${link.label} logo`} className={`${link.logoClass ?? 'h-6 w-6'} object-contain`} loading="lazy" />
-                    ) : (
-                      <Icon className="h-5 w-5" />
-                    )}
-                  </div>
+                  <Icon className="h-5 w-5" />
                 </a>
               );
             })}
           </div>
-
-          <a href={`mailto:${contact.email}`} className="primary-button mt-6">
-            Contact Button
-          </a>
         </div>
 
-        <form onSubmit={handleSubmit} noValidate className="glass-panel group relative overflow-hidden rounded-[2rem] p-6 sm:p-8">
-          <img src={resumeGridBg} alt="" className="absolute inset-0 -z-10 h-full w-full object-cover opacity-10 transition duration-500 group-hover:opacity-30 group-hover:scale-110" />
+        {/* Right — form */}
+        <form
+          onSubmit={handleSubmit}
+          noValidate
+          className="glass-panel p-6 sm:p-8"
+        >
           <div className="grid gap-5">
             <div>
-              <label htmlFor="name" className="mb-2 block text-sm font-medium text-slate-200">
+              <label htmlFor="contact-name" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-slate-500">
                 Name
               </label>
               <input
-                id="name"
+                id="contact-name"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 placeholder="Your name"
               />
-              {errors.name ? <p className="mt-2 text-sm text-rose-300">{errors.name}</p> : null}
+              {errors.name && <p className="mt-1.5 text-xs text-rose-500">{errors.name}</p>}
             </div>
 
             <div>
-              <label htmlFor="email" className="mb-2 block text-sm font-medium text-slate-200">
+              <label htmlFor="contact-email" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-slate-500">
                 Email
               </label>
               <input
-                id="email"
+                id="contact-email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 placeholder="you@example.com"
               />
-              {errors.email ? <p className="mt-2 text-sm text-rose-300">{errors.email}</p> : null}
+              {errors.email && <p className="mt-1.5 text-xs text-rose-500">{errors.email}</p>}
             </div>
 
             <div>
-              <label htmlFor="message" className="mb-2 block text-sm font-medium text-slate-200">
+              <label htmlFor="contact-message" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-slate-500">
                 Message
               </label>
               <textarea
-                id="message"
+                id="contact-message"
                 name="message"
-                rows="6"
+                rows={5}
                 value={formData.message}
                 onChange={handleChange}
-                className="w-full rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none transition focus:border-sky-300/40"
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-400 focus:bg-white focus:ring-4 focus:ring-indigo-100"
                 placeholder="Tell me about the project or role."
               />
-              {errors.message ? <p className="mt-2 text-sm text-rose-300">{errors.message}</p> : null}
+              {errors.message && <p className="mt-1.5 text-xs text-rose-500">{errors.message}</p>}
             </div>
 
-            <button type="submit" disabled={sending} className="primary-button w-full sm:w-fit disabled:cursor-not-allowed disabled:opacity-70">
+            <button
+              type="submit"
+              disabled={sending}
+              className="primary-button w-full disabled:cursor-not-allowed disabled:opacity-60"
+            >
               <Send className="mr-2 h-4 w-4" />
-              {sending ? 'Sending...' : 'Send Message'}
+              {sending ? 'Sending…' : 'Send Message'}
             </button>
 
-            {submitError ? <p className="text-sm text-rose-300">{submitError}</p> : null}
-            {submitted ? <p className="text-sm text-emerald-300">Thanks for contacting me.</p> : null}
+            {submitError && <p className="text-xs text-rose-500">{submitError}</p>}
+            {submitted && <p className="text-xs font-medium text-emerald-600">✓ Message sent! I&apos;ll get back to you soon.</p>}
           </div>
         </form>
       </div>

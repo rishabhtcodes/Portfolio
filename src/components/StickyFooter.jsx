@@ -45,8 +45,8 @@ export default function StickyFooter({ profile }) {
           <div className="glass-panel flex flex-col gap-4 rounded-2xl px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
             {/* Brand info */}
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-white sm:text-base">Rishabh Tiwari</p>
-              <p className="text-xs text-slate-400 sm:text-sm">Full Stack Developer building modern experiences.</p>
+              <p className="text-sm font-semibold text-slate-900 sm:text-base">Rishabh Tiwari</p>
+              <p className="text-xs text-slate-500 sm:text-sm">Full Stack Developer building modern experiences.</p>
             </div>
 
             {/* Social links */}
@@ -60,7 +60,7 @@ export default function StickyFooter({ profile }) {
                     href={social.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-slate-200 transition duration-300 hover:border-sky-300/25 hover:text-white hover:-translate-y-1"
+                    className="flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:-translate-y-0.5 hover:border-indigo-200 hover:text-indigo-600 hover:shadow-sm"
                     aria-label={social.label}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}

@@ -9,11 +9,14 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Sora', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['JetBrains Mono', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        glass: '0 24px 80px rgba(15, 23, 42, 0.45)',
+        glass: '0 8px 32px rgba(15, 23, 42, 0.08)',
+      },
+      borderRadius: {
+        '4xl': '2rem',
       },
     },
   },

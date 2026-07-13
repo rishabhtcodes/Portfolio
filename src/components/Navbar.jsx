@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Download, Menu, X } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import PhotoModal from './PhotoModal';
 import ResumeFormatModal from './ResumeFormatModal';
 
@@ -11,10 +11,9 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
   const [resumeModalOpen, setResumeModalOpen] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 12);
+    const handleScroll = () => setScrolled(window.scrollY > 16);
     handleScroll();
-    window.addEventListener('scroll', handleScroll);
-
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -25,27 +24,15 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
   };
 
   const downloadResumeFile = (url, fileName) => {
-    if (!url) {
-      window.alert('Resume file is not available yet.');
-      return;
-    }
-
+    if (!url) { window.alert('Resume file is not available yet.'); return; }
     const anchor = document.createElement('a');
-    anchor.href = url;
-    anchor.download = fileName;
-    anchor.target = '_blank';
-    anchor.rel = 'noreferrer';
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
+    anchor.href = url; anchor.download = fileName;
+    anchor.target = '_blank'; anchor.rel = 'noreferrer';
+    document.body.appendChild(anchor); anchor.click(); anchor.remove();
   };
 
   const handleResumeDownload = () => {
-    if (!resumePdfUrl && !resumeDocUrl) {
-      window.alert('Resume file is not available yet.');
-      return;
-    }
-
+    if (!resumePdfUrl && !resumeDocUrl) { window.alert('Resume file is not available yet.'); return; }
     setResumeModalOpen(true);
   };
 
@@ -57,95 +44,112 @@ export default function Navbar({ links, resumePdfUrl, resumeDocUrl, profilePhoto
         onClose={() => setResumeModalOpen(false)}
         hasPdf={Boolean(resumePdfUrl)}
         hasDoc={Boolean(resumeDocUrl)}
-        onSelectPdf={() => {
-          setResumeModalOpen(false);
-          downloadResumeFile(resumePdfUrl, 'resume.pdf');
-        }}
-        onSelectDoc={() => {
-          setResumeModalOpen(false);
-          downloadResumeFile(resumeDocUrl, 'resume.docx');
-        }}
+        onSelectPdf={() => { setResumeModalOpen(false); downloadResumeFile(resumePdfUrl, 'resume.pdf'); }}
+        onSelectDoc={() => { setResumeModalOpen(false); downloadResumeFile(resumeDocUrl, 'resume.docx'); }}
       />
+
       <motion.nav
-        initial={{ opacity: 0, y: -20 }}
+        initial={{ opacity: 0, y: -16 }}
         animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
         className={[
-          'mx-auto flex max-w-7xl items-center justify-between rounded-full border px-4 py-3 transition duration-300 sm:px-6',
-          scrolled ? 'border-white/15 bg-slate-950/80 shadow-glass backdrop-blur-xl' : 'border-white/10 bg-white/5 backdrop-blur-md',
+          'mx-auto flex max-w-5xl items-center justify-between rounded-full px-4 py-2.5 transition-all duration-300 sm:px-5',
+          scrolled
+            ? 'border border-slate-200 bg-white shadow-md shadow-slate-200/60'
+            : 'border border-slate-200/60 bg-white/80 shadow-sm backdrop-blur-md',
         ].join(' ')}
       >
+        {/* Logo / Name */}
         <div className="flex items-center gap-3">
-          {/* Photo Logo - Clickable */}
           <button
             type="button"
             onClick={() => setPhotoModalOpen(true)}
-            className="group relative h-10 w-10 overflow-hidden rounded-full border border-white/20 transition hover:border-emerald-400/50"
+            className="group relative h-8 w-8 overflow-hidden rounded-full border border-slate-200 transition hover:border-indigo-300"
             aria-label="View profile photo"
           >
             {profilePhoto ? (
-              <img
-                src={profilePhoto}
-                alt={name}
-                className="h-full w-full object-cover transition group-hover:scale-110"
-              />
+              <img src={profilePhoto} alt={name} className="h-full w-full object-cover transition group-hover:scale-110" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-slate-950 text-emerald-500">
-                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                  <path d="M16 3L27.2583 9.5V22.5L16 29L4.74167 22.5V9.5L16 3Z" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                  <text x="16" y="20" fill="currentColor" fontSize="8" fontWeight="bold" textAnchor="middle" fontFamily="Arial, sans-serif">RK</text>
-                </svg>
+              <div className="flex h-full w-full items-center justify-center bg-indigo-600 text-[10px] font-bold text-white">
+                {(name || 'RT').split(' ').map(p => p[0]).join('').slice(0, 2).toUpperCase()}
               </div>
             )}
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/0 to-green-500/0 transition group-hover:from-emerald-400/20 group-hover:to-green-500/20" />
           </button>
-
-          {/* Name - Links to Home */}
-          <a href="#home" onClick={(event) => handleClick(event, '#home')} className="text-sm font-semibold tracking-[0.24em] text-slate-100 transition hover:text-sky-300 sm:text-base">
+          <a
+            href="#home"
+            onClick={(e) => handleClick(e, '#home')}
+            className="text-sm font-semibold text-slate-900 hover:text-indigo-600 transition-colors"
+          >
             {name}
           </a>
         </div>
 
-        <div className="hidden items-center gap-6 md:flex">
+        {/* Desktop nav */}
+        <div className="hidden items-center gap-1 md:flex">
           {links.map((link) => (
-            <a key={link.href} href={link.href} onClick={(event) => handleClick(event, link.href)} className="nav-link">
+            <a
+              key={link.href}
+              href={link.href}
+              onClick={(e) => handleClick(e, link.href)}
+              className="rounded-full px-3 py-1.5 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-slate-900"
+            >
               {link.label}
             </a>
           ))}
-          <button type="button" onClick={handleResumeDownload} className="secondary-button px-4 py-2 text-xs">
-            <Download className="mr-2 h-4 w-4" />
-            Resume
-          </button>
         </div>
 
-        <button
-          type="button"
-          className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white md:hidden"
-          onClick={() => setOpen((value) => !value)}
-          aria-label="Toggle navigation"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        {/* Resume button + mobile toggle */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={handleResumeDownload}
+            className="hidden items-center gap-1.5 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-xs font-semibold text-slate-700 shadow-sm transition hover:border-indigo-300 hover:text-indigo-600 md:flex"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Resume
+          </button>
+          <button
+            type="button"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 md:hidden"
+            onClick={() => setOpen(v => !v)}
+            aria-label="Toggle navigation"
+          >
+            {open ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
+        </div>
       </motion.nav>
 
-      {open ? (
-        <div className="mx-auto mt-3 max-h-[80vh] max-w-7xl overflow-y-auto rounded-3xl border border-white/10 bg-slate-950/95 p-4 shadow-glass backdrop-blur-xl md:hidden">
-          <div className="flex flex-col gap-2">
+      {/* Mobile drawer */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.18 }}
+            className="mx-auto mt-2 max-w-5xl overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-lg md:hidden"
+          >
             {links.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
-                onClick={(event) => handleClick(event, link.href)}
-                className="rounded-2xl px-4 py-3 text-sm font-medium text-slate-200 transition hover:bg-white/5 hover:text-white"
+                onClick={(e) => handleClick(e, link.href)}
+                className="block rounded-xl px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50 hover:text-slate-900"
               >
                 {link.label}
               </a>
             ))}
-            <button type="button" onClick={handleResumeDownload} className="secondary-button mt-2 w-full text-center text-sm">
-              Resume
+            <button
+              type="button"
+              onClick={() => { setOpen(false); handleResumeDownload(); }}
+              className="mt-1 flex w-full items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium text-slate-600 transition hover:bg-slate-50"
+            >
+              <Download className="h-4 w-4" />
+              Download Resume
             </button>
-          </div>
-        </div>
-      ) : null}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
