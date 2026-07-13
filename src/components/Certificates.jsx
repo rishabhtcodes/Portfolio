@@ -109,8 +109,8 @@ export default function Certificates({ certificates }) {
                 <p className="section-desc mt-1">Exploring other certifications, online course completions, and workshops.</p>
               </div>
 
-              {/* Grid of remaining certificates (2 columns, vertical scroll) */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {/* Grid of remaining certificates (3 columns, vertical scroll) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {otherCerts.map((cert, index) => {
                   const Icon = resolvePortfolioIcon(cert.icon);
                   return (
