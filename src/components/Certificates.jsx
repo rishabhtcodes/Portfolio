@@ -109,17 +109,17 @@ export default function Certificates({ certificates }) {
                 <p className="section-desc mt-1">Exploring other certifications, online course completions, and workshops.</p>
               </div>
 
-              {/* Floating Row of remaining certificates (right scrollable) */}
-              <div className="flex flex-row flex-nowrap gap-6 overflow-x-auto pb-4 custom-scrollbar-horizontal items-stretch">
+              {/* Grid of remaining certificates (2 columns, vertical scroll) */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {otherCerts.map((cert, index) => {
                   const Icon = resolvePortfolioIcon(cert.icon);
                   return (
                     <motion.article
                       key={cert.title}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
                       transition={{ duration: 0.3, delay: index * 0.05 }}
-                      className="panel cert-card w-[295px] sm:w-[350px] flex-shrink-0"
+                      className="panel cert-card"
                     >
                       <div className="cert-top">
                         <div className="cert-icon">
