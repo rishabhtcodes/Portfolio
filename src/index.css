@@ -185,6 +185,9 @@
     background: linear-gradient(160deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.15) 22%, rgba(255,255,255,0) 45%);
     pointer-events: none;
   }
+  .panel.has-custom-bg::before {
+    background: linear-gradient(160deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.05) 22%, transparent 45%);
+  }
   .panel-rivet {
     position: absolute; width: 6px; height: 6px; border-radius: 50%;
     background: radial-gradient(circle at 35% 30%, #fff, var(--metal-3) 60%, #9aa0ac);
@@ -394,6 +397,12 @@
     display: flex; align-items: center; justify-content: center;
     font-family: var(--font-mono); font-weight: 700; font-size: 13px; color: var(--accent-deep);
     box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+  }
+  .panel.has-custom-bg .skill-glyph {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #fff;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.15) inset;
   }
   .skill-card h3 { font-size: 14.5px; margin-bottom: 6px; }
   .skill-card p { font-size: 12.5px; color: var(--ink-soft); line-height: 1.55; margin: 0; }

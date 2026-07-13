@@ -65,20 +65,22 @@ export default function Skills({ skills }) {
               return <span>{initials}</span>;
             };
 
+            const hasCustomBg = !!skill.gridBg;
+
             return (
               <motion.div
                 variants={item}
                 key={`${skill.name}-${index}`}
-                className="panel skill-card"
-                style={skill.gridBg ? { background: skill.gridBg } : {}}
+                className={`panel skill-card ${hasCustomBg ? 'has-custom-bg text-white' : ''}`}
+                style={hasCustomBg ? { background: skill.gridBg } : {}}
               >
                 {/* Glyph */}
                 <div className="skill-glyph">
                   {renderIcon()}
                 </div>
 
-                <h3>{skill.name}</h3>
-                <p>{skill.description}</p>
+                <h3 className={hasCustomBg ? 'text-white' : ''}>{skill.name}</h3>
+                <p className={hasCustomBg ? 'text-white/80' : ''}>{skill.description}</p>
               </motion.div>
             );
           })}
