@@ -31,7 +31,7 @@ export default function Projects({ projects }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.08 }}
-              className="project-card h-full"
+              className="project-card h-full group"
             >
               {/* Thumbnail head */}
               <div className="project-thumb relative overflow-hidden">
@@ -39,7 +39,7 @@ export default function Projects({ projects }) {
                   <img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 hover:scale-105 z-10"
+                    className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 group-hover:scale-105 z-10"
                   />
                 ) : (
                   <div className="grid-overlay" />
@@ -152,7 +152,7 @@ export default function Projects({ projects }) {
                     initial={{ opacity: 0, x: 20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="project-card w-[295px] sm:w-[350px] flex-shrink-0"
+                    className="project-card w-[295px] sm:w-[350px] flex-shrink-0 group"
                   >
                     {/* Thumbnail head */}
                     <div className="project-thumb relative overflow-hidden">
@@ -160,7 +160,7 @@ export default function Projects({ projects }) {
                         <img
                           src={project.image}
                           alt={project.title}
-                          className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 hover:scale-105 z-10"
+                          className="w-full h-full object-cover absolute inset-0 transition-transform duration-300 group-hover:scale-105 z-10"
                         />
                       ) : (
                         <div className="grid-overlay" />
