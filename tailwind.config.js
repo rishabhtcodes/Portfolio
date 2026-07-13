@@ -9,7 +9,8 @@ export default {
         },
       },
       fontFamily: {
-        sans: ['Sora', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        display: ['Sora', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       boxShadow: {
