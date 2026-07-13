@@ -51,7 +51,7 @@ export default function Projects({ projects }) {
                 </p>
 
                 {/* Tech chips */}
-                <div className="chip-row flex-nowrap overflow-x-auto custom-scrollbar-horizontal pb-2">
+                <div className="chip-row flex-nowrap overflow-x-auto custom-scrollbar-horizontal pb-2 mb-4">
                   {project.techStack.map((tech) => (
                     <span key={tech} className="chip flex-shrink-0">
                       {tech}
@@ -164,7 +164,7 @@ export default function Projects({ projects }) {
                       </p>
 
                       {/* Tech chips */}
-                      <div className="chip-row flex-nowrap overflow-x-auto custom-scrollbar-horizontal pb-2">
+                      <div className="chip-row flex-nowrap overflow-x-auto custom-scrollbar-horizontal pb-2 mb-4">
                         {project.techStack.map((tech) => (
                           <span key={tech} className="chip flex-shrink-0">
                             {tech}
