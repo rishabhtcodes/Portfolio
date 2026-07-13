@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 
 const container = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.06 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.05 } },
 };
 
 const item = {
@@ -12,67 +12,54 @@ const item = {
 
 export default function Skills({ skills }) {
   return (
-    <motion.section
-      id="skills"
-      className="relative w-full overflow-hidden py-20 sm:py-28"
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.1 }}
-      transition={{ duration: 0.55, ease: 'easeOut' }}
-    >
-      <div className="mx-auto max-w-6xl px-6 lg:px-12">
-        <span className="section-kicker">Skills</span>
-        <h2 className="section-title">Core technologies I use to ship modern web products.</h2>
-        <p className="section-copy mb-12">
-          A complete view of my technical toolkit across languages, frameworks, databases, and tools.
+    <section id="skills">
+      <div className="wrap">
+        <span className="eyebrow" id="skillsEyebrow">
+          Skills
+        </span>
+        <h2 className="section-title" id="skillsTitle">
+          Core technologies I use to ship modern web products.
+        </h2>
+        <p className="section-desc" id="skillsDesc">
+          A complete view of my toolkit across programming languages, backend frameworks, databases, and tools.
         </p>
 
+        {/* Skill grid */}
         <motion.div
           variants={container}
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
+          className="skill-grid"
+          id="skillGrid"
         >
           {skills.map((skill, index) => {
             const Icon = skill.icon;
+            const initials = skill.name.slice(0, 2).toUpperCase();
             return (
               <motion.div
                 variants={item}
                 key={`${skill.name}-${index}`}
-                className="glass-panel group relative flex flex-col items-start overflow-hidden p-5 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md"
+                className="panel skill-card"
               >
-                {/* Faded watermark logo */}
-                <div
-                  className="pointer-events-none absolute -bottom-4 -right-4 z-0 opacity-[0.06] transition-opacity duration-300 group-hover:opacity-[0.1]"
-                  aria-hidden="true"
-                >
+                {/* Glyph */}
+                <div className="skill-glyph">
                   {skill.logo ? (
-                    <img src={skill.logo} alt="" className="h-24 w-24 object-contain" loading="lazy" />
+                    <img src={skill.logo} alt="" className="h-4.5 w-4.5 object-contain" />
                   ) : Icon ? (
-                    <Icon className="h-24 w-24" />
-                  ) : null}
+                    <Icon className="h-4.5 w-4.5 text-[var(--accent-deep)]" />
+                  ) : (
+                    <span>{initials}</span>
+                  )}
                 </div>
 
-                <div className="relative z-10">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 ring-1 ring-indigo-100 transition-transform duration-200 group-hover:scale-105">
-                    {skill.logo ? (
-                      <img src={skill.logo} alt={`${skill.name} logo`} className="h-5 w-5 object-contain" loading="lazy" />
-                    ) : Icon ? (
-                      <Icon className="h-5 w-5 text-indigo-600" />
-                    ) : (
-                      <span className="text-xs font-bold text-indigo-600">{skill.name[0]}</span>
-                    )}
-                  </div>
-
-                  <h3 className="mt-4 text-sm font-semibold text-slate-900">{skill.name}</h3>
-                  <p className="mt-1 text-xs leading-relaxed text-slate-500">{skill.description}</p>
-                </div>
+                <h3>{skill.name}</h3>
+                <p>{skill.description}</p>
               </motion.div>
             );
           })}
         </motion.div>
       </div>
-    </motion.section>
+    </section>
   );
 }
