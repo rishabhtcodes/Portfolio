@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import * as LucideIcons from 'lucide-react';
 
 const container = {
   hidden: { opacity: 0 },
@@ -36,21 +37,44 @@ export default function Skills({ skills }) {
           {skills.map((skill, index) => {
             const Icon = skill.icon;
             const initials = skill.name.slice(0, 2).toUpperCase();
+
+            const renderIcon = () => {
+              const iconName = skill.languageIcon;
+              if (iconName) {
+                // Treat as image URL or base64 data
+                if (iconName.startsWith('http') || iconName.startsWith('/') || iconName.startsWith('data:')) {
+                  return <img src={iconName} alt="" className="w-full h-full object-contain p-1.5" />;
+                }
+                // Treat as dynamic Lucide Icon
+                const LucideIcon = LucideIcons[iconName];
+                if (LucideIcon) {
+                  return <LucideIcon className="h-5 w-5 text-[var(--accent-deep)]" />;
+                }
+                // Treat as Devicon / FontAwesome class name
+                return <i className={`${iconName} text-lg`} style={{ fontSize: '18px' }}></i>;
+              }
+
+              if (skill.logo) {
+                return <img src={skill.logo} alt="" className="w-full h-full object-contain p-1.5" />;
+              }
+
+              if (Icon) {
+                return <Icon className="h-5 w-5 text-[var(--accent-deep)]" />;
+              }
+
+              return <span>{initials}</span>;
+            };
+
             return (
               <motion.div
                 variants={item}
                 key={`${skill.name}-${index}`}
                 className="panel skill-card"
+                style={skill.gridBg ? { background: skill.gridBg } : {}}
               >
                 {/* Glyph */}
                 <div className="skill-glyph">
-                  {skill.logo ? (
-                    <img src={skill.logo} alt="" className="h-4.5 w-4.5 object-contain" />
-                  ) : Icon ? (
-                    <Icon className="h-4.5 w-4.5 text-[var(--accent-deep)]" />
-                  ) : (
-                    <span>{initials}</span>
-                  )}
+                  {renderIcon()}
                 </div>
 
                 <h3>{skill.name}</h3>
@@ -63,3 +87,4 @@ export default function Skills({ skills }) {
     </section>
   );
 }
+
