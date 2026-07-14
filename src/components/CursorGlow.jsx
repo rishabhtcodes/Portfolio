@@ -2,22 +2,22 @@ import { useEffect, useRef, useState } from 'react';
 
 const TRAIL_LENGTH = 14;
 
-// Colors cycling through pink → purple → orange to match the reference image
+// Colors cycling through light blue shades
 const TRAIL_COLORS = [
-  '#FF3CAC', // hot pink  (head)
-  '#FF3CAC',
-  '#D946EF', // fuchsia
-  '#A855F7', // purple
-  '#A855F7',
-  '#9333EA', // deep purple
-  '#F97316', // orange
-  '#F97316',
-  '#FB923C', // light orange
-  '#FB923C',
-  '#FBBF24', // amber
-  '#D946EF',
-  '#A855F7',
-  '#FF3CAC',
+  '#7DD3FC', // sky-300   (head)
+  '#38BDF8', // sky-400
+  '#0EA5E9', // sky-500
+  '#38BDF8', // sky-400
+  '#BAE6FD', // sky-200
+  '#7DD3FC', // sky-300
+  '#38BDF8', // sky-400
+  '#0EA5E9', // sky-500
+  '#67E8F9', // cyan-300
+  '#22D3EE', // cyan-400
+  '#38BDF8', // sky-400
+  '#7DD3FC', // sky-300
+  '#BAE6FD', // sky-200
+  '#38BDF8', // sky-400
 ];
 
 export default function CursorGlow() {
@@ -103,10 +103,10 @@ export default function CursorGlow() {
           width:  isPointer ? '46px' : '34px',
           height: isPointer ? '46px' : '34px',
           borderRadius: '50%',
-          border: `2.5px solid ${isPointer ? '#F97316' : '#FF3CAC'}`,
+          border: `2.5px solid ${isPointer ? '#22D3EE' : '#38BDF8'}`,
           boxShadow: isPointer
-            ? '0 0 16px 4px rgba(249,115,22,0.55)'
-            : '0 0 14px 3px rgba(255,60,172,0.55)',
+            ? '0 0 16px 4px rgba(34,211,238,0.6)'
+            : '0 0 14px 3px rgba(56,189,248,0.6)',
           transition: 'width 0.18s ease, height 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
           transform: 'translate(-200px, -200px) translate(-50%, -50%)',
         }}
