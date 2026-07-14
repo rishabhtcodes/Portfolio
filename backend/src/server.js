@@ -1,4 +1,8 @@
+import { setDefaultResultOrder } from 'dns';
+setDefaultResultOrder('ipv4first'); // force IPv4 — Render blocks outbound IPv6 to Gmail SMTP
+
 import 'dotenv/config';
+
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
