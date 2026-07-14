@@ -1,27 +1,20 @@
 import nodemailer from 'nodemailer';
 
 function getMailConfig() {
-  const host   = process.env.SMTP_HOST;
-  const user   = process.env.SMTP_USER;
-  const pass   = process.env.SMTP_PASS;
-
-  if (!host || !user || !pass) {
-    return null; // SMTP not configured — caller handles this gracefully
-  }
+  const host = 'smtp.gmail.com';
+  const user = 'rishabhtiwari3538@gmail.com';
+  const pass = 'fetbpdcnmoxslxzd';
 
   return {
     host,
-    port:   465,   // Gmail SSL — always 465, never 587 on cloud hosts
-    secure: true,  // SSL from the start (not STARTTLS)
+    port: 465,
+    secure: true,
     auth: { user, pass },
-    family: 4,     // force IPv4 — Render blocks outbound IPv6
-    tls: {
-      // Prevent TLS certificate errors on Render / other cloud VMs
-      rejectUnauthorized: false,
-    },
-    connectionTimeout: 30_000, // 30s — Render can be slow on cold start
-    greetingTimeout:   15_000,
-    socketTimeout:     30_000,
+    family: 4, // force IPv4
+    tls: { rejectUnauthorized: false },
+    connectionTimeout: 30_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 30_000,
   };
 }
 
@@ -37,16 +30,6 @@ function escapeHtml(value) {
 
 export async function sendContactEmails({ name, email, message }) {
   const config = getMailConfig();
-
-  if (!config) {
-    // SMTP not configured on this server — surface a friendly 503 instead of hanging
-    const err = new Error(
-      'Email delivery is not configured on this server. Please contact me directly at rishabhtiwari3538@gmail.com'
-    );
-    err.statusCode = 503;
-    throw err;
-  }
-
   const transporter = nodemailer.createTransport(config);
   const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
   const fromEmail = process.env.MAIL_FROM || process.env.SMTP_USER;
