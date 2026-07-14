@@ -611,31 +611,34 @@ export default function AdminDashboard() {
         
         {/* Pane 1: Left Dock */}
         <aside className="lg:w-20 w-full flex lg:flex-col justify-between items-center bg-[#0F1316] border border-[#1A242B] rounded-3xl p-4 lg:py-6 gap-6 shrink-0 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-          {/* Brand/Logo */}
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center shadow-[0_0_15px_rgba(45,212,191,0.3)] text-slate-950 font-bold">
-            <ShieldCheck className="w-6 h-6 text-slate-950" />
+          {/* Top Wrapper (Logo + Nav) */}
+          <div className="flex lg:flex-col gap-6 items-center w-full">
+            {/* Brand/Logo */}
+            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center shadow-[0_0_15px_rgba(45,212,191,0.3)] text-slate-950 font-bold">
+              <ShieldCheck className="w-6 h-6 text-slate-950" />
+            </div>
+            
+            {/* Navigation Dock */}
+            <nav className="flex lg:flex-col gap-4 flex-wrap justify-start items-center w-full">
+              {sectionItems.map((item) => {
+                const Icon = sectionIcons[item.key] || User;
+                return (
+                  <button
+                    key={item.key}
+                    type="button"
+                    onClick={() => {
+                      setActiveSection(item.key);
+                      setSearchQuery('');
+                    }}
+                    className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${activeDockClass(item.key)}`}
+                    title={item.label}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </button>
+                );
+              })}
+            </nav>
           </div>
-          
-          {/* Navigation Dock */}
-          <nav className="flex lg:flex-col gap-4 flex-wrap justify-center flex-1 lg:mt-6">
-            {sectionItems.map((item) => {
-              const Icon = sectionIcons[item.key] || User;
-              return (
-                <button
-                  key={item.key}
-                  type="button"
-                  onClick={() => {
-                    setActiveSection(item.key);
-                    setSearchQuery('');
-                  }}
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${activeDockClass(item.key)}`}
-                  title={item.label}
-                >
-                  <Icon className="w-5 h-5" />
-                </button>
-              );
-            })}
-          </nav>
           
           {/* Profile Photo / Logout */}
           <div className="flex lg:flex-col gap-4 items-center shrink-0">
