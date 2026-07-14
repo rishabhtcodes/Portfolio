@@ -14,6 +14,7 @@ function getMailConfig() {
     port:   465,   // Gmail SSL — always 465, never 587 on cloud hosts
     secure: true,  // SSL from the start (not STARTTLS)
     auth: { user, pass },
+    family: 4,     // force IPv4 — Render blocks outbound IPv6
     tls: {
       // Prevent TLS certificate errors on Render / other cloud VMs
       rejectUnauthorized: false,
