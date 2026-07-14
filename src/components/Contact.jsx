@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { Mail, Linkedin, Github, Send, CheckCircle } from 'lucide-react';
-import { apiRequest } from '../lib/api';
+
+// ─── Web3Forms access key ────────────────────────────────────────────────────
+// Get your free key: go to https://web3forms.com → enter rishabhtiwari3538@gmail.com → check inbox
+const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || 'YOUR_KEY_HERE';
+// ─────────────────────────────────────────────────────────────────────────────
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -13,9 +17,9 @@ export default function Contact({ contact }) {
 
   const validate = () => {
     const e = {};
-    if (!formData.name.trim())                  e.name    = 'Name is required.';
-    if (!emailPattern.test(formData.email))     e.email   = 'Enter a valid email address.';
-    if (formData.message.trim().length < 10)    e.message = 'Message must be at least 10 characters.';
+    if (!formData.name.trim())               e.name    = 'Name is required.';
+    if (!emailPattern.test(formData.email))  e.email   = 'Enter a valid email address.';
+    if (formData.message.trim().length < 10) e.message = 'Message must be at least 10 characters.';
     return e;
   };
 
@@ -32,12 +36,35 @@ export default function Contact({ contact }) {
     const errs = validate();
     if (Object.keys(errs).length > 0) { setErrors(errs); return; }
     setErrors({}); setSubmitError(''); setSending(true);
+
     try {
-      await apiRequest('/api/contact/send', { method: 'POST', body: formData });
-      setSubmitted(true);
-      setFormData({ name: '', email: '', message: '' });
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key:   WEB3FORMS_KEY,
+          name:         formData.name,
+          email:        formData.email,
+          message:      formData.message,
+          subject:      `Portfolio Contact: ${formData.name}`,
+          from_name:    formData.name,
+          replyto:      formData.email,
+          // Auto-reply: sender gets a confirmation email
+          'h-X-Web3-Auto-Reply': 'true',
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setSubmitted(true);
+        setFormData({ name: '', email: '', message: '' });
+      } else {
+        throw new Error(data.message || 'Submission failed.');
+      }
     } catch (error) {
-      setSubmitError(error.message || 'Failed to send. Please try again.');
+      console.error('Contact form error:', error);
+      setSubmitError('Failed to send message. Please email me directly at rishabhtiwari3538@gmail.com');
     } finally {
       setSending(false);
     }
@@ -77,9 +104,11 @@ export default function Contact({ contact }) {
             {submitted ? (
               <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
                 <CheckCircle className="h-12 w-12 text-emerald-500" />
-                <p className="font-semibold text-lg" style={{ color: 'var(--green)' }}>Message sent!</p>
+                <p className="font-semibold text-lg" style={{ color: 'var(--green)' }}>
+                  Message sent!
+                </p>
                 <p className="text-sm" style={{ color: 'var(--ink-soft)' }}>
-                  I&apos;ll get back to you within 24–48 hours.
+                  I&apos;ll get back to you within 24–48 hours. Check your inbox for a confirmation.
                 </p>
                 <button type="button" className="btn btn-secondary mt-2"
                   onClick={() => setSubmitted(false)}>
