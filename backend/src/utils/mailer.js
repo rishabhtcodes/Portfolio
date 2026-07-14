@@ -2,17 +2,32 @@ import nodemailer from 'nodemailer';
 
 function getMailConfig() {
   const host   = process.env.SMTP_HOST;
-  const port   = Number(process.env.SMTP_PORT || 587);
   const user   = process.env.SMTP_USER;
   const pass   = process.env.SMTP_PASS;
-  const secure = String(process.env.SMTP_SECURE || 'false').toLowerCase() === 'true';
 
   if (!host || !user || !pass) {
     return null; // SMTP not configured — caller handles this gracefully
   }
 
-  return { host, port, secure, auth: { user, pass } };
+  // Use port 465 + secure:true (SSL) for Gmail — more reliable on cloud hosts than STARTTLS/587
+  const port   = Number(process.env.SMTP_PORT || 465);
+  const secure = port === 465 ? true : String(process.env.SMTP_SECURE || 'false').toLowerCase() === 'true';
+
+  return {
+    host,
+    port,
+    secure,
+    auth: { user, pass },
+    tls: {
+      // Prevent TLS certificate errors on Render / other cloud VMs
+      rejectUnauthorized: false,
+    },
+    connectionTimeout: 30_000, // 30s — Render can be slow on cold start
+    greetingTimeout:   15_000,
+    socketTimeout:     30_000,
+  };
 }
+
 
 function escapeHtml(value) {
   return String(value)
