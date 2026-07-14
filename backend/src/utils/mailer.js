@@ -6,9 +6,10 @@ async function createTransport() {
   const [smtpIp] = await resolve4('smtp.gmail.com');
 
   return nodemailer.createTransport({
-    host: smtpIp,          // actual IPv4 like 142.250.x.x — never IPv6
-    port: 465,
-    secure: true,
+    host: smtpIp,      // actual IPv4 like 142.250.x.x — never IPv6
+    port: 587,         // STARTTLS — port 465 SSL is blocked on Render free tier
+    secure: false,     // false = STARTTLS (upgrades to TLS after connecting)
+    requireTLS: true,  // reject if server doesn't support TLS
     auth: {
       user: 'rishabhtiwari3538@gmail.com',
       pass: 'rpnjafmdmibfcnje',
