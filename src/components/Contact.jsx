@@ -1,11 +1,6 @@
 import { useState } from 'react';
 import { Mail, Linkedin, Github, Send, CheckCircle } from 'lucide-react';
 
-// ─── Web3Forms access key ────────────────────────────────────────────────────
-// Get your free key: go to https://web3forms.com → enter rishabhtiwari3538@gmail.com → check inbox
-const WEB3FORMS_KEY = import.meta.env.VITE_WEB3FORMS_KEY || 'YOUR_KEY_HERE';
-// ─────────────────────────────────────────────────────────────────────────────
-
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function Contact({ contact }) {
@@ -38,33 +33,18 @@ export default function Contact({ contact }) {
     setErrors({}); setSubmitError(''); setSending(true);
 
     try {
-      const res = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          access_key:   WEB3FORMS_KEY,
-          name:         formData.name,
-          email:        formData.email,
-          message:      formData.message,
-          subject:      `Portfolio Contact: ${formData.name}`,
-          from_name:    formData.name,
-          replyto:      formData.email,
-          // Auto-reply: sender gets a confirmation email
-          'h-X-Web3-Auto-Reply': 'true',
-        }),
+      // Calls Vercel serverless function — avoids Render SMTP port blocking
+      const res = await fetch('/api/contact', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(formData),
       });
-
       const data = await res.json();
-
-      if (data.success) {
-        setSubmitted(true);
-        setFormData({ name: '', email: '', message: '' });
-      } else {
-        throw new Error(data.message || 'Submission failed.');
-      }
+      if (!res.ok) throw new Error(data.message || 'Failed to send.');
+      setSubmitted(true);
+      setFormData({ name: '', email: '', message: '' });
     } catch (error) {
-      console.error('Contact form error:', error);
-      setSubmitError('Failed to send message. Please email me directly at rishabhtiwari3538@gmail.com');
+      setSubmitError(error.message || 'Failed to send. Please try again.');
     } finally {
       setSending(false);
     }

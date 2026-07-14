@@ -17,6 +17,7 @@
     "@emailjs/browser": "^4.4.1",
     "framer-motion": "^12.37.0",
     "lucide-react": "^0.468.0",
+    "nodemailer": "^9.0.3",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-intersection-observer": "^9.16.0",
