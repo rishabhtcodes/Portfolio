@@ -1,87 +1,145 @@
 import { useEffect, useRef, useState } from 'react';
 
-const TRAIL_LENGTH = 14;
+/* ─────────────────────────────────────────────────────────────
+   DEFAULT cursor  — diagonal arrow (tip at upper-left)
+   matches the LEFT shape in the reference image
+───────────────────────────────────────────────────────────── */
+function DefaultCursor() {
+  return (
+    <svg
+      width="118"
+      height="110"
+      viewBox="0 0 118 110"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* ── Purple back pill ── */}
+      <rect
+        x="-4" y="8"
+        width="72" height="32"
+        rx="16"
+        fill="#9333EA"
+        transform="rotate(-42 32 24)"
+      />
+      {/* ── Pink front pill ── */}
+      <rect
+        x="-8" y="24"
+        width="70" height="30"
+        rx="15"
+        fill="#FF3CAC"
+        transform="rotate(-42 27 39)"
+      />
+      {/* ── Orange accent stripe ── */}
+      <rect
+        x="6" y="46"
+        width="52" height="16"
+        rx="8"
+        fill="#F97316"
+        transform="rotate(-42 32 54)"
+      />
 
-// Colors cycling through light blue shades
-const TRAIL_COLORS = [
-  '#7DD3FC', // sky-300   (head)
-  '#38BDF8', // sky-400
-  '#0EA5E9', // sky-500
-  '#38BDF8', // sky-400
-  '#BAE6FD', // sky-200
-  '#7DD3FC', // sky-300
-  '#38BDF8', // sky-400
-  '#0EA5E9', // sky-500
-  '#67E8F9', // cyan-300
-  '#22D3EE', // cyan-400
-  '#38BDF8', // sky-400
-  '#7DD3FC', // sky-300
-  '#BAE6FD', // sky-200
-  '#38BDF8', // sky-400
-];
+      {/* ── Trailing dots ── */}
+      <circle cx="66"  cy="60" r="10"  fill="#D946EF" />
+      <circle cx="84"  cy="70" r="6"   fill="#F97316" />
+      <circle cx="73"  cy="82" r="5"   fill="#FF3CAC" />
+      <circle cx="92"  cy="83" r="8.5" fill="#FB923C" />
+      <circle cx="103" cy="68" r="4"   fill="#A855F7" />
+      <circle cx="98"  cy="97" r="6"   fill="#FBBF24" />
+    </svg>
+  );
+}
 
+/* ─────────────────────────────────────────────────────────────
+   POINTER cursor  — upward pointing hand (tip at top)
+   matches the RIGHT shape in the reference image
+───────────────────────────────────────────────────────────── */
+function PointerCursor() {
+  return (
+    <svg
+      width="104"
+      height="116"
+      viewBox="0 0 104 116"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      {/* ── Purple back pill (slightly tilted, vertical) ── */}
+      <rect
+        x="18" y="0"
+        width="34" height="74"
+        rx="17"
+        fill="#9333EA"
+        transform="rotate(-10 35 37)"
+      />
+      {/* ── Pink front pill ── */}
+      <rect
+        x="2" y="2"
+        width="32" height="72"
+        rx="16"
+        fill="#FF3CAC"
+        transform="rotate(-10 18 38)"
+      />
+      {/* ── Orange accent ── */}
+      <rect
+        x="28" y="12"
+        width="24" height="54"
+        rx="12"
+        fill="#F97316"
+        transform="rotate(-10 40 39)"
+      />
+
+      {/* ── Trailing dots ── */}
+      <circle cx="44"  cy="80" r="9"   fill="#D946EF" />
+      <circle cx="60"  cy="90" r="5.5" fill="#F97316" />
+      <circle cx="50"  cy="100" r="4.5" fill="#FF3CAC" />
+      <circle cx="66"  cy="100" r="8"  fill="#FB923C" />
+      <circle cx="76"  cy="84" r="3.5" fill="#A855F7" />
+      <circle cx="72"  cy="110" r="5.5" fill="#FBBF24" />
+    </svg>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Main component
+   – hides default cursor globally
+   – translates the SVG so its hot-spot aligns with mouse pos
+───────────────────────────────────────────────────────────── */
 export default function CursorGlow() {
-  const dotsRef      = useRef(new Array(TRAIL_LENGTH).fill(null));
-  const cursorRef    = useRef(null);
-  const posRef       = useRef({ x: -200, y: -200 });
+  const wrapperRef    = useRef(null);
+  const posRef        = useRef({ x: -300, y: -300 });
   const [isPointer, setIsPointer] = useState(false);
-  const isPointerRef = useRef(false);
+  const isPointerRef  = useRef(false);
 
   useEffect(() => {
-    const positions = Array.from({ length: TRAIL_LENGTH }, () => ({ x: -200, y: -200 }));
     let frameId;
 
     const onMouseMove = (e) => {
       posRef.current = { x: e.clientX, y: e.clientY };
+
       const target = e.target;
-      const isPtr =
+      const ptr =
         window.getComputedStyle(target).cursor === 'pointer' ||
         target.tagName === 'A' ||
         target.tagName === 'BUTTON' ||
-        target.closest('a') ||
-        target.closest('button');
-      isPointerRef.current = !!isPtr;
-      setIsPointer(!!isPtr);
+        !!target.closest('a') ||
+        !!target.closest('button') ||
+        !!target.closest('[role="button"]');
+
+      if (ptr !== isPointerRef.current) {
+        isPointerRef.current = ptr;
+        setIsPointer(ptr);
+      }
     };
 
     const animate = () => {
-      // Head snaps to mouse
-      positions[0] = { x: posRef.current.x, y: posRef.current.y };
-
-      // Each subsequent dot lerps toward the previous
-      for (let i = 1; i < TRAIL_LENGTH; i++) {
-        const prev = positions[i - 1];
-        const curr = positions[i];
-        curr.x += (prev.x - curr.x) * 0.28;
-        curr.y += (prev.y - curr.y) * 0.28;
+      if (wrapperRef.current) {
+        const { x, y } = posRef.current;
+        wrapperRef.current.style.transform = `translate(${x}px, ${y}px)`;
       }
-
-      // Update custom cursor ring
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = `translate(${posRef.current.x}px, ${posRef.current.y}px) translate(-50%, -50%)`;
-      }
-
-      // Update trail dots
-      positions.forEach((pos, i) => {
-        const el = dotsRef.current[i];
-        if (!el) return;
-        const decay = 1 - i / TRAIL_LENGTH;
-        const size  = i === 0
-          ? (isPointerRef.current ? 20 : 16)
-          : Math.max(3, 14 * decay);
-        el.style.width   = `${size}px`;
-        el.style.height  = `${size}px`;
-        el.style.opacity = `${Math.max(0, decay * 0.95)}`;
-        el.style.filter  = `blur(${i === 0 ? 0 : 1 + (1 - decay) * 3}px)`;
-        el.style.transform = `translate(${pos.x}px, ${pos.y}px) translate(-50%, -50%)`;
-      });
-
       frameId = requestAnimationFrame(animate);
     };
 
     window.addEventListener('mousemove', onMouseMove, { passive: true });
     frameId = requestAnimationFrame(animate);
-
     return () => {
       window.removeEventListener('mousemove', onMouseMove);
       cancelAnimationFrame(frameId);
@@ -90,44 +148,30 @@ export default function CursorGlow() {
 
   return (
     <>
-      {/* Hide default cursor globally */}
-      <style>{`
-        *, *::before, *::after { cursor: none !important; }
-      `}</style>
+      {/* Hide the system cursor everywhere */}
+      <style>{`*, *::before, *::after { cursor: none !important; }`}</style>
 
-      {/* Outer ring — scales up on hoverable elements */}
+      {/*
+        The wrapper is fixed at (0,0) and translated to (mouseX, mouseY).
+        The inner div has a negative offset so the SVG's "tip" sits
+        exactly at the mouse coordinate:
+          – default cursor  → tip is near top-left → offset (-4px, -4px)
+          – pointer cursor  → finger-tip is ~(14px, 4px) → offset (-14px, -4px)
+      */}
       <div
-        ref={cursorRef}
+        ref={wrapperRef}
         className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block will-change-transform"
-        style={{
-          width:  isPointer ? '46px' : '34px',
-          height: isPointer ? '46px' : '34px',
-          borderRadius: '50%',
-          border: `2.5px solid ${isPointer ? '#22D3EE' : '#38BDF8'}`,
-          boxShadow: isPointer
-            ? '0 0 16px 4px rgba(34,211,238,0.6)'
-            : '0 0 14px 3px rgba(56,189,248,0.6)',
-          transition: 'width 0.18s ease, height 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease',
-          transform: 'translate(-200px, -200px) translate(-50%, -50%)',
-        }}
-      />
-
-      {/* Colorful dot trail */}
-      <div className="pointer-events-none fixed inset-0 z-[9998] hidden overflow-hidden md:block">
-        {Array.from({ length: TRAIL_LENGTH }).map((_, i) => (
-          <div
-            key={i}
-            ref={(el) => (dotsRef.current[i] = el)}
-            className="absolute left-0 top-0 rounded-full will-change-transform"
-            style={{
-              backgroundColor: TRAIL_COLORS[i % TRAIL_COLORS.length],
-              boxShadow: `0 0 ${10 + i}px 3px ${TRAIL_COLORS[i % TRAIL_COLORS.length]}80`,
-              width:  '14px',
-              height: '14px',
-              transform: 'translate(-200px, -200px) translate(-50%, -50%)',
-            }}
-          />
-        ))}
+        style={{ transform: 'translate(-300px, -300px)' }}
+      >
+        <div
+          style={{
+            transform: isPointer ? 'translate(-14px, -4px)' : 'translate(-4px, -4px)',
+            transition: 'transform 0.12s ease',
+            filter: 'drop-shadow(0 0 8px rgba(255,60,172,0.55))',
+          }}
+        >
+          {isPointer ? <PointerCursor /> : <DefaultCursor />}
+        </div>
       </div>
     </>
   );
