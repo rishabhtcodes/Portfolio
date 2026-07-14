@@ -584,7 +584,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0B0F12] text-slate-100 flex flex-col font-sans relative overflow-hidden select-none">
+    <div className="h-screen w-screen overflow-hidden bg-[#0B0F12] text-slate-100 flex flex-col font-sans relative select-none">
       {/* CSS Overrides Style Tag */}
       <style>{`
         .custom-scrollbar::-webkit-scrollbar {
@@ -607,10 +607,10 @@ export default function AdminDashboard() {
       <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[150px] pointer-events-none" />
 
-      <div className="flex-1 flex flex-col lg:flex-row h-screen p-4 lg:p-6 gap-6 overflow-hidden max-w-[1600px] w-full mx-auto z-10">
+      <div className="flex-1 flex flex-col lg:flex-row h-full p-4 lg:p-6 gap-6 overflow-hidden max-w-[1600px] w-full mx-auto z-10">
         
         {/* Pane 1: Left Dock */}
-        <aside className="lg:w-20 w-full flex lg:flex-col justify-between items-center bg-[#0F1316] border border-[#1A242B] rounded-3xl p-4 lg:py-6 gap-6 shrink-0 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+        <aside className="lg:w-20 w-full lg:h-full flex lg:flex-col justify-between items-center bg-[#0F1316] border border-[#1A242B] rounded-3xl p-4 lg:py-6 gap-6 shrink-0 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
           {/* Top Wrapper (Logo + Nav) */}
           <div className="flex lg:flex-col gap-6 items-center w-full">
             {/* Brand/Logo */}
@@ -659,7 +659,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* Pane 2: Middle Sidebar List */}
-        <aside className="lg:w-80 w-full flex flex-col bg-[#11161B] border border-[#1A242B] rounded-3xl p-5 gap-4 shrink-0 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+        <aside className="lg:w-80 w-full lg:h-full flex flex-col bg-[#11161B] border border-[#1A242B] rounded-3xl p-5 gap-4 shrink-0 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
           {/* List Title & Add Button */}
           <div className="flex justify-between items-center">
             <h2 className="text-xl font-bold font-display text-white">
@@ -801,7 +801,7 @@ export default function AdminDashboard() {
         </aside>
 
         {/* Pane 3: Main Workspace (Editor Panel) */}
-        <main className="flex-1 flex flex-col bg-[#11161B] border border-[#1A242B] rounded-3xl p-6 lg:p-8 gap-5 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
+        <main className="flex-1 lg:h-full flex flex-col bg-[#11161B] border border-[#1A242B] rounded-3xl p-6 lg:p-8 gap-5 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
           {/* Header */}
           <div className="flex items-center justify-between border-b border-[#1A242B] pb-4.5 shrink-0">
             <div className="flex items-center gap-3.5">
