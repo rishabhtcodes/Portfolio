@@ -9,14 +9,10 @@ function getMailConfig() {
     return null; // SMTP not configured — caller handles this gracefully
   }
 
-  // Use port 465 + secure:true (SSL) for Gmail — more reliable on cloud hosts than STARTTLS/587
-  const port   = Number(process.env.SMTP_PORT || 465);
-  const secure = port === 465 ? true : String(process.env.SMTP_SECURE || 'false').toLowerCase() === 'true';
-
   return {
     host,
-    port,
-    secure,
+    port:   465,   // Gmail SSL — always 465, never 587 on cloud hosts
+    secure: true,  // SSL from the start (not STARTTLS)
     auth: { user, pass },
     tls: {
       // Prevent TLS certificate errors on Render / other cloud VMs
