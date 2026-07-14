@@ -19,4 +19,3 @@ function App() {
 }
 
 export default App;
-// the skill language i have added from admin panel backend api it has been removed from my live link
