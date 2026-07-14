@@ -1,3 +1,4 @@
+// Home page — skills from DB are merged with static data so new skills appear automatically
 import { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
