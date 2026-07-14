@@ -1,21 +1,23 @@
 import nodemailer from 'nodemailer';
+import { resolve4 } from 'dns/promises';
 
-function getMailConfig() {
-  const host = 'smtp.gmail.com';
-  const user = 'rishabhtiwari3538@gmail.com';
-  const pass = 'rpnjafmdmibfcnje';
+async function createTransport() {
+  // Resolve smtp.gmail.com to IPv4 explicitly — Render's network blocks IPv6 to Gmail
+  const [smtpIp] = await resolve4('smtp.gmail.com');
 
-  return {
-    host,
+  return nodemailer.createTransport({
+    host: smtpIp,          // actual IPv4 like 142.250.x.x — never IPv6
     port: 465,
     secure: true,
-    auth: { user, pass },
-    family: 4, // force IPv4
+    auth: {
+      user: 'rishabhtiwari3538@gmail.com',
+      pass: 'rpnjafmdmibfcnje',
+    },
     tls: { rejectUnauthorized: false },
-    connectionTimeout: 30_000,
-    greetingTimeout: 15_000,
-    socketTimeout: 30_000,
-  };
+    connectionTimeout: 20_000,
+    greetingTimeout:   10_000,
+    socketTimeout:     20_000,
+  });
 }
 
 
@@ -29,14 +31,12 @@ function escapeHtml(value) {
 }
 
 export async function sendContactEmails({ name, email, message }) {
-  const config = getMailConfig();
-  const transporter = nodemailer.createTransport(config);
-  const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
-  const fromEmail = process.env.MAIL_FROM || process.env.SMTP_USER;
-  const portfolioOwnerName = process.env.PORTFOLIO_OWNER_NAME || 'Rishabh Kumar Tiwari';
-  const portfolioOwnerTitle = process.env.PORTFOLIO_OWNER_TITLE || 'Full Stack Developer';
-  const portfolioSiteUrl = process.env.PORTFOLIO_SITE_URL || '';
-  const replyEta = process.env.CONTACT_REPLY_WINDOW || 'within 24-48 hours';
+  const transporter = await createTransport(); // resolves Gmail IPv4 before connecting
+
+  const OWNER_EMAIL = 'rishabhtiwari3538@gmail.com';
+  const OWNER_NAME  = 'Rishabh Kumar Tiwari';
+  const OWNER_TITLE = 'Full Stack Developer';
+  const SITE_URL    = 'https://rishabhtcodes.vercel.app';
 
   const safeName = escapeHtml(name);
   const safeEmail = escapeHtml(email);
@@ -83,7 +83,7 @@ export async function sendContactEmails({ name, email, message }) {
         <div style="padding: 20px; background: #ffffff;">
           <p>Hi ${safeName},</p>
           <p>I received your message from my portfolio website. Thank you for reaching out.</p>
-          <p>I will review your message and get back to you ${replyEta}.</p>
+          <p>I will review your message and get back to you within 24–48 hours.</p>
           <p><strong>Your submitted details:</strong></p>
           <ul style="padding-left: 20px;">
             <li><strong>Name:</strong> ${safeName}</li>
@@ -94,18 +94,18 @@ export async function sendContactEmails({ name, email, message }) {
             <strong>Your Message:</strong>
             <p style="margin-bottom: 0;">${safeMessage}</p>
           </div>
-          <p style="margin-top: 20px;">Best regards,<br/>${escapeHtml(portfolioOwnerName)}<br/>${escapeHtml(portfolioOwnerTitle)}</p>
-          ${portfolioSiteUrl ? `<p style="margin-top: 12px;"><a href="${escapeHtml(portfolioSiteUrl)}">Visit Portfolio</a></p>` : ''}
+          <p style="margin-top: 20px;">Best regards,<br/>${escapeHtml(OWNER_NAME)}<br/>${escapeHtml(OWNER_TITLE)}</p>
+          <p style="margin-top: 12px;"><a href="${SITE_URL}">Visit Portfolio</a></p>
         </div>
       </div>
     </div>
   `;
 
-  const userText = `Hi ${name},\n\nThank you for contacting me. I received your message and I will get back to you ${replyEta}.\n\nSubmitted details:\n- Name: ${name}\n- Email: ${email}\n- Submitted: ${submittedAt}\n\nYour message:\n${message}\n\nBest regards,\n${portfolioOwnerName}\n${portfolioOwnerTitle}${portfolioSiteUrl ? `\n${portfolioSiteUrl}` : ''}`;
+  const userText = `Hi ${name},\n\nThank you for contacting me. I received your message and I will get back to you within 24-48 hours.\n\nBest regards,\n${OWNER_NAME}\n${OWNER_TITLE}\n${SITE_URL}`;
 
   await transporter.sendMail({
-    from: fromEmail,
-    to: receiverEmail,
+    from: OWNER_EMAIL,
+    to:   OWNER_EMAIL,
     replyTo: email,
     subject: `Portfolio Contact: ${name}`,
     text: ownerText,
@@ -113,9 +113,9 @@ export async function sendContactEmails({ name, email, message }) {
   });
 
   await transporter.sendMail({
-    from: fromEmail,
-    to: email,
-    subject: `Thanks for contacting me, ${name} - I will reach you soon`,
+    from:    OWNER_EMAIL,
+    to:      email,
+    subject: `Thanks for contacting me, ${name} — I will reach you soon`,
     text: userText,
     html: userHtml,
   });
