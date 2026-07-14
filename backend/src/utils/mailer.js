@@ -1,22 +1,17 @@
 import nodemailer from 'nodemailer';
 
 function getMailConfig() {
-  const host = process.env.SMTP_HOST;
-  const port = Number(process.env.SMTP_PORT || 587);
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+  const host   = process.env.SMTP_HOST;
+  const port   = Number(process.env.SMTP_PORT || 587);
+  const user   = process.env.SMTP_USER;
+  const pass   = process.env.SMTP_PASS;
   const secure = String(process.env.SMTP_SECURE || 'false').toLowerCase() === 'true';
 
   if (!host || !user || !pass) {
-    throw new Error('SMTP_HOST, SMTP_USER, and SMTP_PASS are required for sending emails.');
+    return null; // SMTP not configured — caller handles this gracefully
   }
 
-  return {
-    host,
-    port,
-    secure,
-    auth: { user, pass },
-  };
+  return { host, port, secure, auth: { user, pass } };
 }
 
 function escapeHtml(value) {
@@ -29,7 +24,18 @@ function escapeHtml(value) {
 }
 
 export async function sendContactEmails({ name, email, message }) {
-  const transporter = nodemailer.createTransport(getMailConfig());
+  const config = getMailConfig();
+
+  if (!config) {
+    // SMTP not configured on this server — surface a friendly 503 instead of hanging
+    const err = new Error(
+      'Email delivery is not configured on this server. Please contact me directly at rishabhtiwari3538@gmail.com'
+    );
+    err.statusCode = 503;
+    throw err;
+  }
+
+  const transporter = nodemailer.createTransport(config);
   const receiverEmail = process.env.CONTACT_RECEIVER_EMAIL || process.env.SMTP_USER;
   const fromEmail = process.env.MAIL_FROM || process.env.SMTP_USER;
   const portfolioOwnerName = process.env.PORTFOLIO_OWNER_NAME || 'Rishabh Kumar Tiwari';
