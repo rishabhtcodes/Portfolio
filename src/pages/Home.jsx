@@ -77,8 +77,17 @@ export default function Home() {
           resume: resolvedResume,
           projects:
             Array.isArray(payload.projects) && payload.projects.length > 0 ? payload.projects : projects,
-          skills:
-            Array.isArray(payload.skills) && payload.skills.length > 0 ? payload.skills : skills,
+          skills: (() => {
+            const dbSkills = Array.isArray(payload.skills) ? payload.skills : [];
+            const mergedMap = new Map();
+            skills.forEach(s => {
+              if (s && s.name) mergedMap.set(s.name.toLowerCase(), s);
+            });
+            dbSkills.forEach(s => {
+              if (s && s.name) mergedMap.set(s.name.toLowerCase(), s);
+            });
+            return Array.from(mergedMap.values());
+          })(),
           achievements:
             Array.isArray(payload.achievements) && payload.achievements.length > 0 ? payload.achievements : achievements,
           certificates:
