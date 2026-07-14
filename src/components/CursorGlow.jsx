@@ -20,6 +20,8 @@ export default function CursorGlow() {
         window.getComputedStyle(target).cursor === 'pointer' ||
         ['A', 'BUTTON'].includes(target.tagName) ||
         !!target.closest('a, button, [role="button"]');
+
+      // accent colours mirror --accent / --accent-light / --accent-deep in index.css
     };
 
     // ── animation loop ────────────────────────────────────────
@@ -33,9 +35,9 @@ export default function CursorGlow() {
         dotRef.current.style.transform =
           `translate(${mouse.x}px, ${mouse.y}px) translate(-50%, -50%)`;
         // Shrink dot on hover (ring takes over focus)
-        dotRef.current.style.width  = isHover ? '6px'  : '8px';
-        dotRef.current.style.height = isHover ? '6px'  : '8px';
-        dotRef.current.style.opacity = isHover ? '0.6' : '1';
+        dotRef.current.style.width   = isHover ? '6px'  : '8px';
+        dotRef.current.style.height  = isHover ? '6px'  : '8px';
+        dotRef.current.style.opacity = isHover ? '0.5'  : '1';
       }
 
       // Ring: lagged + scales up on hover
@@ -44,12 +46,13 @@ export default function CursorGlow() {
           `translate(${ring.x}px, ${ring.y}px) translate(-50%, -50%)`;
         ringRef.current.style.width  = isHover ? '48px' : '36px';
         ringRef.current.style.height = isHover ? '48px' : '36px';
+        // --accent #3452e0 / --accent-light #7d94ff
         ringRef.current.style.borderColor = isHover
-          ? 'rgba(56,189,248,0.85)'   // sky-400
-          : 'rgba(139,92,246,0.75)';  // violet-500
+          ? 'rgba(52,82,224,0.9)'    // --accent
+          : 'rgba(125,148,255,0.75)'; // --accent-light
         ringRef.current.style.boxShadow = isHover
-          ? '0 0 18px 3px rgba(56,189,248,0.35)'
-          : '0 0 12px 2px rgba(139,92,246,0.3)';
+          ? '0 0 20px 4px rgba(52,82,224,0.4)'
+          : '0 0 12px 2px rgba(125,148,255,0.35)';
       }
 
       frameId = requestAnimationFrame(tick);
@@ -87,8 +90,9 @@ export default function CursorGlow() {
           ...shared,
           width:      '8px',
           height:     '8px',
-          background: 'linear-gradient(135deg, #38bdf8, #818cf8)',
-          boxShadow:  '0 0 8px 2px rgba(56,189,248,0.6)',
+          /* gradient from --accent-light → --accent → --accent-deep */
+          background: 'linear-gradient(135deg, #7d94ff, #3452e0)',
+          boxShadow:  '0 0 10px 3px rgba(52,82,224,0.65)',
           transition: 'width 0.15s ease, height 0.15s ease, opacity 0.15s ease',
         }}
       />
@@ -101,9 +105,9 @@ export default function CursorGlow() {
           ...shared,
           width:  '36px',
           height: '36px',
-          border: '2px solid rgba(139,92,246,0.75)',
+          border: '2px solid rgba(125,148,255,0.75)',
           background: 'transparent',
-          boxShadow: '0 0 12px 2px rgba(139,92,246,0.3)',
+          boxShadow: '0 0 12px 2px rgba(125,148,255,0.35)',
           transition:
             'width 0.2s ease, height 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease',
         }}
