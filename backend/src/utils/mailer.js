@@ -3,7 +3,7 @@ import nodemailer from 'nodemailer';
 function getMailConfig() {
   const host = 'smtp.gmail.com';
   const user = 'rishabhtiwari3538@gmail.com';
-  const pass = 'fetbpdcnmoxslxzd';
+  const pass = 'rpnjafmdmibfcnje';
 
   return {
     host,
