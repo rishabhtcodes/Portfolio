@@ -689,25 +689,27 @@ export default function AdminDashboard() {
           <div className="flex-1 overflow-y-auto swift-custom-scrollbar flex flex-col gap-2 pr-1">
             {activeSection === 'profile' ? (
               <div className="space-y-3">
+                {/* Profile Summary Card — photo big at top, name below */}
                 <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 text-xs space-y-3">
-                  <div className="flex items-center gap-3 border-b border-[#d4cbb8] pb-2.5">
-                    {(profileForm.aboutPhoto || profileForm.profilePhoto) ? (
-                      <img
-                        src={profileForm.aboutPhoto || profileForm.profilePhoto}
-                        alt="Avatar"
-                        className="w-12 h-14 rounded-[1.2rem] object-cover border border-[#794422] shrink-0"
-                      />
+                  {/* Big profile photo */}
+                  <div className="w-full h-40 rounded border border-[#d4cbb8] overflow-hidden bg-[#ece6d9] flex items-center justify-center">
+                    {profileForm.profilePhoto ? (
+                      <img src={profileForm.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
-                      <div className="w-12 h-12 rounded-full bg-[#794422]/10 text-[#794422] flex items-center justify-center font-bold shrink-0">
-                        <User className="w-6 h-6" />
+                      <div className="flex flex-col items-center gap-1 text-[#794422]/40">
+                        <User className="w-10 h-10" />
+                        <span className="text-[10px] text-[#6b6255] italic">No Profile Photo</span>
                       </div>
                     )}
-                    <div>
-                      <h3 className="font-bold text-[#2b251d] leading-snug">{profileForm.name || 'Admin'}</h3>
-                      <p className="text-[10px] text-[#6b6255] mt-0.5">{profileForm.title || 'CMS Admin'}</p>
-                    </div>
                   </div>
 
+                  {/* Name & title centred below photo */}
+                  <div className="text-center border-b border-[#d4cbb8] pb-2.5">
+                    <h3 className="font-bold text-[#2b251d] leading-snug">{profileForm.name || 'Admin'}</h3>
+                    <p className="text-[10px] text-[#6b6255] mt-0.5">{profileForm.title || 'CMS Admin'}</p>
+                  </div>
+
+                  {/* Stats */}
                   <div className="space-y-1.5 text-[11px] text-[#6b6255]">
                     <div className="flex justify-between">
                       <span>Projects:</span>
