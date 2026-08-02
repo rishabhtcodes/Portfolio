@@ -12,15 +12,16 @@ import {
   Trophy,
   Award,
   Search,
-  ArrowUp,
-  X,
   Upload,
   Image as ImageIcon,
   Check,
   Info,
-  ExternalLink,
-  ChevronRight,
-  FileText
+  FileText,
+  Terminal,
+  Activity,
+  Server,
+  Database,
+  HardDrive
 } from 'lucide-react';
 
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -191,32 +192,32 @@ function buildProfilePayload(form) {
 
 function AdminTable({ items, columns, onEdit, onDelete }) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#1A242B] bg-[#11161B] mt-6">
+    <div className="overflow-hidden rounded-xl border border-[#d4cbb8] bg-[#fbf8f1] mt-6">
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-[#1A242B] text-left text-sm text-slate-300">
-          <thead className="bg-[#161F25] text-xs uppercase tracking-[0.24em] text-teal-400">
+        <table className="min-w-full divide-y divide-[#d4cbb8] text-left text-xs font-mono text-[#2b251d]">
+          <thead className="bg-[#ece6d9] text-[11px] uppercase tracking-wider text-[#794422] font-semibold">
             <tr>
               {columns.map((column) => (
-                <th key={column} className="px-4 py-4 font-semibold">{column}</th>
+                <th key={column} className="px-4 py-3.5 border-b border-[#d4cbb8]">{column}</th>
               ))}
-              <th className="px-4 py-4 font-semibold">Actions</th>
+              <th className="px-4 py-3.5 border-b border-[#d4cbb8]">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-[#1A242B]">
+          <tbody className="divide-y divide-[#d4cbb8]/60 bg-[#fbf8f1]">
             {items.map((item) => (
-              <tr key={item._id} className="hover:bg-[#161F25]/40 transition">
+              <tr key={item._id} className="hover:bg-[#f5f0e6] transition">
                 {columns.map((column) => (
-                  <td key={column} className="px-4 py-4 align-top text-slate-400">
+                  <td key={column} className="px-4 py-3 align-top text-[#6b6255]">
                     {Array.isArray(item[column]) ? item[column].join(', ') : item[column]}
                   </td>
                 ))}
-                <td className="px-4 py-4 align-top">
+                <td className="px-4 py-3 align-top">
                   <div className="flex gap-2">
-                    <button type="button" onClick={() => onEdit(item)} className="inline-flex items-center rounded-full border border-teal-500/30 bg-teal-500/10 px-3.5 py-1.5 text-xs font-semibold text-teal-300 transition hover:bg-teal-500/20">
-                      <Pencil className="mr-1.5 h-3.5 w-3.5" /> Edit
+                    <button type="button" onClick={() => onEdit(item)} className="inline-flex items-center rounded border border-[#794422]/30 bg-[#794422]/10 px-2.5 py-1 text-xs font-semibold text-[#794422] transition hover:bg-[#794422]/20">
+                      <Pencil className="mr-1 h-3 w-3" /> Edit
                     </button>
-                    <button type="button" onClick={() => onDelete(item)} className="inline-flex items-center rounded-full border border-red-500/20 bg-red-400/10 px-3.5 py-1.5 text-xs font-semibold text-red-300 transition hover:bg-red-500/20">
-                      <Trash2 className="mr-1.5 h-3.5 w-3.5" /> Delete
+                    <button type="button" onClick={() => onDelete(item)} className="inline-flex items-center rounded border border-red-800/30 bg-red-100/50 px-2.5 py-1 text-xs font-semibold text-red-700 transition hover:bg-red-200/50">
+                      <Trash2 className="mr-1 h-3 w-3" /> Delete
                     </button>
                   </div>
                 </td>
@@ -319,9 +320,7 @@ export default function AdminDashboard() {
 
   const handleImageUpload = (event, targetField) => {
     const file = event.target.files?.[0];
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     if (!file.type.startsWith('image/')) {
       setError('Please select a valid image file.');
@@ -331,9 +330,7 @@ export default function AdminDashboard() {
     setError('');
     const reader = new FileReader();
     reader.onload = () => {
-      if (typeof reader.result !== 'string') {
-        return;
-      }
+      if (typeof reader.result !== 'string') return;
 
       const image = new Image();
       image.onload = () => {
@@ -365,9 +362,7 @@ export default function AdminDashboard() {
 
   const handleResumeFileUpload = (event, targetField) => {
     const file = event.target.files?.[0];
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     const lowerName = file.name.toLowerCase();
     const allowed = targetField === 'resumePdfLink'
@@ -392,9 +387,7 @@ export default function AdminDashboard() {
 
   const handleEntityImageUpload = (event, section, targetField) => {
     const file = event.target.files?.[0];
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     if (!file.type.startsWith('image/')) {
       setError('Please select a valid image file.');
@@ -404,9 +397,7 @@ export default function AdminDashboard() {
     setError('');
     const reader = new FileReader();
     reader.onload = () => {
-      if (typeof reader.result !== 'string') {
-        return;
-      }
+      if (typeof reader.result !== 'string') return;
 
       const image = new Image();
       image.onload = () => {
@@ -556,13 +547,13 @@ export default function AdminDashboard() {
 
   const activeDockClass = (key) =>
     activeSection === key
-      ? 'bg-teal-500/10 text-teal-400 border border-teal-500/30 shadow-[0_0_15px_rgba(45,212,191,0.25)]'
-      : 'text-slate-400 hover:bg-slate-800/40 hover:text-white border border-transparent';
+      ? 'bg-[#794422] text-[#f7f3ec] border border-[#5c3217] shadow-sm'
+      : 'text-[#6b6255] hover:bg-[#ece6d9] hover:text-[#2b251d] border border-transparent';
 
   const activeItemClass = (item) =>
     editingId[activeSection] === item._id
-      ? 'border-teal-500/30 bg-teal-500/10 text-white shadow-[0_0_15px_rgba(45,212,191,0.1)]'
-      : 'border-transparent bg-[#161F25]/40 hover:bg-[#161F25]/80 text-slate-300';
+      ? 'border-[#794422] bg-[#fbf8f1] text-[#2b251d] shadow-sm'
+      : 'border-[#d4cbb8] bg-[#f5f0e6] hover:bg-[#fbf8f1] text-[#2b251d]';
 
   const profileFields = [
     ['name', 'Full name'],
@@ -580,300 +571,250 @@ export default function AdminDashboard() {
   ];
 
   if (loading) {
-    return <div className="flex min-h-screen items-center justify-center bg-[#0B0F12] text-teal-400 font-bold font-mono">Loading admin dashboard...</div>;
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-[#ece6d9] text-[#794422] font-mono font-semibold">
+        <Terminal className="mr-2 h-5 w-5 animate-pulse" /> Loading Swift OS Admin Dashboard...
+      </div>
+    );
   }
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#0B0F12] text-slate-100 flex flex-col font-sans relative select-none">
-      {/* CSS Overrides Style Tag */}
+    <div className="h-screen w-screen overflow-hidden bg-[#ece6d9] text-[#2b251d] flex flex-col font-mono relative select-none">
+      {/* Custom Retro Scrollbar */}
       <style>{`
-        .custom-scrollbar::-webkit-scrollbar {
-          width: 5px;
-          height: 5px;
+        .swift-custom-scrollbar::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-          background: transparent;
+        .swift-custom-scrollbar::-webkit-scrollbar-track {
+          background: #ece6d9;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #1A242B;
-          border-radius: 9999px;
+        .swift-custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #b8ac94;
+          border-radius: 4px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #2DD4BF;
+        .swift-custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #794422;
         }
       `}</style>
 
-      {/* Decorative background glows */}
-      <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-teal-500/5 rounded-full blur-[150px] pointer-events-none" />
-      <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-cyan-500/5 rounded-full blur-[150px] pointer-events-none" />
-
-      <div className="flex-1 flex flex-col lg:flex-row h-full p-4 lg:p-6 gap-6 overflow-hidden max-w-[1600px] w-full mx-auto z-10">
-        
-        {/* Pane 1: Left Dock */}
-        <aside className="lg:w-20 w-full lg:h-full flex lg:flex-col justify-between items-center bg-[#0F1316] border border-[#1A242B] rounded-3xl p-4 lg:py-6 gap-6 shrink-0 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-          {/* Top Wrapper (Logo + Nav) */}
-          <div className="flex lg:flex-col gap-6 items-center w-full">
-            {/* Brand/Logo */}
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-500 to-cyan-500 flex items-center justify-center shadow-[0_0_15px_rgba(45,212,191,0.3)] text-slate-950 font-bold">
-              <ShieldCheck className="w-6 h-6 text-slate-950" />
-            </div>
-            
-            {/* Navigation Dock */}
-            <nav className="flex lg:flex-col gap-4 flex-wrap justify-start items-center w-full">
-              {sectionItems.map((item) => {
-                const Icon = sectionIcons[item.key] || User;
-                return (
-                  <button
-                    key={item.key}
-                    type="button"
-                    onClick={() => {
-                      setActiveSection(item.key);
-                      setSearchQuery('');
-                    }}
-                    className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-all duration-200 ${activeDockClass(item.key)}`}
-                    title={item.label}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </button>
-                );
-              })}
-            </nav>
+      {/* TOP RETRO OS HEADER */}
+      <header className="bg-[#794422] text-[#f7f3ec] border-b-2 border-[#5c3217] px-4 py-2 flex justify-between items-center text-xs shrink-0">
+        <div className="flex items-center gap-3 font-semibold">
+          <div className="bg-[#5c3217] p-1 rounded text-[#f7f3ec]">
+            <Terminal className="w-4 h-4" />
           </div>
+          <span className="tracking-wider">SWIFT OS ADMIN</span>
+          <span className="text-[10px] opacity-70 bg-[#5c3217] px-1.5 py-0.5 rounded">v2.4.0</span>
+        </div>
+        <div className="flex items-center gap-4 text-[11px]">
+          <span className="flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" /> DB Connected
+          </span>
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-1 bg-[#5c3217] hover:bg-[#8e522b] px-2.5 py-1 rounded text-[#f7f3ec] transition"
+          >
+            <LogOut className="w-3.5 h-3.5" /> Logout
+          </button>
+        </div>
+      </header>
+
+      {/* MAIN CONTAINER */}
+      <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-38px)] p-3 lg:p-4 gap-4 overflow-hidden">
+
+        {/* PANE 1: LEFT DOCK */}
+        <aside className="lg:w-16 w-full flex lg:flex-col justify-between items-center bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-2 shrink-0 shadow-sm">
+          <nav className="flex lg:flex-col gap-2 w-full items-center">
+            {sectionItems.map((item) => {
+              const Icon = sectionIcons[item.key] || User;
+              return (
+                <button
+                  key={item.key}
+                  type="button"
+                  onClick={() => {
+                    setActiveSection(item.key);
+                    setSearchQuery('');
+                  }}
+                  className={`w-11 h-11 rounded-md flex flex-col items-center justify-center text-[10px] font-semibold transition-all ${activeDockClass(item.key)}`}
+                  title={item.label}
+                >
+                  <Icon className="w-4 h-4 mb-0.5" />
+                  <span className="text-[9px] uppercase tracking-tighter">{item.key.slice(0, 4)}</span>
+                </button>
+              );
+            })}
+          </nav>
           
-          {/* Profile Photo / Logout */}
-          <div className="flex lg:flex-col gap-4 items-center shrink-0">
+          <div className="hidden lg:flex flex-col items-center gap-2">
             {profileForm.profilePhoto && (
-              <div className="w-10 h-10 rounded-full border border-teal-500/40 overflow-hidden shadow-[0_0_10px_rgba(45,212,191,0.2)]">
+              <div className="w-8 h-8 rounded-full border border-[#794422] overflow-hidden">
                 <img src={profileForm.profilePhoto} alt="Admin" className="w-full h-full object-cover" />
               </div>
             )}
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 hover:text-red-300 flex items-center justify-center transition-all duration-200"
-              title="Logout"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
           </div>
         </aside>
 
-        {/* Pane 2: Middle Sidebar List */}
-        <aside className="lg:w-80 w-full lg:h-full flex flex-col bg-[#11161B] border border-[#1A242B] rounded-3xl p-5 gap-4 shrink-0 shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-          {/* List Title & Add Button */}
-          <div className="flex justify-between items-center">
-            <h2 className="text-xl font-bold font-display text-white">
-              {activeSection === 'profile' ? 'Profile Summary' : activeSection.charAt(0).toUpperCase() + activeSection.slice(1)}
+        {/* PANE 2: MIDDLE NAVIGATION LIST */}
+        <aside className="lg:w-72 w-full flex flex-col bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-3 gap-3 shrink-0 shadow-sm">
+          <div className="flex justify-between items-center border-b border-[#d4cbb8] pb-2">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-[#794422] flex items-center gap-1.5">
+              <span className="text-[#3d7a46]">&gt;</span> {activeSection}
             </h2>
             {activeSection !== 'profile' && (
               <button
                 type="button"
                 onClick={() => resetEntityForm(activeSection)}
-                className="w-7 h-7 rounded-lg border border-teal-500/30 hover:border-teal-500/60 bg-teal-500/5 hover:bg-teal-500/10 flex items-center justify-center transition text-teal-400"
+                className="p-1 rounded bg-[#794422] text-[#f7f3ec] hover:bg-[#5c3217] transition text-xs font-bold flex items-center gap-1 px-2"
                 title={`New ${activeSection.slice(0, -1)}`}
               >
-                <Plus className="w-4 h-4" />
+                <Plus className="w-3.5 h-3.5" /> Add
               </button>
             )}
           </div>
-          
-          {/* Search Box */}
-          {activeSection !== 'profile' ? (
+
+          {activeSection !== 'profile' && (
             <div className="relative">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b6255]" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search..."
-                className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-500 outline-none focus:border-teal-500/40"
+                placeholder="Search entries..."
+                className="w-full rounded border border-[#d4cbb8] bg-[#fbf8f1] pl-8 pr-3 py-1.5 text-xs text-[#2b251d] placeholder-[#6b6255] outline-none focus:border-[#794422]"
               />
             </div>
-          ) : null}
-          
-          {/* Items List (Scrollable) */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar flex flex-col gap-2.5">
+          )}
+
+          <div className="flex-1 overflow-y-auto swift-custom-scrollbar flex flex-col gap-2 pr-1">
             {activeSection === 'profile' ? (
-              /* Profile summary card */
-              <div className="border border-teal-500/10 bg-gradient-to-b from-[#161F25]/60 to-[#11161B] rounded-2xl p-4 flex flex-col gap-4 text-center items-center shadow-inner">
-                {profileForm.profilePhoto ? (
-                  <div className="w-20 h-20 rounded-full border-2 border-teal-500/40 p-1 relative">
-                    <img src={profileForm.profilePhoto} alt="Admin avatar" className="w-full h-full object-cover rounded-full" />
-                    <span className="absolute bottom-1 right-1 w-4.5 h-4.5 bg-emerald-500 border-4 border-[#11161B] rounded-full shadow-[0_0_8px_#10b981]" />
+              <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 text-xs space-y-3">
+                <div className="flex items-center gap-3 border-b border-[#d4cbb8] pb-2.5">
+                  {profileForm.profilePhoto ? (
+                    <img src={profileForm.profilePhoto} alt="Avatar" className="w-12 h-12 rounded-full object-cover border border-[#794422]" />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-[#794422]/10 text-[#794422] flex items-center justify-center font-bold">
+                      <User className="w-6 h-6" />
+                    </div>
+                  )}
+                  <div>
+                    <h3 className="font-bold text-[#2b251d]">{profileForm.name || 'Admin'}</h3>
+                    <p className="text-[10px] text-[#6b6255]">{profileForm.title || 'CMS Admin'}</p>
                   </div>
-                ) : (
-                  <div className="w-20 h-20 rounded-full bg-teal-500/10 flex items-center justify-center text-teal-400 relative">
-                    <User className="w-10 h-10" />
-                    <span className="absolute bottom-1 right-1 w-4.5 h-4.5 bg-emerald-500 border-4 border-[#11161B] rounded-full shadow-[0_0_8px_#10b981]" />
-                  </div>
-                )}
-                
-                <div>
-                  <h3 className="font-bold text-white text-lg leading-snug">{profileForm.name || 'Admin User'}</h3>
-                  <p className="text-xs text-teal-400 font-mono mt-0.5">{profileForm.title || 'CMS Control'}</p>
                 </div>
-                
-                <div className="w-full border-t border-[#1A242B] pt-4 text-left space-y-2 text-xs text-slate-400">
+
+                <div className="space-y-1.5 text-[11px] text-[#6b6255]">
                   <div className="flex justify-between">
-                    <span className="font-semibold text-slate-500 uppercase tracking-wider">Status:</span>
-                    <span className="text-emerald-400 font-semibold flex items-center gap-1.5">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block animate-pulse" /> Active Now
-                    </span>
+                    <span>Projects:</span>
+                    <span className="font-bold text-[#794422]">{projects.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-semibold text-slate-500 uppercase tracking-wider">Email:</span>
-                    <span className="truncate max-w-[150px]">{profileForm.email}</span>
+                    <span>Skills:</span>
+                    <span className="font-bold text-[#794422]">{skills.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-semibold text-slate-500 uppercase tracking-wider">Projects:</span>
-                    <span>{projects.length} entries</span>
+                    <span>Achievements:</span>
+                    <span className="font-bold text-[#794422]">{achievements.length}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-semibold text-slate-500 uppercase tracking-wider">Skills:</span>
-                    <span>{skills.length} entries</span>
+                    <span>Certificates:</span>
+                    <span className="font-bold text-[#794422]">{certificates.length}</span>
                   </div>
                 </div>
               </div>
-            ) : (
-              /* Entity List Items */
-              filteredItems.length > 0 ? (
-                filteredItems.map((item) => {
-                  const Icon = sectionIcons[activeSection] || User;
-                  let thumbnail = null;
-                  let subtitle = '';
-                  
-                  if (activeSection === 'projects') {
-                    thumbnail = item.image;
-                    subtitle = item.status || (item.isLive ? 'Live' : 'Completed');
-                  } else if (activeSection === 'skills') {
-                    thumbnail = item.logo;
-                    subtitle = item.category;
-                  } else if (activeSection === 'achievements') {
-                    subtitle = item.year;
-                  } else if (activeSection === 'certificates') {
-                    subtitle = item.issuer;
-                  }
-                  
-                  return (
-                    <div
-                      key={item._id}
-                      onClick={() => handleEntityEdit(activeSection, item)}
-                      className={`flex items-center gap-3.5 p-3 rounded-2xl border cursor-pointer transition-all duration-150 relative group ${activeItemClass(item)}`}
-                    >
-                      {/* Avatar / Icon */}
-                      <div className="w-10 h-10 shrink-0 overflow-hidden rounded-xl border border-[#1A242B] bg-[#161F25] flex items-center justify-center text-teal-400">
-                        {thumbnail && (thumbnail.startsWith('http') || thumbnail.startsWith('data:image')) ? (
-                          <img src={thumbnail} alt="" className="w-full h-full object-cover" />
-                        ) : (
-                          <Icon className="w-5 h-5 text-teal-400" />
-                        )}
-                      </div>
-                      
-                      {/* Info */}
-                      <div className="flex-1 min-w-0 pr-6">
-                        <h4 className="text-sm font-semibold truncate text-white">{item.title || item.name || 'Untitled'}</h4>
-                        <p className="text-xs text-slate-500 truncate mt-0.5">{subtitle}</p>
-                      </div>
-                      
-                      {/* Delete icon */}
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEntityDelete(activeSection, item);
-                        }}
-                        className="absolute right-3.5 opacity-0 group-hover:opacity-100 focus:opacity-100 hover:text-red-400 text-slate-500 transition p-1 rounded-md hover:bg-red-500/10"
-                        title="Delete entry"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
+            ) : filteredItems.length > 0 ? (
+              filteredItems.map((item) => {
+                const Icon = sectionIcons[activeSection] || User;
+                let thumbnail = null;
+                let subtitle = '';
+
+                if (activeSection === 'projects') {
+                  thumbnail = item.image;
+                  subtitle = item.status || (item.isLive ? 'Live' : 'Completed');
+                } else if (activeSection === 'skills') {
+                  thumbnail = item.logo;
+                  subtitle = item.category;
+                } else if (activeSection === 'achievements') {
+                  subtitle = item.year;
+                } else if (activeSection === 'certificates') {
+                  subtitle = item.issuer;
+                }
+
+                return (
+                  <div
+                    key={item._id}
+                    onClick={() => handleEntityEdit(activeSection, item)}
+                    className={`flex items-center gap-2.5 p-2 rounded border cursor-pointer transition relative group ${activeItemClass(item)}`}
+                  >
+                    <div className="w-8 h-8 shrink-0 rounded border border-[#d4cbb8] bg-[#fbf8f1] flex items-center justify-center text-[#794422] overflow-hidden">
+                      {thumbnail && (thumbnail.startsWith('http') || thumbnail.startsWith('data:image')) ? (
+                        <img src={thumbnail} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        <Icon className="w-4 h-4 text-[#794422]" />
+                      )}
                     </div>
-                  );
-                })
-              ) : (
-                <div className="flex flex-col items-center justify-center p-8 text-center text-slate-600 gap-2 flex-1">
-                  <Info className="w-8 h-8 opacity-40 text-slate-500" />
-                  <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">No Items Found</p>
-                </div>
-              )
+                    <div className="flex-1 min-w-0 pr-5">
+                      <h4 className="text-xs font-semibold truncate text-[#2b251d]">{item.title || item.name || 'Untitled'}</h4>
+                      <p className="text-[10px] text-[#6b6255] truncate">{subtitle}</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEntityDelete(activeSection, item);
+                      }}
+                      className="absolute right-2 opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition p-1"
+                      title="Delete"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="p-4 text-center text-xs text-[#6b6255]">No entries found</div>
             )}
           </div>
         </aside>
 
-        {/* Pane 3: Main Workspace (Editor Panel) */}
-        <main className="flex-1 lg:h-full flex flex-col bg-[#11161B] border border-[#1A242B] rounded-3xl p-6 lg:p-8 gap-5 overflow-hidden shadow-[0_10px_30px_rgba(0,0,0,0.3)]">
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-[#1A242B] pb-4.5 shrink-0">
-            <div className="flex items-center gap-3.5">
-              {activeSection === 'profile' ? (
-                <div className="w-10 h-10 rounded-full border border-teal-500/40 p-0.5">
-                  {profileForm.profilePhoto ? (
-                    <img src={profileForm.profilePhoto} alt="" className="w-full h-full object-cover rounded-full" />
-                  ) : (
-                    <div className="w-full h-full bg-teal-500/10 flex items-center justify-center rounded-full text-teal-400"><User className="w-5 h-5" /></div>
-                  )}
-                </div>
-              ) : (
-                <div className="w-10 h-10 bg-teal-500/10 border border-teal-500/20 text-teal-400 rounded-xl flex items-center justify-center shadow-inner">
-                  {(() => {
-                    const Icon = sectionIcons[activeSection] || User;
-                    return <Icon className="w-5 h-5" />;
-                  })()}
-                </div>
-              )}
-              
-              <div>
-                <h3 className="font-bold text-white font-display leading-tight text-lg">
-                  {activeSection === 'profile'
-                    ? 'Profile Settings'
-                    : editingId[activeSection]
-                    ? `Editing: ${entityForms[activeSection].title || entityForms[activeSection].name || 'Entry'}`
-                    : `New ${entityConfigs[activeSection].title.slice(0, -1)}`}
-                </h3>
-                <p className="text-xs text-teal-400 font-medium flex items-center gap-1.5 mt-0.5">
-                  <span className="w-2 h-2 rounded-full bg-teal-400 inline-block animate-pulse" />
-                  {activeSection === 'profile' ? 'Active Mode • Identity Editor' : editingId[activeSection] ? 'Modify details' : 'Create new entry'}
-                </p>
-              </div>
+        {/* PANE 3: MAIN EDITOR WORKSPACE */}
+        <main className="flex-1 flex flex-col bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-4 gap-4 overflow-hidden shadow-sm">
+          {/* EDITOR HEADER */}
+          <div className="flex justify-between items-center border-b border-[#d4cbb8] pb-3 shrink-0">
+            <div>
+              <h3 className="text-sm font-bold uppercase tracking-wider text-[#794422] flex items-center gap-2">
+                <Terminal className="w-4 h-4" />
+                {activeSection === 'profile'
+                  ? 'Edit Profile Content'
+                  : editingId[activeSection]
+                  ? `Edit: ${entityForms[activeSection].title || entityForms[activeSection].name || 'Entry'}`
+                  : `New ${entityConfigs[activeSection].title.slice(0, -1)}`}
+              </h3>
+              <p className="text-[11px] text-[#6b6255]">Modify portfolio database content in real-time</p>
             </div>
-            
-            {/* Quick action header buttons */}
-            <div className="flex items-center gap-2">
-              {activeSection !== 'profile' && editingId[activeSection] && (
-                <button
-                  type="button"
-                  onClick={() => resetEntityForm(activeSection)}
-                  className="rounded-full border border-teal-500/20 bg-teal-500/5 hover:bg-teal-500/10 text-teal-400 px-4.5 py-2 text-xs font-semibold transition"
-                >
-                  Cancel Edit
-                </button>
-              )}
-            </div>
+            {activeSection !== 'profile' && editingId[activeSection] && (
+              <button
+                type="button"
+                onClick={() => resetEntityForm(activeSection)}
+                className="px-3 py-1 text-xs font-bold border border-[#d4cbb8] rounded bg-[#ece6d9] hover:bg-[#fbf8f1] text-[#794422] transition"
+              >
+                Cancel Edit
+              </button>
+            )}
           </div>
-          
-          {/* Scrollable Form Area */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar pr-1">
+
+          {/* FORM AREA */}
+          <div className="flex-1 overflow-y-auto swift-custom-scrollbar pr-2 pb-4">
             {activeSection === 'profile' ? (
               /* PROFILE FORM */
-              <form onSubmit={saveProfile} className="space-y-6">
-                
-                {/* Visual Attachments (styled like the dot-teal tag elements in the chat footer) */}
-                <div className="border border-[#1A242B] bg-[#161F25]/40 rounded-2.5xl p-5 space-y-5 shadow-inner">
-                  <h4 className="text-xs uppercase tracking-widest text-slate-500 font-bold border-b border-[#1A242B] pb-2">Media & Resumes</h4>
-                  
-                  <div className="grid gap-5 sm:grid-cols-2">
-                    
+              <form id="profile-form" onSubmit={saveProfile} className="space-y-4">
+                <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-4 space-y-4">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-[#794422] border-b border-[#d4cbb8] pb-1">Media Files</h4>
+                  <div className="grid gap-4 sm:grid-cols-2">
                     {/* Profile Photo */}
-                    <div className="flex items-center gap-4.5">
-                      <div className="h-16 w-16 overflow-hidden rounded-2xl border border-[#1A242B] bg-[#161F25] flex items-center justify-center shrink-0">
-                        {profileForm.profilePhoto ? (
-                          <img src={profileForm.profilePhoto} alt="Profile" className="h-full w-full object-cover" />
-                        ) : (
-                          <div className="text-xs text-slate-500 uppercase font-semibold">Empty</div>
-                        )}
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">Profile Photo</p>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-[#6b6255]">Profile Photo</label>
+                      <div className="flex gap-2 items-center">
                         <input
                           id="profile-photo-file"
                           type="file"
@@ -884,31 +825,24 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => triggerFileInput('profile-photo-file')}
-                          className="border border-dashed border-teal-500/40 text-teal-400 bg-teal-500/5 hover:bg-teal-500/10 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 transition text-xs font-semibold uppercase tracking-wider"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
                         >
-                          <ImageIcon className="h-3.5 w-3.5" /> Upload Photo
+                          <Upload className="w-3.5 h-3.5" /> Upload
                         </button>
                         <input
                           name="profilePhoto"
                           value={profileForm.profilePhoto || ''}
                           onChange={handleProfileChange}
-                          placeholder="Or paste photo URL"
-                          className="w-full rounded-xl border border-[#1A242B] bg-[#161F25] px-3.5 py-2 text-xs text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
+                          placeholder="Image URL..."
+                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
                         />
                       </div>
                     </div>
 
-                    {/* About Section Photo */}
-                    <div className="flex items-center gap-4.5">
-                      <div className="h-16 w-16 overflow-hidden rounded-2xl border border-[#1A242B] bg-[#161F25] flex items-center justify-center shrink-0">
-                        {profileForm.aboutPhoto ? (
-                          <img src={profileForm.aboutPhoto} alt="About" className="h-full w-full object-cover" />
-                        ) : (
-                          <div className="text-xs text-slate-500 uppercase font-semibold">Empty</div>
-                        )}
-                      </div>
-                      <div className="flex-1 space-y-2">
-                        <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">About Photo</p>
+                    {/* About Photo */}
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-[#6b6255]">About Photo</label>
+                      <div className="flex gap-2 items-center">
                         <input
                           id="about-photo-file"
                           type="file"
@@ -919,163 +853,101 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => triggerFileInput('about-photo-file')}
-                          className="border border-dashed border-teal-500/40 text-teal-400 bg-teal-500/5 hover:bg-teal-500/10 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 transition text-xs font-semibold uppercase tracking-wider"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
                         >
-                          <ImageIcon className="h-3.5 w-3.5" /> Upload Photo
+                          <Upload className="w-3.5 h-3.5" /> Upload
                         </button>
                         <input
                           name="aboutPhoto"
                           value={profileForm.aboutPhoto || ''}
                           onChange={handleProfileChange}
-                          placeholder="Or paste photo URL"
-                          className="w-full rounded-xl border border-[#1A242B] bg-[#161F25] px-3.5 py-2 text-xs text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
+                          placeholder="Image URL..."
+                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
                         />
                       </div>
                     </div>
 
                     {/* PDF Resume */}
-                    <div className="space-y-2 border border-[#1A242B] p-3 rounded-2xl bg-[#11161B]">
-                      <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">PDF Resume</p>
-                      <input
-                        id="pdf-resume-file"
-                        type="file"
-                        accept=".pdf,application/pdf"
-                        onChange={(event) => handleResumeFileUpload(event, 'resumePdfLink')}
-                        className="hidden"
-                      />
-                      <div className="flex gap-2">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-[#6b6255]">PDF Resume File</label>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          id="pdf-resume-file"
+                          type="file"
+                          accept=".pdf,application/pdf"
+                          onChange={(event) => handleResumeFileUpload(event, 'resumePdfLink')}
+                          className="hidden"
+                        />
                         <button
                           type="button"
                           onClick={() => triggerFileInput('pdf-resume-file')}
-                          className="border border-dashed border-teal-500/40 text-teal-400 bg-teal-500/5 hover:bg-teal-500/10 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 transition text-xs font-semibold uppercase tracking-wider"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
                         >
-                          <FileText className="h-3.5 w-3.5" /> Upload PDF
+                          <FileText className="w-3.5 h-3.5" /> Upload PDF
                         </button>
+                        <input
+                          name="resumePdfLink"
+                          value={profileForm.resumePdfLink || ''}
+                          onChange={handleProfileChange}
+                          placeholder="PDF URL or File Data..."
+                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                        />
                       </div>
-                      <input
-                        name="resumePdfLink"
-                        value={profileForm.resumePdfLink || ''}
-                        onChange={handleProfileChange}
-                        placeholder="Or PDF File URL"
-                        className="w-full rounded-xl border border-[#1A242B] bg-[#161F25] px-3.5 py-2 text-xs text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                      />
                     </div>
 
                     {/* DOC Resume */}
-                    <div className="space-y-2 border border-[#1A242B] p-3 rounded-2xl bg-[#11161B]">
-                      <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">DOC/DOCX Resume</p>
-                      <input
-                        id="doc-resume-file"
-                        type="file"
-                        accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                        onChange={(event) => handleResumeFileUpload(event, 'resumeDocLink')}
-                        className="hidden"
-                      />
-                      <div className="flex gap-2">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold uppercase text-[#6b6255]">DOC/DOCX Resume File</label>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          id="doc-resume-file"
+                          type="file"
+                          accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                          onChange={(event) => handleResumeFileUpload(event, 'resumeDocLink')}
+                          className="hidden"
+                        />
                         <button
                           type="button"
                           onClick={() => triggerFileInput('doc-resume-file')}
-                          className="border border-dashed border-teal-500/40 text-teal-400 bg-teal-500/5 hover:bg-teal-500/10 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 transition text-xs font-semibold uppercase tracking-wider"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
                         >
-                          <FileText className="h-3.5 w-3.5" /> Upload DOC
+                          <FileText className="w-3.5 h-3.5" /> Upload DOC
                         </button>
+                        <input
+                          name="resumeDocLink"
+                          value={profileForm.resumeDocLink || ''}
+                          onChange={handleProfileChange}
+                          placeholder="DOC URL or File Data..."
+                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                        />
                       </div>
-                      <input
-                        name="resumeDocLink"
-                        value={profileForm.resumeDocLink || ''}
-                        onChange={handleProfileChange}
-                        placeholder="Or DOC File URL"
-                        className="w-full rounded-xl border border-[#1A242B] bg-[#161F25] px-3.5 py-2 text-xs text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                      />
                     </div>
-
                   </div>
                 </div>
 
-                {/* Text Fields */}
-                <div className="grid gap-5 sm:grid-cols-2">
+                {/* Text fields */}
+                <div className="grid gap-3 sm:grid-cols-2">
                   {profileFields.map(([key, label]) => (
                     <div key={key}>
-                      <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</label>
+                      <label className="mb-1 block text-xs font-bold uppercase text-[#6b6255]">{label}</label>
                       <input
                         value={profileForm[key] || ''}
                         onChange={handleProfileChange}
                         name={key}
-                        className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
+                        className="w-full rounded border border-[#d4cbb8] bg-[#fbf8f1] px-3 py-1.5 text-xs text-[#2b251d] outline-none focus:border-[#794422]"
                       />
                     </div>
                   ))}
-
                   <div className="sm:col-span-2">
-                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">Introduction</label>
+                    <label className="mb-1 block text-xs font-bold uppercase text-[#6b6255]">Introduction</label>
                     <textarea
                       name="introduction"
-                      rows={3}
+                      rows={2}
                       value={profileForm.introduction}
                       onChange={handleProfileChange}
-                      className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
+                      className="w-full rounded border border-[#d4cbb8] bg-[#fbf8f1] px-3 py-1.5 text-xs text-[#2b251d] outline-none focus:border-[#794422]"
                     />
                   </div>
-                  <div>
-                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">About summary</label>
-                    <textarea
-                      name="aboutSummary"
-                      rows={4}
-                      value={profileForm.aboutSummary}
-                      onChange={handleProfileChange}
-                      className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                    />
-                  </div>
-                  <div>
-                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">About interests</label>
-                    <textarea
-                      name="aboutInterests"
-                      rows={4}
-                      value={profileForm.aboutInterests}
-                      onChange={handleProfileChange}
-                      className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                    />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">About description</label>
-                    <textarea
-                      name="aboutDescription"
-                      rows={4}
-                      value={profileForm.aboutDescription}
-                      onChange={handleProfileChange}
-                      className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                    />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">Contact copy</label>
-                    <textarea
-                      name="contactCopy"
-                      rows={3}
-                      value={profileForm.contactCopy}
-                      onChange={handleProfileChange}
-                      className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                    />
-                  </div>
-                  <div className="sm:col-span-2">
-                    <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">Resume highlights</label>
-                    <textarea
-                      name="resumeHighlights"
-                      rows={5}
-                      value={profileForm.resumeHighlights}
-                      onChange={handleProfileChange}
-                      className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                      placeholder="Use one highlight per line: Label|Detail"
-                    />
-                  </div>
-                </div>
-
-                <div className="mt-6 flex justify-end">
-                  <button
-                    type="submit"
-                    className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-3.5 text-sm font-bold text-slate-950 transition duration-300 hover:from-teal-400 hover:to-cyan-400 shadow-[0_4px_15px_rgba(45,212,191,0.25)] hover:-translate-y-0.5"
-                  >
-                    <Save className="mr-2 h-4.5 w-4.5 text-slate-950" /> Save Profile Content
-                  </button>
                 </div>
               </form>
             ) : (
@@ -1083,142 +955,100 @@ export default function AdminDashboard() {
               (() => {
                 const config = entityConfigs[activeSection];
                 const form = entityForms[activeSection];
-                
+
                 return (
-                  <form onSubmit={(event) => handleEntitySubmit(event, activeSection)} className="space-y-6">
-                    {/* Media fields inside dedicated container styled as chat attachment list */}
+                  <form id="entity-form" onSubmit={(event) => handleEntitySubmit(event, activeSection)} className="space-y-4">
                     {config.fields.filter((f) => f.type === 'image').length > 0 && (
-                      <div className="border border-[#1A242B] bg-[#161F25]/40 rounded-2.5xl p-5 space-y-4 shadow-inner">
-                        <h4 className="text-xs uppercase tracking-widest text-slate-500 font-bold border-b border-[#1A242B] pb-2">Image Attachments</h4>
-                        
+                      <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 space-y-3">
+                        <h4 className="text-xs font-bold uppercase text-[#794422] border-b border-[#d4cbb8] pb-1">Media Files</h4>
                         {config.fields
                           .filter((f) => f.type === 'image')
                           .map((field) => {
                             const fieldInputId = `file-input-${activeSection}-${field.key}`;
                             return (
-                              <div key={field.key} className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                                <div className="h-16 w-16 overflow-hidden rounded-xl border border-[#1A242B] bg-[#161F25] flex items-center justify-center shrink-0">
-                                  {form[field.key] ? (
-                                    <img src={form[field.key]} alt={field.label} className="h-full w-full object-cover" />
-                                  ) : (
-                                    <div className="text-xs text-slate-500 uppercase font-semibold">Empty</div>
-                                  )}
-                                </div>
-                                <div className="flex-1 space-y-2">
-                                  <p className="text-xs text-slate-400 font-semibold uppercase tracking-wider">{field.label}</p>
-                                  <input
-                                    id={fieldInputId}
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(event) => handleEntityImageUpload(event, activeSection, field.key)}
-                                    className="hidden"
-                                  />
-                                  <div className="flex gap-2">
-                                    <button
-                                      type="button"
-                                      onClick={() => triggerFileInput(fieldInputId)}
-                                      className="border border-dashed border-teal-500/40 text-teal-400 bg-teal-500/5 hover:bg-teal-500/10 px-3.5 py-1.5 rounded-full inline-flex items-center gap-2 transition text-xs font-semibold uppercase tracking-wider"
-                                    >
-                                      <Upload className="h-3.5 w-3.5" /> Upload File
-                                    </button>
-                                  </div>
-                                  <input
-                                    type="text"
-                                    value={form[field.key] || ''}
-                                    onChange={(event) => updateEntityForm(activeSection, field.key, event.target.value)}
-                                    placeholder={`Or paste ${field.label} URL`}
-                                    className="w-full rounded-xl border border-[#1A242B] bg-[#161F25] px-3.5 py-2 text-xs text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
-                                  />
-                                </div>
+                              <div key={field.key} className="flex gap-2 items-center">
+                                <input
+                                  id={fieldInputId}
+                                  type="file"
+                                  accept="image/*"
+                                  onChange={(event) => handleEntityImageUpload(event, activeSection, field.key)}
+                                  className="hidden"
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() => triggerFileInput(fieldInputId)}
+                                  className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
+                                >
+                                  <Upload className="w-3.5 h-3.5" /> Upload
+                                </button>
+                                <input
+                                  type="text"
+                                  value={form[field.key] || ''}
+                                  onChange={(event) => updateEntityForm(activeSection, field.key, event.target.value)}
+                                  placeholder={`Or URL for ${field.label}...`}
+                                  className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                                />
                               </div>
                             );
                           })}
                       </div>
                     )}
-                    
-                    {/* General Text inputs grid */}
-                    <div className="grid gap-5 sm:grid-cols-2">
+
+                    <div className="grid gap-3 sm:grid-cols-2">
                       {config.fields
                         .filter((f) => f.type !== 'image')
                         .map((field) => (
                           <div key={field.key} className={field.type === 'textarea' ? 'sm:col-span-2' : ''}>
-                            <label className="mb-2 block text-xs font-semibold uppercase tracking-wider text-slate-400">{field.label}</label>
-                            
+                            <label className="mb-1 block text-xs font-bold uppercase text-[#6b6255]">{field.label}</label>
                             {field.type === 'textarea' ? (
                               <textarea
                                 value={form[field.key] || ''}
                                 onChange={(event) => updateEntityForm(activeSection, field.key, event.target.value)}
-                                rows={4}
-                                className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
+                                rows={3}
+                                className="w-full rounded border border-[#d4cbb8] bg-[#fbf8f1] px-3 py-1.5 text-xs text-[#2b251d] outline-none focus:border-[#794422]"
                               />
                             ) : field.type === 'checkbox' ? (
-                              <div className="flex items-center gap-3 py-2">
+                              <div className="flex items-center gap-2 py-1">
                                 <input
                                   type="checkbox"
                                   checked={!!form[field.key]}
                                   onChange={(event) => updateEntityForm(activeSection, field.key, event.target.checked)}
-                                  className="h-5 w-5 rounded border-[#1A242B] bg-[#161F25] text-teal-500 focus:ring-teal-500/30 accent-teal-500"
+                                  className="h-4 w-4 rounded border-[#d4cbb8] text-[#794422] accent-[#794422]"
                                 />
-                                <span className="text-sm text-slate-400">Project is live & accessible</span>
+                                <span className="text-xs text-[#6b6255]">Is live & active?</span>
                               </div>
                             ) : (
                               <input
                                 type={field.type || 'text'}
                                 value={form[field.key] || ''}
                                 onChange={(event) => updateEntityForm(activeSection, field.key, event.target.value)}
-                                className="w-full rounded-2xl border border-[#1A242B] bg-[#161F25] px-4 py-3 text-sm text-white placeholder-slate-600 outline-none focus:border-teal-500/40"
+                                className="w-full rounded border border-[#d4cbb8] bg-[#fbf8f1] px-3 py-1.5 text-xs text-[#2b251d] outline-none focus:border-[#794422]"
                               />
                             )}
                           </div>
                         ))}
-                    </div>
-                    
-                    {/* Form actions */}
-                    <div className="mt-6 flex flex-wrap justify-between items-center gap-3 border-t border-[#1A242B] pt-4.5">
-                      <div>
-                        {editingId[activeSection] && (
-                          <button
-                            type="button"
-                            onClick={() => resetEntityForm(activeSection)}
-                            className="inline-flex items-center justify-center rounded-full border border-red-500/20 bg-red-400/10 px-5 py-2.5 text-xs font-semibold text-red-300 transition hover:bg-red-400/20"
-                          >
-                            Cancel Edit
-                          </button>
-                        )}
-                      </div>
-                      
-                      <button
-                        type="submit"
-                        className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-teal-500 to-cyan-500 px-6 py-3 text-sm font-bold text-slate-950 transition duration-300 hover:from-teal-400 hover:to-cyan-400 shadow-[0_4px_15px_rgba(45,212,191,0.25)] hover:-translate-y-0.5"
-                      >
-                        <Save className="mr-2 h-4.5 w-4.5 text-slate-950" />
-                        {editingId[activeSection] ? 'Update Entry' : 'Create Entry'}
-                      </button>
                     </div>
                   </form>
                 );
               })()
             )}
 
-            {/* Bottom Alert notifications area */}
-            <div className="mt-6 space-y-4 shrink-0">
-              {error ? (
-                <div className="rounded-2xl border border-red-500/20 bg-red-500/10 px-5 py-4 text-sm text-red-300 animate-fade-in-up">
-                  {error}
-                </div>
-              ) : null}
-              {flash ? (
-                <div className="rounded-2xl border border-[#1E3A3A] bg-[#162e2e] px-5 py-4 text-sm text-teal-300 animate-fade-in-up flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  {flash}
-                </div>
-              ) : null}
-            </div>
+            {/* Flash / Error notification */}
+            {error && (
+              <div className="mt-3 p-2.5 rounded border border-red-700 bg-red-100 text-red-800 text-xs font-semibold">
+                {error}
+              </div>
+            )}
+            {flash && (
+              <div className="mt-3 p-2.5 rounded border border-[#3d7a46] bg-[#3d7a46]/10 text-[#3d7a46] text-xs font-semibold flex items-center gap-1.5">
+                <Check className="w-4 h-4 text-[#3d7a46]" /> {flash}
+              </div>
+            )}
 
-            {/* Admin Table for full view list at the bottom */}
+            {/* Table Overview */}
             {activeSection !== 'profile' && dataMap[activeSection]?.length > 0 && (
-              <div className="mt-10 border-t border-[#1A242B] pt-8">
-                <h3 className="text-base font-bold font-display text-white mb-4">Table Overview</h3>
+              <div className="mt-6 border-t border-[#d4cbb8] pt-4">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-[#794422]">Database Records</h4>
                 <AdminTable
                   items={dataMap[activeSection]}
                   columns={entityConfigs[activeSection].columns}
@@ -1228,9 +1058,41 @@ export default function AdminDashboard() {
               </div>
             )}
           </div>
+
+          {/* FIXED BOTTOM NAV BAR WITH SAVE BUTTON */}
+          <div className="shrink-0 pt-3 border-t border-[#d4cbb8] flex justify-between items-center bg-[#f5f0e6]">
+            <div>
+              {activeSection !== 'profile' && editingId[activeSection] && (
+                <button
+                  type="button"
+                  onClick={() => resetEntityForm(activeSection)}
+                  className="px-3 py-1.5 rounded border border-red-700 bg-red-100 text-red-800 text-xs font-bold hover:bg-red-200 transition"
+                >
+                  Cancel
+                </button>
+              )}
+            </div>
+            {activeSection === 'profile' ? (
+              <button
+                type="submit"
+                form="profile-form"
+                className="px-5 py-2.5 rounded bg-[#794422] hover:bg-[#5c3217] text-[#f7f3ec] font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm"
+              >
+                <Save className="w-4 h-4" /> Save Profile
+              </button>
+            ) : (
+              <button
+                type="submit"
+                form="entity-form"
+                className="px-5 py-2.5 rounded bg-[#794422] hover:bg-[#5c3217] text-[#f7f3ec] font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm"
+              >
+                <Save className="w-4 h-4" />
+                {editingId[activeSection] ? 'Update Entry' : 'Create Entry'}
+              </button>
+            )}
+          </div>
         </main>
       </div>
     </div>
   );
 }
-

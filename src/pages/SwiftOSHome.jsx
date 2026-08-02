@@ -1215,16 +1215,73 @@ export default function SwiftOSHome() {
                   Download a copy of my resume in PDF or DOC format below.
                 </p>
                 <div className="flex justify-center gap-4 mt-6">
-                  {data.resume.resumePdfLink && (
-                    <a href={data.resume.resumePdfLink} download className="swift-main-cta-btn">
+                  {(data.resume.resumePdfLink || data.resume.resumeLink) ? (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const url = data.resume.resumePdfLink || data.resume.resumeLink;
+                        const filename = `${data.profile.name.replace(/\s+/g, '_')}_Resume.pdf`;
+
+                        if (url.startsWith('data:')) {
+                          const res = await fetch(url);
+                          const blob = await res.blob();
+                          const blobUrl = URL.createObjectURL(blob);
+                          const link = document.createElement('a');
+                          link.href = blobUrl;
+                          link.download = filename;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                          setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+                        } else {
+                          const link = document.createElement('a');
+                          link.href = url;
+                          link.download = filename;
+                          link.target = '_blank';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }
+                      }}
+                      className="swift-main-cta-btn flex items-center gap-2 cursor-pointer"
+                    >
                       <Download size={16} /> Download PDF
-                    </a>
-                  )}
-                  {data.resume.resumeDocLink && (
-                    <a href={data.resume.resumeDocLink} download className="swift-main-cta-btn secondary">
+                    </button>
+                  ) : null}
+
+                  {data.resume.resumeDocLink ? (
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        const url = data.resume.resumeDocLink;
+                        const filename = `${data.profile.name.replace(/\s+/g, '_')}_Resume.docx`;
+
+                        if (url.startsWith('data:')) {
+                          const res = await fetch(url);
+                          const blob = await res.blob();
+                          const blobUrl = URL.createObjectURL(blob);
+                          const link = document.createElement('a');
+                          link.href = blobUrl;
+                          link.download = filename;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                          setTimeout(() => URL.revokeObjectURL(blobUrl), 10000);
+                        } else {
+                          const link = document.createElement('a');
+                          link.href = url;
+                          link.download = filename;
+                          link.target = '_blank';
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }
+                      }}
+                      className="swift-main-cta-btn secondary flex items-center gap-2 cursor-pointer"
+                    >
                       <Download size={16} /> Download DOCX
-                    </a>
-                  )}
+                    </button>
+                  ) : null}
                 </div>
               </div>
             </div>
