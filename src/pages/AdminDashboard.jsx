@@ -688,37 +688,54 @@ export default function AdminDashboard() {
 
           <div className="flex-1 overflow-y-auto swift-custom-scrollbar flex flex-col gap-2 pr-1">
             {activeSection === 'profile' ? (
-              <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 text-xs space-y-3">
-                <div className="flex items-center gap-3 border-b border-[#d4cbb8] pb-2.5">
-                  {profileForm.profilePhoto ? (
-                    <img src={profileForm.profilePhoto} alt="Avatar" className="w-12 h-12 rounded-full object-cover border border-[#794422]" />
-                  ) : (
-                    <div className="w-12 h-12 rounded-full bg-[#794422]/10 text-[#794422] flex items-center justify-center font-bold">
-                      <User className="w-6 h-6" />
+              <div className="space-y-3">
+                <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 text-xs space-y-3">
+                  <div className="flex items-center gap-3 border-b border-[#d4cbb8] pb-2.5">
+                    {profileForm.profilePhoto ? (
+                      <img src={profileForm.profilePhoto} alt="Avatar" className="w-12 h-12 rounded-full object-cover border border-[#794422]" />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-[#794422]/10 text-[#794422] flex items-center justify-center font-bold">
+                        <User className="w-6 h-6" />
+                      </div>
+                    )}
+                    <div>
+                      <h3 className="font-bold text-[#2b251d]">{profileForm.name || 'Admin'}</h3>
+                      <p className="text-[10px] text-[#6b6255]">{profileForm.title || 'CMS Admin'}</p>
                     </div>
-                  )}
-                  <div>
-                    <h3 className="font-bold text-[#2b251d]">{profileForm.name || 'Admin'}</h3>
-                    <p className="text-[10px] text-[#6b6255]">{profileForm.title || 'CMS Admin'}</p>
+                  </div>
+
+                  <div className="space-y-1.5 text-[11px] text-[#6b6255]">
+                    <div className="flex justify-between">
+                      <span>Projects:</span>
+                      <span className="font-bold text-[#794422]">{projects.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Skills:</span>
+                      <span className="font-bold text-[#794422]">{skills.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Achievements:</span>
+                      <span className="font-bold text-[#794422]">{achievements.length}</span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span>Certificates:</span>
+                      <span className="font-bold text-[#794422]">{certificates.length}</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="space-y-1.5 text-[11px] text-[#6b6255]">
-                  <div className="flex justify-between">
-                    <span>Projects:</span>
-                    <span className="font-bold text-[#794422]">{projects.length}</span>
+                {/* About Photo Preview Card */}
+                <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 text-xs space-y-2">
+                  <div className="flex justify-between items-center border-b border-[#d4cbb8] pb-1.5">
+                    <span className="font-bold text-[#794422] uppercase text-[10px] tracking-wider">About Photo</span>
+                    <span className="text-[10px] text-[#6b6255]">Preview</span>
                   </div>
-                  <div className="flex justify-between">
-                    <span>Skills:</span>
-                    <span className="font-bold text-[#794422]">{skills.length}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Achievements:</span>
-                    <span className="font-bold text-[#794422]">{achievements.length}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Certificates:</span>
-                    <span className="font-bold text-[#794422]">{certificates.length}</span>
+                  <div className="w-full h-40 rounded border border-[#d4cbb8] overflow-hidden bg-[#ece6d9] flex items-center justify-center">
+                    {profileForm.aboutPhoto ? (
+                      <img src={profileForm.aboutPhoto} alt="About Preview" className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="text-[11px] text-[#6b6255] italic">No About Photo Uploaded</div>
+                    )}
                   </div>
                 </div>
               </div>
