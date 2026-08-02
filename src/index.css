@@ -66,11 +66,6 @@
     color: #fff;
   }
 
-  @media (min-width: 768px) {
-    *, *::before, *::after {
-      cursor: none !important;
-    }
-  }
 
   h1, h2, h3, h4, h5, h6, .section-title, .font-display {
     font-family: var(--font-display);

@@ -1,0 +1,1864 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --swift-bg: #ece6d9;
+  --swift-bg-card: #f5f0e6;
+  --swift-panel: #fbf8f1;
+  --swift-border: #d4cbb8;
+  --swift-border-dark: #b8ac94;
+  --swift-text-main: #2b251d;
+  --swift-text-muted: #6b6255;
+  --swift-brown: #794422;
+  --swift-brown-dark: #5c3217;
+  --swift-brown-light: #8e522b;
+  --swift-accent-green: #3d7a46;
+  --swift-font-mono: 'JetBrains Mono', monospace;
+  --swift-font-sans: 'Plus Jakarta Sans', sans-serif;
+}
+
+body {
+  background-color: var(--swift-bg);
+  color: var(--swift-text-main);
+  font-family: var(--swift-font-mono);
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ROOT OS LAYOUT */
+.swift-os-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--swift-bg);
+}
+
+@media (min-width: 901px) {
+  .swift-os-root {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
+/* TOP HEADER */
+.swift-header {
+  background-color: var(--swift-brown);
+  color: #f7f3ec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 18px;
+  font-size: 13px;
+  border-bottom: 2px solid var(--swift-brown-dark);
+  flex-shrink: 0;
+}
+
+.swift-header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.swift-os-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+
+.swift-os-version {
+  font-size: 10px;
+  opacity: 0.7;
+}
+
+.swift-terminal-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.swift-terminal-btn:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.swift-terminal-btn kbd {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
+.swift-header-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.swift-dot {
+  opacity: 0.5;
+}
+
+.swift-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.swift-icon-btn {
+  background: transparent;
+  border: none;
+  color: #f7f3ec;
+  cursor: pointer;
+  opacity: 0.8;
+  padding: 4px;
+}
+
+.swift-icon-btn:hover {
+  opacity: 1;
+}
+
+.swift-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.swift-avatar-tiny {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--swift-brown-dark);
+}
+
+.swift-avatar-tiny img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swift-avatar-fallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 11px;
+}
+
+.swift-user-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.swift-user-name {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.swift-user-status {
+  font-size: 9px;
+  opacity: 0.8;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.swift-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #4ade80;
+}
+
+/* MAIN OS BODY SPLIT */
+.swift-body {
+  display: flex;
+  flex: 1;
+  padding: 16px;
+  gap: 16px;
+  overflow: hidden;
+}
+
+@media (max-width: 900px) {
+  .swift-body {
+    flex-direction: column;
+    overflow: visible;
+  }
+}
+
+/* SIDEBAR */
+.swift-sidebar {
+  width: 240px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.swift-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.swift-sidebar::-webkit-scrollbar-thumb {
+  background: var(--swift-border-dark);
+  border-radius: 2px;
+}
+
+@media (max-width: 900px) {
+  .swift-sidebar {
+    width: 100%;
+    overflow-y: visible;
+  }
+}
+
+
+.swift-profile-card {
+  background-color: var(--swift-bg-card);
+  border: 1px solid var(--swift-border);
+  border-radius: 6px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.swift-profile-img-container {
+  width: 110px;
+  height: 120px;
+  border: 1px solid var(--swift-border-dark);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  background: var(--swift-panel);
+}
+
+.swift-profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.swift-profile-avatar-large {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: var(--swift-brown);
+}
+
+.swift-profile-name {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 6px 0;
+  color: var(--swift-text-main);
+}
+
+.swift-available-badge {
+  font-size: 11px;
+  color: var(--swift-text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* SIDEBAR NAV */
+.swift-nav-section {
+  background-color: var(--swift-bg-card);
+  border: 1px solid var(--swift-border);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.swift-nav-header {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--swift-text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  padding-left: 6px;
+}
+
+.swift-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.swift-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  color: var(--swift-text-main);
+  font-family: var(--swift-font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+}
+
+.swift-nav-item:hover {
+  background-color: rgba(121, 68, 34, 0.08);
+}
+
+.swift-nav-item.active {
+  background-color: var(--swift-brown);
+  color: #ffffff;
+}
+
+/* WIDGET BOXES */
+.swift-widget-box {
+  background-color: var(--swift-bg-card);
+  border: 1px solid var(--swift-border);
+  border-radius: 6px;
+  padding: 12px;
+}
+
+.swift-widget-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--swift-text-muted);
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+}
+
+.swift-status-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  margin-bottom: 6px;
+}
+
+.swift-badge-on {
+  font-weight: 700;
+  color: var(--swift-brown);
+}
+
+.swift-val {
+  font-weight: 600;
+}
+
+.swift-progress-mini {
+  width: 60px;
+  height: 6px;
+  background-color: var(--swift-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.swift-progress-fill {
+  height: 100%;
+  background-color: var(--swift-brown);
+}
+
+.swift-quick-links {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.swift-quick-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--swift-text-main);
+  text-decoration: none;
+  padding: 4px 6px;
+  border-radius: 3px;
+  transition: background 0.15s;
+}
+
+.swift-quick-link:hover {
+  background: rgba(121, 68, 34, 0.08);
+}
+
+.swift-quick-link span {
+  flex: 1;
+  margin-left: 8px;
+}
+
+/* MUSIC PLAYER */
+.swift-music-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.swift-music-info {
+  line-height: 1.2;
+}
+
+.swift-track-name {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.swift-track-sub {
+  font-size: 10px;
+  color: var(--swift-text-muted);
+}
+
+.swift-soundwave {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 18px;
+  padding: 4px 0;
+}
+
+.swift-bar {
+  flex: 1;
+  background-color: var(--swift-brown);
+  height: 20%;
+  border-radius: 1px;
+  transition: height 0.2s ease;
+}
+
+.swift-bar.anim {
+  animation: soundwave 1s infinite alternate;
+}
+
+.swift-bar:nth-child(1).anim { animation-delay: 0.1s; }
+.swift-bar:nth-child(2).anim { animation-delay: 0.3s; }
+.swift-bar:nth-child(3).anim { animation-delay: 0.2s; }
+.swift-bar:nth-child(4).anim { animation-delay: 0.4s; }
+.swift-bar:nth-child(5).anim { animation-delay: 0.15s; }
+.swift-bar:nth-child(6).anim { animation-delay: 0.35s; }
+
+@keyframes soundwave {
+  0% { height: 15%; }
+  100% { height: 100%; }
+}
+
+.swift-music-controls {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.swift-music-btn {
+  background: transparent;
+  border: none;
+  color: var(--swift-text-main);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.swift-music-btn.main {
+  background: var(--swift-brown);
+  color: #fff;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* MAIN CONTENT DASHBOARD GRID */
+.swift-main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.swift-main-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.swift-main-content::-webkit-scrollbar-thumb {
+  background: var(--swift-border-dark);
+  border-radius: 2px;
+}
+
+@media (max-width: 900px) {
+  .swift-main-content {
+    overflow-y: visible;
+  }
+}
+
+
+.swift-grid-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.swift-dashboard-row {
+  display: flex;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .swift-dashboard-row {
+    flex-direction: column;
+  }
+}
+
+.swift-dashboard-row.hero-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+}
+
+@media (max-width: 990px) {
+  .swift-dashboard-row.hero-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.swift-dashboard-row.dual-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 990px) {
+  .swift-dashboard-row.dual-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* PANELS & WINDOW STYLING */
+.swift-panel {
+  background-color: var(--swift-panel);
+  border: 1px solid var(--swift-border);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.swift-window-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--swift-border);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.swift-window-controls.compact {
+  justify-content: space-between;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--swift-border-dark);
+}
+
+.dot.red { background-color: #e06c75; }
+.dot.yellow { background-color: #e5c07b; }
+.dot.green { background-color: #98c379; }
+
+.swift-window-path {
+  font-size: 11px;
+  color: var(--swift-text-muted);
+  margin-left: 6px;
+}
+
+.swift-welcome-content {
+  padding: 20px;
+}
+
+.swift-greeting {
+  font-size: 26px;
+  font-weight: 800;
+  line-height: 1.1;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.5px;
+}
+
+.swift-highlight-name {
+  color: var(--swift-brown);
+}
+
+.swift-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--swift-text-muted);
+}
+
+.swift-divider-dash {
+  border-top: 1px dashed var(--swift-border-dark);
+  margin: 14px 0;
+}
+
+.swift-bio-desc {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--swift-text-main);
+  margin-bottom: 16px;
+}
+
+.swift-terminal-prompt {
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.swift-prompt-symbol {
+  color: var(--swift-brown);
+}
+
+.swift-cursor-blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* SYSTEM INFO TABLE */
+.swift-sysinfo-table {
+  padding: 16px;
+  font-size: 12px;
+}
+
+.swift-sys-row {
+  display: flex;
+  margin-bottom: 6px;
+}
+
+.swift-label {
+  width: 100px;
+  color: var(--swift-text-muted);
+}
+
+.swift-colon {
+  margin-right: 8px;
+}
+
+.swift-val {
+  font-weight: 600;
+  flex: 1;
+}
+
+.highlight-green {
+  color: var(--swift-accent-green);
+}
+
+.swift-progress-bar-full {
+  height: 8px;
+  background-color: var(--swift-border);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-top: 6px;
+  margin-bottom: 14px;
+}
+
+.swift-progress-bar-fill {
+  height: 100%;
+  background-color: var(--swift-brown);
+}
+
+.swift-action-btn {
+  background: var(--swift-bg-card);
+  border: 1px solid var(--swift-border-dark);
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-family: var(--swift-font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--swift-brown-dark);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.swift-action-btn:hover {
+  background: var(--swift-brown);
+  color: #fff;
+}
+
+/* SHORTCUTS GRID */
+.swift-shortcuts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 12px;
+}
+
+.swift-shortcut-card {
+  background-color: var(--swift-panel);
+  border: 1px solid var(--swift-border);
+  border-radius: 6px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.swift-shortcut-card:hover {
+  border-color: var(--swift-brown);
+  transform: translateY(-2px);
+}
+
+.swift-shortcut-icon {
+  color: var(--swift-brown);
+}
+
+.swift-sc-title {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.swift-sc-sub {
+  font-size: 9px;
+  color: var(--swift-text-muted);
+}
+
+/* PANEL HEADERS */
+.swift-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--swift-border);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.swift-panel-title {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.swift-dots {
+  color: var(--swift-brown);
+  margin-right: 6px;
+}
+
+.swift-link-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--swift-font-mono);
+  font-size: 11px;
+  color: var(--swift-text-muted);
+  cursor: pointer;
+}
+
+.swift-link-btn:hover {
+  color: var(--swift-brown);
+}
+
+.swift-panel-footer {
+  padding: 10px 14px;
+  border-top: 1px solid var(--swift-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.swift-techstack-music-block {
+  margin: 10px 14px 14px 14px;
+  padding: 12px;
+  background-color: var(--swift-bg-card);
+  border: 1px solid var(--swift-border);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.swift-tsm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.swift-tsm-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--swift-text-muted);
+  letter-spacing: 0.5px;
+}
+
+.swift-tsm-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.swift-tsm-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.swift-tsm-track {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--swift-text-main);
+}
+
+.swift-tsm-artist {
+  font-size: 10px;
+  color: var(--swift-text-muted);
+}
+
+/* FEATURED PROJECTS LIST */
+.swift-projects-list {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.swift-project-row-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--swift-border);
+  border-radius: 4px;
+  background: var(--swift-bg-card);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.swift-project-row-item:hover {
+  border-color: var(--swift-brown);
+}
+
+.swift-proj-thumb {
+  width: 60px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 3px;
+}
+
+.swift-proj-thumb-placeholder {
+  width: 60px;
+  height: 44px;
+  background: var(--swift-border);
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--swift-text-muted);
+}
+
+.swift-proj-info {
+  flex: 1;
+}
+
+.swift-proj-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.swift-proj-name {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.swift-live-tag {
+  background: rgba(61, 122, 70, 0.15);
+  color: var(--swift-accent-green);
+  border: 1px solid rgba(61, 122, 70, 0.3);
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.swift-proj-desc {
+  font-size: 10px;
+  color: var(--swift-text-muted);
+  margin: 3px 0 6px 0;
+  line-height: 1.3;
+}
+
+.swift-proj-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.swift-tag {
+  background: var(--swift-panel);
+  border: 1px solid var(--swift-border);
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.swift-chevron {
+  color: var(--swift-text-muted);
+}
+
+/* TECH STACK BARS */
+.swift-skills-list {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.swift-skills-list.scrollable {
+  max-height: 310px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.swift-audio-diag-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 6px 10px;
+  border-radius: 3px;
+  border: 1px dashed var(--swift-border-dark);
+  margin-top: 4px;
+}
+
+.swift-diag-label {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--swift-font-mono);
+  color: var(--swift-text-muted);
+}
+
+.swift-diag-spectrum {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  height: 16px;
+  flex: 1;
+}
+
+.swift-spec-col {
+  width: 4px;
+  background-color: var(--swift-brown);
+  opacity: 0.4;
+  transition: height 0.2s ease, opacity 0.2s ease;
+  border-radius: 1px;
+}
+
+.swift-spec-col.active {
+  opacity: 0.9;
+  animation: specPulse 0.6s infinite alternate ease-in-out;
+}
+
+@keyframes specPulse {
+  0% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.swift-diag-status {
+  font-size: 9px;
+  font-weight: 700;
+  font-family: var(--swift-font-mono);
+  color: var(--swift-accent-green);
+}
+
+.swift-skills-list.scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+.swift-skills-list.scrollable::-webkit-scrollbar-thumb {
+  background: var(--swift-border-dark);
+  border-radius: 2px;
+}
+
+.swift-skill-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+}
+
+.swift-skill-info {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.swift-skill-icon-img {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+}
+
+.swift-skill-name {
+  font-weight: 600;
+}
+
+.swift-skill-track {
+  flex: 1;
+  height: 6px;
+  background-color: var(--swift-border);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.swift-skill-fill {
+  height: 100%;
+  background-color: var(--swift-brown);
+}
+
+.swift-skill-pct {
+  width: 32px;
+  text-align: right;
+  font-size: 10px;
+  color: var(--swift-text-muted);
+}
+
+/* TIMELINE COMPACT */
+.swift-timeline-compact {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.swift-tl-item {
+  display: flex;
+  gap: 12px;
+}
+
+.swift-tl-icon {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--swift-border);
+  background: var(--swift-bg-card);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--swift-brown);
+}
+
+.swift-tl-content {
+  flex: 1;
+}
+
+.swift-tl-date {
+  font-size: 10px;
+  color: var(--swift-text-muted);
+}
+
+.swift-tl-title {
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.swift-tl-desc {
+  font-size: 10px;
+  color: var(--swift-text-muted);
+  margin-top: 2px;
+}
+
+/* RECENT ACTIVITY */
+.swift-activity-list {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.swift-act-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+}
+
+.swift-act-circle {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 2px solid var(--swift-brown);
+}
+
+.swift-act-text {
+  flex: 1;
+}
+
+.swift-act-title {
+  font-weight: 600;
+}
+
+.swift-act-time {
+  font-size: 9px;
+  color: var(--swift-text-muted);
+}
+
+.swift-act-status {
+  color: var(--swift-brown);
+}
+
+.swift-act-status.ok {
+  color: var(--swift-accent-green);
+}
+
+/* TERMINAL INTERACTIVE */
+.terminal-panel {
+  min-height: 200px;
+}
+
+.swift-terminal-screen {
+  background-color: #211c16;
+  color: #f7f3ec;
+  padding: 14px;
+  font-family: var(--swift-font-mono);
+  font-size: 11px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+}
+
+.swift-term-line.cmd { color: #e5c07b; }
+.swift-term-line.output { color: #abb2bf; }
+.swift-term-line.success { color: #98c379; }
+.swift-term-line.error { color: #e06c75; }
+
+.swift-term-input-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.swift-term-input-line input {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-family: var(--swift-font-mono);
+  font-size: 11px;
+  outline: none;
+  flex: 1;
+}
+
+/* CTA PANEL */
+.cta-panel {
+  background-color: var(--swift-bg-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+.swift-cta-content h3 {
+  font-size: 18px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+}
+
+.swift-cta-content p {
+  font-size: 11px;
+  color: var(--swift-text-muted);
+  margin-bottom: 16px;
+}
+
+.swift-main-cta-btn {
+  background-color: var(--swift-brown);
+  color: #fff;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  font-family: var(--swift-font-mono);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.15s;
+  text-decoration: none;
+}
+
+.swift-main-cta-btn:hover {
+  background-color: var(--swift-brown-dark);
+}
+
+.swift-main-cta-btn.secondary {
+  background-color: var(--swift-panel);
+  color: var(--swift-text-main);
+  border: 1px solid var(--swift-border-dark);
+}
+
+/* TAB VIEWS */
+.swift-tab-view {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.swift-view-header {
+  margin-bottom: 4px;
+}
+
+.swift-view-header h2 {
+  font-size: 20px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.swift-view-subtitle {
+  font-size: 11px;
+  color: var(--swift-text-muted);
+}
+
+.swift-para {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--swift-text-main);
+}
+
+/* PROJECTS GRID TAB */
+.swift-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.swift-project-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.swift-card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-bottom: 1px solid var(--swift-border);
+}
+
+.swift-card-img-placeholder {
+  width: 100%;
+  height: 140px;
+  background: var(--swift-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--swift-text-muted);
+}
+
+.swift-card-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.swift-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.swift-card-header h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.swift-card-desc {
+  font-size: 11px;
+  color: var(--swift-text-muted);
+  margin-top: 6px;
+  line-height: 1.4;
+  flex: 1;
+}
+
+.swift-card-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.swift-btn-sm {
+  padding: 4px 10px;
+  font-size: 10px;
+  border: 1px solid var(--swift-border-dark);
+  border-radius: 3px;
+  background: var(--swift-panel);
+  color: var(--swift-text-main);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.swift-btn-sm.primary {
+  background: var(--swift-brown);
+  color: #fff;
+  border: none;
+}
+
+/* SKILLS FULL GRID */
+.swift-skills-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+}
+
+.swift-skill-tile {
+  padding: 14px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.swift-skill-icon-large {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  margin-bottom: 8px;
+}
+
+.swift-skill-tile-name {
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.swift-skill-tile-desc {
+  font-size: 9px;
+  color: var(--swift-text-muted);
+  margin-top: 4px;
+}
+
+/* CERTIFICATES & ACHIEVEMENTS */
+.swift-cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.swift-cert-card {
+  padding: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.swift-cert-icon {
+  color: var(--swift-brown);
+}
+
+.swift-cert-info h4 {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.swift-cert-issuer {
+  font-size: 10px;
+  color: var(--swift-text-muted);
+  margin: 2px 0 6px 0;
+}
+
+.swift-cert-link {
+  font-size: 10px;
+  color: var(--swift-brown);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.swift-achieve-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.swift-achieve-card {
+  padding: 14px;
+  display: flex;
+  gap: 14px;
+}
+
+.swift-achieve-icon {
+  color: var(--swift-brown);
+}
+
+.swift-achieve-body h3 {
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.swift-achieve-sub {
+  font-size: 10px;
+  color: var(--swift-text-muted);
+  margin: 2px 0 6px 0;
+}
+
+.swift-achieve-desc {
+  font-size: 11px;
+}
+
+/* CONTACT FORM */
+.swift-contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .swift-contact-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.swift-contact-methods {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.swift-cm-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.swift-contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.swift-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.swift-form-group label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.swift-form-group input, .swift-form-group textarea {
+  background: var(--swift-panel);
+  border: 1px solid var(--swift-border-dark);
+  padding: 8px;
+  border-radius: 4px;
+  font-family: var(--swift-font-mono);
+  font-size: 11px;
+  outline: none;
+}
+
+.swift-form-group input:focus, .swift-form-group textarea:focus {
+  border-color: var(--swift-brown);
+}
+
+.swift-alert {
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.swift-alert.success {
+  background: rgba(61, 122, 70, 0.15);
+  color: var(--swift-accent-green);
+  border: 1px solid rgba(61, 122, 70, 0.3);
+}
+
+.swift-alert.error {
+  background: rgba(224, 108, 117, 0.15);
+  color: #e06c75;
+  border: 1px solid rgba(224, 108, 117, 0.3);
+}
+
+/* MODALS */
+.swift-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.swift-modal-window {
+  background: var(--swift-panel);
+  border: 1px solid var(--swift-border-dark);
+  border-radius: 6px;
+  width: 100%;
+  max-width: 500px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.swift-modal-window.terminal-window {
+  max-width: 700px;
+  height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.swift-modal-header {
+  background: var(--swift-brown);
+  color: #fff;
+  padding: 8px 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.swift-modal-header button {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+}
+
+.swift-modal-body {
+  padding: 16px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.modal-term {
+  height: 100%;
+}
+
+/* FOOTER */
+.swift-footer {
+  background-color: var(--swift-bg-card);
+  border-top: 1px solid var(--swift-border);
+  padding: 12px 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--swift-text-muted);
+}
+
+.swift-footer-left, .swift-footer-center, .swift-footer-right {
+  flex: 1;
+}
+
+.swift-footer-center {
+  text-align: center;
+}
+
+.swift-footer-right {
+  text-align: right;
+}
+
+.swift-top-btn {
+  background: transparent;
+  border: none;
+  font-family: var(--swift-font-mono);
+  font-size: 11px;
+  color: var(--swift-brown);
+  cursor: pointer;
+}
+
+/* RESPONSIVE MOBILE STYLING ENHANCEMENTS */
+.swift-mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.swift-mobile-drawer {
+  background-color: var(--swift-brown-dark);
+  border-bottom: 2px solid var(--swift-brown);
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.swift-mobile-drawer-header {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 1px;
+}
+
+.swift-mobile-drawer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 6px;
+}
+
+.swift-mobile-drawer-grid .swift-nav-item {
+  color: #f7f3ec;
+}
+
+.swift-mobile-drawer-grid .swift-nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.swift-mobile-drawer-grid .swift-nav-item.active {
+  background-color: #fff;
+  color: var(--swift-brown-dark);
+}
+
+@media (max-width: 768px) {
+  .swift-mobile-menu-btn {
+    display: flex;
+    align-items: center;
+  }
+
+  .swift-header {
+    padding: 8px 12px;
+  }
+
+  .swift-header-center {
+    display: none;
+  }
+
+  .swift-terminal-btn span, .swift-terminal-btn kbd {
+    display: none;
+  }
+
+  .swift-terminal-btn {
+    padding: 4px 6px;
+  }
+
+  .swift-body {
+    padding: 10px;
+    gap: 12px;
+  }
+
+  .swift-greeting {
+    font-size: 20px;
+  }
+
+  .swift-shortcuts-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .swift-projects-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .swift-skills-full-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .swift-cert-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .swift-footer {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .swift-modal-window.terminal-window {
+    height: 80vh;
+  }
+}
+
+/* FX MODE BUTTON & VIDEO EFFECT OVERLAY */
+.swift-effect-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(61, 122, 70, 0.25);
+  border: 1px solid rgba(61, 122, 70, 0.5);
+  color: #4ade80;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: var(--swift-font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.swift-effect-btn:hover, .swift-effect-btn.active {
+  background: rgba(61, 122, 70, 0.5);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(74, 222, 128, 0.4);
+}
+
+.swift-video-effect-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.swift-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.85;
+  filter: contrast(120%) brightness(110%);
+}
+
+.swift-video-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0),
+    rgba(255,255,255,0) 50%,
+    rgba(0, 0, 0, 0.3) 50%,
+    rgba(0, 0, 0, 0.3)
+  );
+  background-size: 100% 4px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.swift-video-crt-lines {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, transparent 60%, rgba(0,0,0,0.8) 100%);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.swift-video-effect-badge {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid #22c55e;
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
+}
+
+.swift-video-badge-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.swift-matrix-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.swift-matrix-hero-text {
+  position: absolute;
+  z-index: 4;
+  text-align: center;
+  pointer-events: none;
+}
+
+.swift-glitch-text {
+  font-size: 42px;
+  font-weight: 900;
+  color: #00ff66;
+  text-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66;
+  letter-spacing: 4px;
+  font-family: var(--swift-font-mono);
+  animation: pulseGlow 1.5s ease-in-out infinite alternate;
+}
+
+.swift-glitch-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: #a7f3d0;
+  letter-spacing: 2px;
+  margin-top: 8px;
+  font-family: var(--swift-font-mono);
+}
+
+.swift-fx-close-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 4px;
+  padding: 4px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.swift-fx-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+@keyframes pulseGlow {
+  from { opacity: 0.8; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1.02); }
+}
+
+
+.swift-vbt-sub {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+

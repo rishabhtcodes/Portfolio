@@ -70,14 +70,20 @@ app.use((error, _request, response, _next) => {
 });
 
 async function startServer() {
-  await connectDatabase();
-  await bootstrapDatabase();
+  try {
+    await connectDatabase();
+    await bootstrapDatabase();
+    console.log('Database connected successfully.');
+  } catch (dbError) {
+    console.warn('[Backend] Warning: Could not connect to remote MongoDB Atlas. Starting server in fallback mode.', dbError.message);
+    await bootstrapDatabase();
+  }
+
 
   app.listen(port, () => {
-    console.log(`Portfolio backend running on port ${port} — connected to MongoDB.`);
+    console.log(`Portfolio backend running on port ${port}.`);
 
-    // Self-ping to keep the free Render service awake
-    // Render typically sleeps after 15 minutes of inactivity
+    // Self-ping to keep service awake
     const pingInterval = 14 * 60 * 1000; // 14 minutes
     const backendUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${port}`;
     
@@ -94,6 +100,7 @@ async function startServer() {
 }
 
 startServer().catch((error) => {
-  console.error('Failed to start backend:', error);
+  console.error('Failed to start backend server:', error);
   process.exit(1);
 });
+

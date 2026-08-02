@@ -1,4 +1,4 @@
-let storageMode = 'mongo';
+let storageMode = 'local';
 
 export function setStorageMode(mode) {
   storageMode = mode;
@@ -7,3 +7,4 @@ export function setStorageMode(mode) {
 export function getStorageMode() {
   return storageMode;
 }
+

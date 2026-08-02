@@ -24,7 +24,9 @@ export async function bootstrapDatabase() {
   }
 
   const currentProfile = await store.getProfile();
-  if (currentProfile) {
+  if (!currentProfile) {
+    await store.upsertProfile(seedProfile);
+  } else {
     const unsplashMatches = [
       'images.unsplash.com/photo-1507003211169-0a1dd7228f2d',
       'images.unsplash.com/photo-1527980965255-d3b416303d12'
@@ -47,6 +49,7 @@ export async function bootstrapDatabase() {
       await store.upsertProfile(updatedProfile);
     }
   }
+
 
   if ((await store.countProjects()) === 0) {
     await store.seedProjects(seedProjects);

@@ -55,6 +55,13 @@ export async function getPortfolioData() {
   return apiRequest('/api/portfolio');
 }
 
+export async function sendContactMessage(payload) {
+  return apiRequest('/api/contact', {
+    method: 'POST',
+    body: payload,
+  });
+}
+
 export async function apiDelete(path, token) {
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method: 'DELETE',
@@ -66,3 +73,5 @@ export async function apiDelete(path, token) {
     throw new Error(payload.message || 'Delete request failed.');
   }
 }
+
+

@@ -11,12 +11,13 @@ export async function connectDatabase() {
   console.log('Connecting to MongoDB...');
 
   await mongoose.connect(mongoUri, {
-    serverSelectionTimeoutMS: 10000,
-    socketTimeoutMS: 45000,
-    connectTimeoutMS: 10000,
+    serverSelectionTimeoutMS: 2500,
+    socketTimeoutMS: 15000,
+    connectTimeoutMS: 2500,
     maxPoolSize: 10,
     retryWrites: true,
   });
+
 
   setStorageMode('mongo');
 
