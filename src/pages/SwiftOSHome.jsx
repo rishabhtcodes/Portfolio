@@ -634,20 +634,33 @@ export default function SwiftOSHome() {
           {/* NOW PLAYING AUDIO WIDGET */}
           <div className="swift-widget-box">
             <div className="swift-widget-title">NOW PLAYING</div>
-            <div className="swift-now-playing-content p-2">
-              <div className="text-xs font-semibold text-[var(--swift-text-main)] truncate">
-                {playlist[currentTrackIndex].title}
+            <div className="swift-now-playing-content p-2 space-y-2">
+              <div>
+                <div className="text-xs font-semibold text-[var(--swift-text-main)] truncate">
+                  {playlist[currentTrackIndex].title.toLowerCase()}
+                </div>
+                <div className="text-[10px] text-[var(--swift-text-muted)] truncate">
+                  {playlist[currentTrackIndex].artist.toLowerCase()}
+                </div>
               </div>
-              <div className="text-[10px] text-[var(--swift-text-muted)] truncate mb-2">
-                {playlist[currentTrackIndex].artist}
+
+              {/* RETRO WAVEFORM VISUALIZER */}
+              <div className="my-2 py-1 px-1 flex items-center justify-between gap-[2px] h-6 overflow-hidden">
+                {[40, 65, 30, 85, 45, 95, 60, 35, 75, 50, 90, 40, 70, 55, 80, 35, 60, 45, 75, 50, 85, 30, 65, 40, 70].map((height, i) => (
+                  <span
+                    key={i}
+                    className="w-[2px] bg-[var(--swift-text-muted)] opacity-70 rounded-full transition-all duration-300"
+                    style={{
+                      height: isPlaying ? `${Math.max(15, (height + (i % 3 * 10)) % 100)}%` : '20%',
+                      opacity: isPlaying ? 0.85 : 0.3,
+                      animation: isPlaying ? `pulse 1.2s ease-in-out infinite ${i * 0.05}s` : 'none'
+                    }}
+                  />
+                ))}
               </div>
-              <div className="swift-audio-bars flex items-end gap-1 h-4 mb-3 justify-center">
-                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-full' : 'h-1.5'}`}></span>
-                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-3/4 delay-75' : 'h-2'}`}></span>
-                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-full delay-150' : 'h-1'}`}></span>
-                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-1/2 delay-100' : 'h-2.5'}`}></span>
-              </div>
-              <div className="flex items-center justify-center gap-3 text-[var(--swift-text-main)]">
+
+              {/* CONTROLS */}
+              <div className="flex items-center justify-center gap-4 text-[var(--swift-text-main)] pt-1">
                 <button 
                   onClick={() => handleSkip('prev')} 
                   className="hover:text-[var(--swift-brown)] transition"
@@ -657,10 +670,10 @@ export default function SwiftOSHome() {
                 </button>
                 <button 
                   onClick={togglePlay} 
-                  className="w-7 h-7 rounded-full bg-[var(--swift-brown)] text-[#f7f3ec] flex items-center justify-center hover:scale-105 transition"
+                  className="hover:scale-110 text-[var(--swift-text-main)] hover:text-[var(--swift-brown)] transition"
                   title={isPlaying ? "Pause" : "Play"}
                 >
-                  {isPlaying ? <Pause size={12} /> : <Play size={12} className="ml-0.5" />}
+                  {isPlaying ? <Pause size={16} /> : <Play size={16} />}
                 </button>
                 <button 
                   onClick={() => handleSkip('next')} 
