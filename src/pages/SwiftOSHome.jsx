@@ -631,6 +631,48 @@ export default function SwiftOSHome() {
             </div>
           </div>
 
+          {/* NOW PLAYING AUDIO WIDGET */}
+          <div className="swift-widget-box">
+            <div className="swift-widget-title">NOW PLAYING</div>
+            <div className="swift-now-playing-content p-2">
+              <div className="text-xs font-semibold text-[var(--swift-text-main)] truncate">
+                {playlist[currentTrackIndex].title}
+              </div>
+              <div className="text-[10px] text-[var(--swift-text-muted)] truncate mb-2">
+                {playlist[currentTrackIndex].artist}
+              </div>
+              <div className="swift-audio-bars flex items-end gap-1 h-4 mb-3 justify-center">
+                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-full' : 'h-1.5'}`}></span>
+                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-3/4 delay-75' : 'h-2'}`}></span>
+                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-full delay-150' : 'h-1'}`}></span>
+                <span className={`w-1 bg-[var(--swift-brown)] rounded-full transition-all ${isPlaying ? 'animate-bounce h-1/2 delay-100' : 'h-2.5'}`}></span>
+              </div>
+              <div className="flex items-center justify-center gap-3 text-[var(--swift-text-main)]">
+                <button 
+                  onClick={() => handleSkip('prev')} 
+                  className="hover:text-[var(--swift-brown)] transition"
+                  title="Previous Track"
+                >
+                  <SkipBack size={14} />
+                </button>
+                <button 
+                  onClick={togglePlay} 
+                  className="w-7 h-7 rounded-full bg-[var(--swift-brown)] text-[#f7f3ec] flex items-center justify-center hover:scale-105 transition"
+                  title={isPlaying ? "Pause" : "Play"}
+                >
+                  {isPlaying ? <Pause size={12} /> : <Play size={12} className="ml-0.5" />}
+                </button>
+                <button 
+                  onClick={() => handleSkip('next')} 
+                  className="hover:text-[var(--swift-brown)] transition"
+                  title="Next Track"
+                >
+                  <SkipForward size={14} />
+                </button>
+              </div>
+            </div>
+          </div>
+
         </aside>
 
         {/* MAIN DASHBOARD CONTENT AREA */}
