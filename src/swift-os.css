@@ -207,7 +207,7 @@ body {
   }
 }
 
-/* SIDEBAR */
+/* SIDEBAR (Desktop Vertical Dock, Mobile Horizontal Dock matching Admin Dashboard) */
 .swift-sidebar {
   width: 240px;
   display: flex;
@@ -230,7 +230,83 @@ body {
 @media (max-width: 900px) {
   .swift-sidebar {
     width: 100%;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
     overflow-y: visible;
+    padding-right: 0;
+    gap: 8px;
+    background-color: var(--swift-bg-card);
+    border: 1px solid var(--swift-border);
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .swift-sidebar .swift-profile-card {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding: 0 6px 0 2px;
+    background: transparent;
+    border: none;
+    border-right: 1px solid var(--swift-border);
+    border-radius: 0;
+    flex-shrink: 0;
+  }
+
+  .swift-sidebar .swift-profile-img-container {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    margin-bottom: 0;
+    border: 1.5px solid var(--swift-brown);
+  }
+
+  .swift-sidebar .swift-profile-name,
+  .swift-sidebar .swift-available-badge,
+  .swift-sidebar .swift-widget-box {
+    display: none;
+  }
+
+  .swift-sidebar .swift-nav-section {
+    background: transparent;
+    border: none;
+    padding: 0;
+    width: 100%;
+  }
+
+  .swift-sidebar .swift-nav-header {
+    display: none;
+  }
+
+  .swift-sidebar .swift-nav {
+    flex-direction: row;
+    gap: 6px;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 2px;
+  }
+
+  .swift-sidebar .swift-nav-item {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 6px 10px;
+    min-width: 62px;
+    height: 44px;
+    font-size: 9px;
+    gap: 3px;
+    text-align: center;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .swift-sidebar .swift-nav-item span {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: -0.2px;
   }
 }
 
@@ -1659,7 +1735,17 @@ body {
   }
 
   .swift-header {
-    padding: 8px 12px;
+    padding: 6px 10px;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .swift-os-title {
+    font-size: 12px;
+  }
+
+  .swift-os-version {
+    display: none;
   }
 
   .swift-header-center {
@@ -1671,20 +1757,59 @@ body {
   }
 
   .swift-terminal-btn {
-    padding: 4px 6px;
+    padding: 3px 6px;
+  }
+
+  .swift-effect-btn span {
+    display: none;
+  }
+
+  .swift-effect-btn {
+    padding: 3px 6px;
   }
 
   .swift-body {
-    padding: 10px;
-    gap: 12px;
+    padding: 8px;
+    gap: 10px;
   }
 
   .swift-greeting {
-    font-size: 20px;
+    font-size: 18px;
+  }
+
+  .swift-bio-desc {
+    font-size: 11px;
+  }
+
+  .swift-welcome-content {
+    padding: 12px;
+  }
+
+  .swift-sysinfo-table {
+    padding: 12px;
+  }
+
+  .swift-sys-row {
+    flex-direction: column;
+    margin-bottom: 8px;
+  }
+
+  .swift-label {
+    width: auto;
+    font-weight: bold;
+  }
+
+  .swift-colon {
+    display: none;
   }
 
   .swift-shortcuts-grid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  .swift-shortcut-card {
+    padding: 8px;
   }
 
   .swift-projects-grid {
@@ -1699,14 +1824,55 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .swift-footer {
-    flex-direction: column;
-    gap: 8px;
-    text-align: center;
+  .swift-contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .swift-modal-overlay {
+    padding: 8px;
+  }
+
+  .swift-modal-window {
+    max-height: 90vh;
   }
 
   .swift-modal-window.terminal-window {
-    height: 80vh;
+    height: 85vh;
+    max-width: 100%;
+  }
+
+  .swift-footer {
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+    padding: 10px;
+  }
+
+  .swift-footer-left, .swift-footer-center, .swift-footer-right {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .swift-shortcuts-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .swift-skills-full-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .swift-profile-img-container {
+    width: 90px;
+    height: 100px;
+  }
+
+  .swift-header-left {
+    gap: 8px;
+  }
+
+  .swift-header-right {
+    gap: 6px;
   }
 }
 

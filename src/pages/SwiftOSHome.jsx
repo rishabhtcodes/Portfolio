@@ -40,6 +40,7 @@ import {
   Zap
 } from 'lucide-react';
 import { getPortfolioData, sendContactMessage } from '../lib/api';
+import PhotoModal from '../components/PhotoModal';
 import { 
   about as staticAbout, 
   achievements as staticAchievements, 
@@ -134,6 +135,7 @@ export default function SwiftOSHome() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showVideoEffect, setShowVideoEffect] = useState(false);
+  const [showPhotoModal, setShowPhotoModal] = useState(false);
 
   const triggerVideoEffect = () => {
     setShowVideoEffect(true);
@@ -506,7 +508,11 @@ export default function SwiftOSHome() {
         <aside className="swift-sidebar">
           {/* PROFILE CARD */}
           <div className="swift-profile-card">
-            <div className="swift-profile-img-container">
+            <div 
+              className="swift-profile-img-container cursor-pointer hover:opacity-90 transition-opacity"
+              onClick={() => setShowPhotoModal(true)}
+              title="Click to view full photo"
+            >
               {data.profile.profilePhoto ? (
                 <img src={data.profile.profilePhoto} alt={data.profile.name} className="swift-profile-img" />
               ) : (
@@ -1516,6 +1522,14 @@ export default function SwiftOSHome() {
       {showVideoEffect && (
         <MatrixRainOverlay onClose={() => setShowVideoEffect(false)} />
       )}
+
+      {/* Photo Modal Preview */}
+      <PhotoModal 
+        isOpen={showPhotoModal}
+        onClose={() => setShowPhotoModal(false)}
+        photoUrl={data.profile.profilePhoto}
+        name={data.profile.name}
+      />
     </div>
   );
 }
