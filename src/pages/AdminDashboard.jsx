@@ -21,7 +21,10 @@ import {
   Activity,
   Server,
   Database,
-  HardDrive
+  HardDrive,
+  ChevronDown,
+  ChevronUp,
+  Menu
 } from 'lucide-react';
 
 import { Navigate, useNavigate } from 'react-router-dom';
@@ -246,6 +249,7 @@ export default function AdminDashboard() {
   const [editingId, setEditingId] = useState({ projects: null, skills: null, achievements: null, certificates: null });
   const [entityForms, setEntityForms] = useState(() => Object.fromEntries(Object.entries(entityConfigs).map(([key, config]) => [key, config.empty])));
   const [searchQuery, setSearchQuery] = useState('');
+  const [isNavOpen, setIsNavOpen] = useState(true);
 
   const dataMap = useMemo(
     () => ({ projects, skills, achievements, certificates }),
@@ -599,21 +603,22 @@ export default function AdminDashboard() {
       `}</style>
 
       {/* TOP RETRO OS HEADER */}
-      <header className="bg-[#794422] text-[#f7f3ec] border-b-2 border-[#5c3217] px-4 py-2 flex justify-between items-center text-xs shrink-0">
-        <div className="flex items-center gap-3 font-semibold">
+      <header className="bg-[#794422] text-[#f7f3ec] border-b-2 border-[#5c3217] px-3 lg:px-4 py-2 flex justify-between items-center text-xs shrink-0 z-20">
+        <div className="flex items-center gap-2 lg:gap-3 font-semibold">
           <div className="bg-[#5c3217] p-1 rounded text-[#f7f3ec]">
             <Terminal className="w-4 h-4" />
           </div>
-          <span className="tracking-wider">SWIFT OS ADMIN</span>
-          <span className="text-[10px] opacity-70 bg-[#5c3217] px-1.5 py-0.5 rounded">v2.4.0</span>
+          <span className="tracking-wider text-xs sm:text-sm">SWIFT OS ADMIN</span>
+          <span className="text-[10px] opacity-70 bg-[#5c3217] px-1.5 py-0.5 rounded hidden sm:inline-block">v2.4.0</span>
         </div>
-        <div className="flex items-center gap-4 text-[11px]">
-          <span className="flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" /> DB Connected
+        <div className="flex items-center gap-2 sm:gap-4 text-[11px]">
+          <span className="flex items-center gap-1.5 text-[10px] sm:text-[11px]">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 inline-block animate-pulse" />
+            <span className="hidden sm:inline">DB Connected</span>
           </span>
           <button
             onClick={handleLogout}
-            className="flex items-center gap-1 bg-[#5c3217] hover:bg-[#8e522b] px-2.5 py-1 rounded text-[#f7f3ec] transition"
+            className="flex items-center gap-1 bg-[#5c3217] hover:bg-[#8e522b] px-2 py-1 sm:px-2.5 sm:py-1 rounded text-[#f7f3ec] transition text-xs"
           >
             <LogOut className="w-3.5 h-3.5" /> Logout
           </button>
@@ -621,11 +626,11 @@ export default function AdminDashboard() {
       </header>
 
       {/* MAIN CONTAINER */}
-      <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-38px)] p-3 lg:p-4 gap-4 overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row h-[calc(100vh-38px)] p-2 sm:p-3 lg:p-4 gap-2 sm:gap-3 lg:gap-4 overflow-hidden">
 
-        {/* PANE 1: LEFT DOCK */}
-        <aside className="lg:w-16 w-full flex lg:flex-col justify-between items-center bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-2 shrink-0 shadow-sm">
-          <nav className="flex lg:flex-col gap-2 w-full items-center">
+        {/* PANE 1: NAVIGATION BAR (Horizontal scroll tabs on mobile, vertical dock on desktop) */}
+        <aside className="lg:w-16 w-full flex lg:flex-col justify-between items-center bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-1.5 sm:p-2 shrink-0 shadow-sm">
+          <nav className="flex lg:flex-col gap-1.5 sm:gap-2 w-full items-center overflow-x-auto lg:overflow-visible swift-custom-scrollbar py-0.5">
             {sectionItems.map((item) => {
               const Icon = sectionIcons[item.key] || User;
               return (
@@ -636,11 +641,11 @@ export default function AdminDashboard() {
                     setActiveSection(item.key);
                     setSearchQuery('');
                   }}
-                  className={`w-11 h-11 rounded-md flex flex-col items-center justify-center text-[10px] font-semibold transition-all ${activeDockClass(item.key)}`}
+                  className={`flex-1 lg:flex-none min-w-[60px] lg:min-w-0 w-auto lg:w-11 h-9 lg:h-11 px-2 lg:px-0 rounded-md flex flex-row lg:flex-col items-center justify-center gap-1 lg:gap-0 text-[10px] font-semibold transition-all shrink-0 ${activeDockClass(item.key)}`}
                   title={item.label}
                 >
-                  <Icon className="w-4 h-4 mb-0.5" />
-                  <span className="text-[9px] uppercase tracking-tighter">{item.key.slice(0, 4)}</span>
+                  <Icon className="w-4 h-4 lg:mb-0.5 shrink-0" />
+                  <span className="text-[9px] uppercase tracking-tighter">{item.label}</span>
                 </button>
               );
             })}
@@ -655,13 +660,29 @@ export default function AdminDashboard() {
           </div>
         </aside>
 
-        {/* PANE 2: MIDDLE NAVIGATION LIST */}
-        <aside className="lg:w-72 w-full flex flex-col bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-3 gap-3 shrink-0 shadow-sm">
+        {/* PANE 2: MIDDLE NAVIGATION LIST (Collapsible / Sliding) */}
+        <aside className="lg:w-72 w-full flex flex-col bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-2.5 sm:p-3 shrink-0 shadow-sm transition-all duration-300 ease-in-out">
           <div className="flex justify-between items-center border-b border-[#d4cbb8] pb-2">
-            <h2 className="text-xs font-bold uppercase tracking-wider text-[#794422] flex items-center gap-1.5">
-              <span className="text-[#3d7a46]">&gt;</span> {activeSection}
-            </h2>
-            {activeSection !== 'profile' && (
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setIsNavOpen(!isNavOpen)}
+                className="p-1 rounded hover:bg-[#ece6d9] text-[#794422] transition flex items-center gap-1 border border-[#d4cbb8]/60 text-xs font-bold"
+                title={isNavOpen ? 'Collapse panel' : 'Expand panel'}
+              >
+                {isNavOpen ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                <span className="lg:hidden text-[11px]">{isNavOpen ? 'Hide' : 'Show'} List</span>
+              </button>
+              <h2 className="text-xs font-bold uppercase tracking-wider text-[#794422] flex items-center gap-1.5">
+                <span className="text-[#3d7a46]">&gt;</span> {activeSection}
+                {!isNavOpen && (
+                  <span className="text-[10px] text-[#6b6255] font-normal normal-case ml-1">
+                    ({dataMap[activeSection]?.length || 0} items)
+                  </span>
+                )}
+              </h2>
+            </div>
+            {activeSection !== 'profile' && isNavOpen && (
               <button
                 type="button"
                 onClick={() => resetEntityForm(activeSection)}
@@ -673,44 +694,50 @@ export default function AdminDashboard() {
             )}
           </div>
 
-          {activeSection !== 'profile' && (
-            <div className="relative">
-              <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b6255]" />
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search entries..."
-                className="w-full rounded border border-[#d4cbb8] bg-[#fbf8f1] pl-8 pr-3 py-1.5 text-xs text-[#2b251d] placeholder-[#6b6255] outline-none focus:border-[#794422]"
-              />
-            </div>
-          )}
+          {/* SLIDING CONTENT CONTAINER */}
+          <div className={`flex flex-col gap-2 sm:gap-3 transition-all duration-300 ease-in-out overflow-hidden ${
+            isNavOpen
+              ? 'max-h-[380px] lg:max-h-[calc(100vh-140px)] opacity-100 mt-2'
+              : 'max-h-0 opacity-0 mt-0 pointer-events-none'
+          }`}>
+            {activeSection !== 'profile' && (
+              <div className="relative pt-1">
+                <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#6b6255]" />
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search entries..."
+                  className="w-full rounded border border-[#d4cbb8] bg-[#fbf8f1] pl-8 pr-3 py-1.5 text-xs text-[#2b251d] placeholder-[#6b6255] outline-none focus:border-[#794422]"
+                />
+              </div>
+            )}
 
           <div className="flex-1 overflow-y-auto swift-custom-scrollbar flex flex-col gap-2 pr-1">
             {activeSection === 'profile' ? (
               <div className="space-y-3">
                 {/* Profile Summary Card — photo big at top, name below */}
                 <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 text-xs space-y-3">
-                  {/* Big profile photo */}
-                  <div className="w-full h-40 rounded border border-[#d4cbb8] overflow-hidden bg-[#ece6d9] flex items-center justify-center">
+                  {/* Profile photo preview */}
+                  <div className="w-full h-28 sm:h-36 lg:h-40 rounded border border-[#d4cbb8] overflow-hidden bg-[#ece6d9] flex items-center justify-center">
                     {profileForm.profilePhoto ? (
                       <img src={profileForm.profilePhoto} alt="Profile" className="w-full h-full object-cover" />
                     ) : (
                       <div className="flex flex-col items-center gap-1 text-[#794422]/40">
-                        <User className="w-10 h-10" />
+                        <User className="w-8 h-8 lg:w-10 lg:h-10" />
                         <span className="text-[10px] text-[#6b6255] italic">No Profile Photo</span>
                       </div>
                     )}
                   </div>
 
                   {/* Name & title centred below photo */}
-                  <div className="text-center border-b border-[#d4cbb8] pb-2.5">
+                  <div className="text-center border-b border-[#d4cbb8] pb-2">
                     <h3 className="font-bold text-[#2b251d] leading-snug">{profileForm.name || 'Admin'}</h3>
                     <p className="text-[10px] text-[#6b6255] mt-0.5">{profileForm.title || 'CMS Admin'}</p>
                   </div>
 
                   {/* Stats */}
-                  <div className="space-y-1.5 text-[11px] text-[#6b6255]">
+                  <div className="grid grid-cols-2 lg:grid-cols-1 gap-1 sm:gap-1.5 text-[11px] text-[#6b6255]">
                     <div className="flex justify-between">
                       <span>Projects:</span>
                       <span className="font-bold text-[#794422]">{projects.length}</span>
@@ -736,7 +763,7 @@ export default function AdminDashboard() {
                     <span className="font-bold text-[#794422] uppercase text-[10px] tracking-wider">About Photo</span>
                     <span className="text-[10px] text-[#6b6255]">Preview</span>
                   </div>
-                  <div className="w-full h-40 rounded border border-[#d4cbb8] overflow-hidden bg-[#ece6d9] flex items-center justify-center">
+                  <div className="w-full h-28 sm:h-36 lg:h-40 rounded border border-[#d4cbb8] overflow-hidden bg-[#ece6d9] flex items-center justify-center">
                     {profileForm.aboutPhoto ? (
                       <img src={profileForm.aboutPhoto} alt="About Preview" className="w-full h-full object-cover" />
                     ) : (
@@ -776,7 +803,7 @@ export default function AdminDashboard() {
                         <Icon className="w-4 h-4 text-[#794422]" />
                       )}
                     </div>
-                    <div className="flex-1 min-w-0 pr-5">
+                    <div className="flex-1 min-w-0 pr-8">
                       <h4 className="text-xs font-semibold truncate text-[#2b251d]">{item.title || item.name || 'Untitled'}</h4>
                       <p className="text-[10px] text-[#6b6255] truncate">{subtitle}</p>
                     </div>
@@ -786,7 +813,7 @@ export default function AdminDashboard() {
                         e.stopPropagation();
                         handleEntityDelete(activeSection, item);
                       }}
-                      className="absolute right-2 opacity-0 group-hover:opacity-100 text-red-600 hover:text-red-800 transition p-1"
+                      className="absolute right-1.5 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 text-red-600 hover:text-red-800 transition p-1 rounded bg-[#f5f0e6]/80 lg:bg-transparent"
                       title="Delete"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -798,46 +825,49 @@ export default function AdminDashboard() {
               <div className="p-4 text-center text-xs text-[#6b6255]">No entries found</div>
             )}
           </div>
-        </aside>
+        </div>
+      </aside>
 
         {/* PANE 3: MAIN EDITOR WORKSPACE */}
-        <main className="flex-1 flex flex-col bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-4 gap-4 overflow-hidden shadow-sm">
+        <main className="flex-1 flex flex-col bg-[#f5f0e6] border border-[#d4cbb8] rounded-lg p-3 sm:p-4 gap-3 sm:gap-4 overflow-hidden shadow-sm min-h-0">
           {/* EDITOR HEADER */}
-          <div className="flex justify-between items-center border-b border-[#d4cbb8] pb-3 shrink-0">
-            <div>
-              <h3 className="text-sm font-bold uppercase tracking-wider text-[#794422] flex items-center gap-2">
-                <Terminal className="w-4 h-4" />
-                {activeSection === 'profile'
-                  ? 'Edit Profile Content'
-                  : editingId[activeSection]
-                  ? `Edit: ${entityForms[activeSection].title || entityForms[activeSection].name || 'Entry'}`
-                  : `New ${entityConfigs[activeSection].title.slice(0, -1)}`}
+          <div className="flex justify-between items-center border-b border-[#d4cbb8] pb-2.5 shrink-0">
+            <div className="min-w-0 pr-2">
+              <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#794422] flex items-center gap-2 truncate">
+                <Terminal className="w-4 h-4 shrink-0" />
+                <span className="truncate">
+                  {activeSection === 'profile'
+                    ? 'Edit Profile Content'
+                    : editingId[activeSection]
+                    ? `Edit: ${entityForms[activeSection].title || entityForms[activeSection].name || 'Entry'}`
+                    : `New ${entityConfigs[activeSection].title.slice(0, -1)}`}
+                </span>
               </h3>
-              <p className="text-[11px] text-[#6b6255]">Modify portfolio database content in real-time</p>
+              <p className="text-[10px] sm:text-[11px] text-[#6b6255] truncate">Modify portfolio database content in real-time</p>
             </div>
             {activeSection !== 'profile' && editingId[activeSection] && (
               <button
                 type="button"
                 onClick={() => resetEntityForm(activeSection)}
-                className="px-3 py-1 text-xs font-bold border border-[#d4cbb8] rounded bg-[#ece6d9] hover:bg-[#fbf8f1] text-[#794422] transition"
+                className="px-2.5 py-1 text-xs font-bold border border-[#d4cbb8] rounded bg-[#ece6d9] hover:bg-[#fbf8f1] text-[#794422] transition shrink-0"
               >
-                Cancel Edit
+                Cancel
               </button>
             )}
           </div>
 
           {/* FORM AREA */}
-          <div className="flex-1 overflow-y-auto swift-custom-scrollbar pr-2 pb-4">
+          <div className="flex-1 overflow-y-auto swift-custom-scrollbar pr-1 sm:pr-2 pb-4">
             {activeSection === 'profile' ? (
               /* PROFILE FORM */
               <form id="profile-form" onSubmit={saveProfile} className="space-y-4">
-                <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-4 space-y-4">
+                <div className="border border-[#d4cbb8] bg-[#fbf8f1] rounded p-3 sm:p-4 space-y-4">
                   <h4 className="text-xs font-bold uppercase tracking-wider text-[#794422] border-b border-[#d4cbb8] pb-1">Media Files</h4>
-                  <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
                     {/* Profile Photo */}
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase text-[#6b6255]">Profile Photo</label>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
                         <input
                           id="profile-photo-file"
                           type="file"
@@ -848,7 +878,7 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => triggerFileInput('profile-photo-file')}
-                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center justify-center gap-1.5 shrink-0"
                         >
                           <Upload className="w-3.5 h-3.5" /> Upload
                         </button>
@@ -857,15 +887,15 @@ export default function AdminDashboard() {
                           value={profileForm.profilePhoto || ''}
                           onChange={handleProfileChange}
                           placeholder="Image URL..."
-                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                          className="w-full sm:flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1.5 text-xs outline-none focus:border-[#794422]"
                         />
                       </div>
                     </div>
 
                     {/* About Photo */}
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase text-[#6b6255]">About Photo</label>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
                         <input
                           id="about-photo-file"
                           type="file"
@@ -876,7 +906,7 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => triggerFileInput('about-photo-file')}
-                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center justify-center gap-1.5 shrink-0"
                         >
                           <Upload className="w-3.5 h-3.5" /> Upload
                         </button>
@@ -885,15 +915,15 @@ export default function AdminDashboard() {
                           value={profileForm.aboutPhoto || ''}
                           onChange={handleProfileChange}
                           placeholder="Image URL..."
-                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                          className="w-full sm:flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1.5 text-xs outline-none focus:border-[#794422]"
                         />
                       </div>
                     </div>
 
                     {/* PDF Resume */}
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase text-[#6b6255]">PDF Resume File</label>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
                         <input
                           id="pdf-resume-file"
                           type="file"
@@ -904,7 +934,7 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => triggerFileInput('pdf-resume-file')}
-                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center justify-center gap-1.5 shrink-0"
                         >
                           <FileText className="w-3.5 h-3.5" /> Upload PDF
                         </button>
@@ -913,15 +943,15 @@ export default function AdminDashboard() {
                           value={profileForm.resumePdfLink || ''}
                           onChange={handleProfileChange}
                           placeholder="PDF URL or File Data..."
-                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                          className="w-full sm:flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1.5 text-xs outline-none focus:border-[#794422]"
                         />
                       </div>
                     </div>
 
                     {/* DOC Resume */}
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <label className="text-xs font-bold uppercase text-[#6b6255]">DOC/DOCX Resume File</label>
-                      <div className="flex gap-2 items-center">
+                      <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
                         <input
                           id="doc-resume-file"
                           type="file"
@@ -932,7 +962,7 @@ export default function AdminDashboard() {
                         <button
                           type="button"
                           onClick={() => triggerFileInput('doc-resume-file')}
-                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
+                          className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center justify-center gap-1.5 shrink-0"
                         >
                           <FileText className="w-3.5 h-3.5" /> Upload DOC
                         </button>
@@ -941,7 +971,7 @@ export default function AdminDashboard() {
                           value={profileForm.resumeDocLink || ''}
                           onChange={handleProfileChange}
                           placeholder="DOC URL or File Data..."
-                          className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                          className="w-full sm:flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1.5 text-xs outline-none focus:border-[#794422]"
                         />
                       </div>
                     </div>
@@ -949,7 +979,7 @@ export default function AdminDashboard() {
                 </div>
 
                 {/* Text fields */}
-                <div className="grid gap-3 sm:grid-cols-2">
+                <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
                   {profileFields.map(([key, label]) => (
                     <div key={key}>
                       <label className="mb-1 block text-xs font-bold uppercase text-[#6b6255]">{label}</label>
@@ -989,7 +1019,7 @@ export default function AdminDashboard() {
                           .map((field) => {
                             const fieldInputId = `file-input-${activeSection}-${field.key}`;
                             return (
-                              <div key={field.key} className="flex gap-2 items-center">
+                              <div key={field.key} className="flex flex-col sm:flex-row gap-2 sm:items-center">
                                 <input
                                   id={fieldInputId}
                                   type="file"
@@ -1000,7 +1030,7 @@ export default function AdminDashboard() {
                                 <button
                                   type="button"
                                   onClick={() => triggerFileInput(fieldInputId)}
-                                  className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center gap-1.5"
+                                  className="px-3 py-1.5 rounded border border-[#794422] bg-[#794422] text-[#f7f3ec] text-xs font-bold hover:bg-[#5c3217] transition inline-flex items-center justify-center gap-1.5 shrink-0"
                                 >
                                   <Upload className="w-3.5 h-3.5" /> Upload
                                 </button>
@@ -1009,7 +1039,7 @@ export default function AdminDashboard() {
                                   value={form[field.key] || ''}
                                   onChange={(event) => updateEntityForm(activeSection, field.key, event.target.value)}
                                   placeholder={`Or URL for ${field.label}...`}
-                                  className="flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1 text-xs outline-none focus:border-[#794422]"
+                                  className="w-full sm:flex-1 rounded border border-[#d4cbb8] bg-[#ece6d9] px-2.5 py-1.5 text-xs outline-none focus:border-[#794422]"
                                 />
                               </div>
                             );
@@ -1017,7 +1047,7 @@ export default function AdminDashboard() {
                       </div>
                     )}
 
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="grid gap-3 grid-cols-1 sm:grid-cols-2">
                       {config.fields
                         .filter((f) => f.type !== 'image')
                         .map((field) => (
@@ -1083,7 +1113,7 @@ export default function AdminDashboard() {
           </div>
 
           {/* FIXED BOTTOM NAV BAR WITH SAVE BUTTON */}
-          <div className="shrink-0 pt-3 border-t border-[#d4cbb8] flex justify-between items-center bg-[#f5f0e6]">
+          <div className="shrink-0 pt-2.5 border-t border-[#d4cbb8] flex justify-between items-center bg-[#f5f0e6]">
             <div>
               {activeSection !== 'profile' && editingId[activeSection] && (
                 <button
@@ -1099,7 +1129,7 @@ export default function AdminDashboard() {
               <button
                 type="submit"
                 form="profile-form"
-                className="px-5 py-2.5 rounded bg-[#794422] hover:bg-[#5c3217] text-[#f7f3ec] font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm"
+                className="w-full sm:w-auto px-5 py-2.5 rounded bg-[#794422] hover:bg-[#5c3217] text-[#f7f3ec] font-bold text-xs transition inline-flex items-center justify-center gap-1.5 shadow-sm"
               >
                 <Save className="w-4 h-4" /> Save Profile
               </button>
@@ -1107,7 +1137,7 @@ export default function AdminDashboard() {
               <button
                 type="submit"
                 form="entity-form"
-                className="px-5 py-2.5 rounded bg-[#794422] hover:bg-[#5c3217] text-[#f7f3ec] font-bold text-xs transition inline-flex items-center gap-1.5 shadow-sm"
+                className="w-full sm:w-auto px-5 py-2.5 rounded bg-[#794422] hover:bg-[#5c3217] text-[#f7f3ec] font-bold text-xs transition inline-flex items-center justify-center gap-1.5 shadow-sm"
               >
                 <Save className="w-4 h-4" />
                 {editingId[activeSection] ? 'Update Entry' : 'Create Entry'}
