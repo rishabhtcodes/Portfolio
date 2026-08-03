@@ -608,7 +608,7 @@ export default function AdminDashboard() {
           <div className="bg-[#5c3217] p-1 rounded text-[#f7f3ec]">
             <Terminal className="w-4 h-4" />
           </div>
-          <span className="tracking-wider text-xs sm:text-sm">SWIFT OS ADMIN</span>
+          <span className="tracking-wider text-xs sm:text-sm">ADMIN PANEL</span>
           <span className="text-[10px] opacity-70 bg-[#5c3217] px-1.5 py-0.5 rounded hidden sm:inline-block">v2.4.0</span>
         </div>
         <div className="flex items-center gap-2 sm:gap-4 text-[11px]">
