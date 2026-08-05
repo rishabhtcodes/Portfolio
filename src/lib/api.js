@@ -53,7 +53,7 @@ export async function apiRequest(path, options = {}) {
  */
 export async function getPortfolioData() {
   const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 4000);
+  const timeoutId = setTimeout(() => controller.abort(), 3000);
 
   try {
     const result = await apiRequest('/api/portfolio', { signal: controller.signal });
