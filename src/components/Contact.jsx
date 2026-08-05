@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Mail, Linkedin, Github, Send, CheckCircle } from 'lucide-react';
+import { sendContactMessage } from '../lib/api';
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -33,17 +34,7 @@ export default function Contact({ contact }) {
     setErrors({}); setSubmitError(''); setSending(true);
 
     try {
-      // Calls Vercel serverless function — avoids Render SMTP port blocking
-      const res = await fetch('/api/contact', {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(formData),
-      });
-      const contentType = res.headers.get('content-type') || '';
-      const data = contentType.includes('application/json') ? await res.json() : null;
-      if (!res.ok) {
-        throw new Error(data?.message || `Failed to send (${res.status} ${res.statusText}).`);
-      }
+      await sendContactMessage(formData);
       setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {
