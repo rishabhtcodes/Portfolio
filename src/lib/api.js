@@ -52,7 +52,18 @@ export async function apiRequest(path, options = {}) {
  * The backend returns { profile, projects, skills, achievements, certificates }.
  */
 export async function getPortfolioData() {
-  return apiRequest('/api/portfolio');
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 4000);
+
+  try {
+    const result = await apiRequest('/api/portfolio', { signal: controller.signal });
+    clearTimeout(timeoutId);
+    return result;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    // If backend is waking up or slow, return null silently to use instant static fallback
+    return null;
+  }
 }
 
 export async function sendContactMessage(payload) {

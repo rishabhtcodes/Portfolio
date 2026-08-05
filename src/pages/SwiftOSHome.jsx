@@ -222,7 +222,7 @@ export default function SwiftOSHome() {
     async function fetchLive() {
       try {
         const payload = await getPortfolioData();
-        if (!isMounted) return;
+        if (!isMounted || !payload) return;
 
         generateNotifications(payload);
 
