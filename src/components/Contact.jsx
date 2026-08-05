@@ -39,8 +39,11 @@ export default function Contact({ contact }) {
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to send.');
+      const contentType = res.headers.get('content-type') || '';
+      const data = contentType.includes('application/json') ? await res.json() : null;
+      if (!res.ok) {
+        throw new Error(data?.message || `Failed to send (${res.status} ${res.statusText}).`);
+      }
       setSubmitted(true);
       setFormData({ name: '', email: '', message: '' });
     } catch (error) {

@@ -4,7 +4,7 @@ import { sendContactEmails } from '../utils/mailer.js';
 const router = express.Router();
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-router.post('/send', async (request, response, next) => {
+const handleSend = async (request, response, next) => {
   try {
     const { name, email, message } = request.body;
 
@@ -30,6 +30,9 @@ router.post('/send', async (request, response, next) => {
   } catch (error) {
     return next(error);
   }
-});
+};
+
+router.post('/', handleSend);
+router.post('/send', handleSend);
 
 export default router;
