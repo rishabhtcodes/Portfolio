@@ -1,5 +1,21 @@
 import nodemailer from 'nodemailer';
 
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  pool: true,
+  maxConnections: 5,
+  maxMessages: 100,
+  auth: {
+    user: 'rishabhtiwari3538@gmail.com',
+    pass: process.env.SMTP_PASS || 'rpnjafmdmibfcnje',
+  },
+  connectionTimeout: 10_000,
+  greetingTimeout:   5_000,
+  socketTimeout:     10_000,
+});
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method not allowed' });
@@ -15,20 +31,6 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: 'Message must be at least 10 characters.' });
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      pool: true,
-      maxConnections: 3,
-      auth: {
-        user: 'rishabhtiwari3538@gmail.com',
-        pass: process.env.SMTP_PASS || 'rpnjafmdmibfcnje',
-      },
-      connectionTimeout: 5_000,
-      greetingTimeout:   3_000,
-      socketTimeout:     5_000,
-    });
 
     const OWNER   = 'rishabhtiwari3538@gmail.com';
     const SITE    = 'https://rishabhtcodes.vercel.app';

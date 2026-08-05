@@ -56,10 +56,32 @@ export async function getPortfolioData() {
 }
 
 export async function sendContactMessage(payload) {
-  return apiRequest('/api/contact', {
-    method: 'POST',
-    body: payload,
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 30000);
+
+  try {
+    const response = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: controller.signal,
+    });
+    clearTimeout(timeoutId);
+
+    const contentType = response.headers.get('content-type') || '';
+    const body = contentType.includes('application/json') ? await response.json() : null;
+
+    if (!response.ok) {
+      throw new Error(body?.message || `Request failed with status ${response.status}`);
+    }
+    return body;
+  } catch (error) {
+    clearTimeout(timeoutId);
+    if (error.name === 'AbortError') {
+      throw new Error('Connection timed out. Please try again.');
+    }
+    throw error;
+  }
 }
 
 export async function apiDelete(path, token) {
