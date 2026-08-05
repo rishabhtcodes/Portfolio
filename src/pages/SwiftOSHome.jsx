@@ -404,7 +404,7 @@ export default function SwiftOSHome() {
             {/* NOTIFICATION DROPDOWN MENU */}
             {showNotificationsDropdown && (
               <div 
-                className="absolute right-0 top-9 z-50 w-80 rounded-lg border border-[var(--swift-border-dark)] bg-[var(--swift-panel)] p-3 shadow-2xl text-[var(--swift-text-main)]"
+                className="absolute -right-2 sm:right-0 top-9 z-50 w-[calc(100vw-2rem)] max-w-xs sm:w-80 rounded-lg border border-[var(--swift-border-dark)] bg-[var(--swift-panel)] p-3 shadow-2xl text-[var(--swift-text-main)]"
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex items-center justify-between border-b border-[var(--swift-border)] pb-2 mb-2">
