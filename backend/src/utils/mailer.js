@@ -2,22 +2,21 @@ import nodemailer from 'nodemailer';
 import { resolve4 } from 'dns/promises';
 
 async function createTransport() {
-  // Resolve smtp.gmail.com to IPv4 explicitly — Render's network blocks IPv6 to Gmail
   const [smtpIp] = await resolve4('smtp.gmail.com');
 
   return nodemailer.createTransport({
-    host: smtpIp,      // actual IPv4 like 142.250.x.x — never IPv6
-    port: 587,         // STARTTLS — port 465 SSL is blocked on Render free tier
-    secure: false,     // false = STARTTLS (upgrades to TLS after connecting)
-    requireTLS: true,  // reject if server doesn't support TLS
+    host: smtpIp,
+    port: 587,
+    secure: false,
+    requireTLS: true,
     auth: {
       user: 'rishabhtiwari3538@gmail.com',
       pass: 'rpnjafmdmibfcnje',
     },
     tls: { rejectUnauthorized: false },
-    connectionTimeout: 20_000,
-    greetingTimeout:   10_000,
-    socketTimeout:     20_000,
+    connectionTimeout: 5_000,
+    greetingTimeout:   3_000,
+    socketTimeout:     5_000,
   });
 }
 

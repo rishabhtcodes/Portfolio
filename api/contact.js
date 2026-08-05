@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer';
-import { resolve4 } from 'dns/promises';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -16,21 +15,19 @@ export default async function handler(req, res) {
     return res.status(400).json({ message: 'Message must be at least 10 characters.' });
 
   try {
-    // Resolve Gmail IPv4 explicitly — avoids any IPv6 preference
-    const [smtpIp] = await resolve4('smtp.gmail.com');
-
     const transporter = nodemailer.createTransport({
-      host:   smtpIp,
-      port:   587,
-      secure: false,
-      requireTLS: true,
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
+      pool: true,
+      maxConnections: 3,
       auth: {
         user: 'rishabhtiwari3538@gmail.com',
         pass: process.env.SMTP_PASS || 'rpnjafmdmibfcnje',
       },
-      tls: { rejectUnauthorized: false },
-      connectionTimeout: 15_000,
-      greetingTimeout:   10_000,
+      connectionTimeout: 5_000,
+      greetingTimeout:   3_000,
+      socketTimeout:     5_000,
     });
 
     const OWNER   = 'rishabhtiwari3538@gmail.com';
