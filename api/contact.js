@@ -43,10 +43,12 @@ export default async function handler(req, res) {
       hour: '2-digit', minute: '2-digit',
     });
 
+    const SENDER = `"Rishabh Tiwari" <${OWNER}>`;
+
     // 1️⃣ Send both owner email and auto-reply confirmation email in parallel for fast response
     await Promise.all([
       transporter.sendMail({
-        from:    `"Portfolio Contact" <${OWNER}>`,
+        from:    SENDER,
         to:      OWNER,
         replyTo: safeEmail,
         subject: `📩 Portfolio Contact: ${safeName}`,
@@ -65,7 +67,7 @@ export default async function handler(req, res) {
         `,
       }),
       transporter.sendMail({
-        from:    `"Rishabh Kumar Tiwari" <${OWNER}>`,
+        from:    SENDER,
         to:      safeEmail,
         subject: `Thanks for reaching out, ${safeName}!`,
         html: `
@@ -79,7 +81,7 @@ export default async function handler(req, res) {
               <blockquote style="margin:16px 0;padding:12px 16px;border-left:4px solid #3452e0;background:#f8fafc;border-radius:0 8px 8px 0">
                 ${safeMessage}
               </blockquote>
-              <p style="margin-top:24px">Best regards,<br><strong>Rishabh Kumar Tiwari</strong><br>Full Stack Developer</p>
+              <p style="margin-top:24px">Best regards,<br><strong>Rishabh Tiwari</strong><br>Full Stack Developer</p>
               <a href="${SITE}" style="display:inline-block;margin-top:16px;padding:10px 20px;background:#3452e0;color:#fff;text-decoration:none;border-radius:8px">Visit Portfolio</a>
             </div>
           </div>

@@ -35,7 +35,7 @@ export async function sendContactEmails({ name, email, message }) {
   const transporter = await createTransport(); // resolves Gmail IPv4 before connecting
 
   const OWNER_EMAIL = 'rishabhtiwari3538@gmail.com';
-  const OWNER_NAME  = 'Rishabh Kumar Tiwari';
+  const OWNER_NAME  = 'Rishabh Tiwari';
   const OWNER_TITLE = 'Full Stack Developer';
   const SITE_URL    = 'https://rishabhtcodes.vercel.app';
 
@@ -104,9 +104,11 @@ export async function sendContactEmails({ name, email, message }) {
 
   const userText = `Hi ${name},\n\nThank you for contacting me. I received your message and I will get back to you within 24-48 hours.\n\nBest regards,\n${OWNER_NAME}\n${OWNER_TITLE}\n${SITE_URL}`;
 
+  const sender = `"Rishabh Tiwari" <${OWNER_EMAIL}>`;
+
   await Promise.all([
     transporter.sendMail({
-      from: OWNER_EMAIL,
+      from: sender,
       to:   OWNER_EMAIL,
       replyTo: email,
       subject: `Portfolio Contact: ${name}`,
@@ -114,7 +116,7 @@ export async function sendContactEmails({ name, email, message }) {
       html: ownerHtml,
     }),
     transporter.sendMail({
-      from:    OWNER_EMAIL,
+      from:    sender,
       to:      email,
       subject: `Thanks for contacting me, ${name} — I will reach you soon`,
       text: userText,
