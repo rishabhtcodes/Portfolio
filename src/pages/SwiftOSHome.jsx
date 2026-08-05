@@ -41,6 +41,7 @@ import {
 } from 'lucide-react';
 import { getPortfolioData, sendContactMessage } from '../lib/api';
 import PhotoModal from '../components/PhotoModal';
+import RandomLoader from '../components/RandomLoader';
 import { 
   about as staticAbout, 
   achievements as staticAchievements, 
@@ -130,6 +131,7 @@ export default function SwiftOSHome() {
   const [formStatus, setFormStatus] = useState({ loading: false, success: null, error: null });
 
   // Terminal modal / section state
+  const [isLoading, setIsLoading] = useState(true);
   const [showTerminalModal, setShowTerminalModal] = useState(false);
   const [showSkillsModal, setShowSkillsModal] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -340,6 +342,9 @@ export default function SwiftOSHome() {
 
   return (
     <div className="swift-os-root">
+      {/* INITIAL RANDOMIZED LOADING ANIMATION */}
+      {isLoading && <RandomLoader onFinish={() => setIsLoading(false)} />}
+
       {/* OS TOP HEADER */}
       <header className="swift-header">
         <div className="swift-header-left">
