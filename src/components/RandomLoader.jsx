@@ -139,36 +139,36 @@ export default function RandomLoader({ onFinish }) {
 
           {/* WELCOME POPUP CARD EMERGES AFTER GLASS SHATTERS */}
           <div 
-            className={`z-40 max-w-md w-11/12 bg-[#f5f0e6] border-4 border-[#794422] rounded-2xl p-6 shadow-[0_25px_60px_rgba(121,68,34,0.3)] text-center space-y-4 transition-all duration-500 transform ${
+            className={`z-40 max-w-md w-full max-w-[90vw] sm:max-w-md bg-[#f5f0e6] border-4 border-[#794422] rounded-2xl p-4 sm:p-6 shadow-[0_25px_60px_rgba(121,68,34,0.3)] text-center space-y-3 sm:space-y-4 transition-all duration-500 transform ${
               showWelcomePopup ? 'scale-100 opacity-100 translate-y-0' : 'scale-75 opacity-0 translate-y-8'
             }`}
           >
             {/* Header Badge */}
-            <div className="inline-flex items-center gap-2 bg-[#794422] text-[#f7f3ec] px-3 py-1 rounded-full text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
+            <div className="inline-flex items-center gap-1.5 sm:gap-2 bg-[#794422] text-[#f7f3ec] px-2.5 py-1 rounded-full text-[9px] sm:text-[10px] font-extrabold tracking-widest uppercase shadow-sm">
               <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
               SYSTEM BOOT SUCCESSFUL
             </div>
 
             {/* Welcome Name Announcement */}
             <div className="space-y-1">
-              <h2 className="text-xs font-extrabold text-[#6b6255] uppercase tracking-widest">
+              <h2 className="text-[10px] sm:text-xs font-extrabold text-[#6b6255] uppercase tracking-widest">
                 WELCOME TO
               </h2>
-              <h1 className="text-2xl sm:text-3xl font-black text-[#794422] tracking-wider uppercase drop-shadow-sm">
+              <h1 className="text-xl sm:text-3xl font-black text-[#794422] tracking-wider uppercase drop-shadow-sm leading-snug">
                 RISHABH'S PORTFOLIO
               </h1>
-              <p className="text-xs text-[#2b251d] font-semibold pt-1">
+              <p className="text-[11px] sm:text-xs text-[#2b251d] font-semibold pt-0.5">
                 Full Stack Developer & AI Enthusiast
               </p>
             </div>
 
             {/* Progress Bar inside Popup */}
             <div className="space-y-1.5 pt-2 border-t border-[#d4cbb8]">
-              <div className="flex justify-between text-[10px] text-[#794422] font-bold">
+              <div className="flex justify-between text-[9px] sm:text-[10px] text-[#794422] font-bold">
                 <span>AUTHENTICATING SESSION</span>
                 <span>{Math.round(progress)}%</span>
               </div>
-              <div className="w-full h-3 bg-[#ece6d9] rounded-full border border-[#b8ac94] p-0.5 overflow-hidden">
+              <div className="w-full h-2.5 sm:h-3 bg-[#ece6d9] rounded-full border border-[#b8ac94] p-0.5 overflow-hidden">
                 <div 
                   className="h-full bg-gradient-to-r from-[#794422] via-[#8e522b] to-[#3d7a46] rounded-full transition-all duration-75 shadow-sm"
                   style={{ width: `${progress}%` }}
